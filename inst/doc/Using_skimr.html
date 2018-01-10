@@ -12,7 +12,7 @@
 
 <meta name="author" content="Elin Waring" />
 
-<meta name="date" content="2017-12-21" />
+<meta name="date" content="2018-01-09" />
 
 <title>Using Skimr</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using Skimr</h1>
 <h4 class="author"><em>Elin Waring</em></h4>
-<h4 class="date"><em>2017-12-21</em></h4>
+<h4 class="date"><em>2018-01-09</em></h4>
 
 
 
@@ -91,12 +91,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##                 
 ##                 
 ## </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(iris$Sepal.Length)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   4.300   5.100   5.800   5.843   6.400   7.900</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fivenum</span>(iris$Sepal.Length)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fivenum</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
 <pre><code>## [1] 4.3 5.1 5.8 6.4 7.9</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(iris$Species)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(iris<span class="op">$</span>Species)</code></pre></div>
 <pre><code>##     setosa versicolor  virginica 
 ##         50         50         50</code></pre>
 <div id="the-skim-function" class="section level1">
@@ -110,22 +110,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n variables: 5 
 ## 
 ## Variable type: factor 
-##   variable missing complete   n n_unique                       top_counts
-## 1  Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
-##   ordered
-## 1   FALSE
+##  variable missing complete   n n_unique                       top_counts
+##   Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
+##  ordered
+##    FALSE
 ## 
 ## Variable type: numeric 
-##       variable missing complete   n mean   sd min p25 median p75 max
-## 1 Petal.Length       0      150 150 3.76 1.77 1   1.6   4.35 5.1 6.9
-## 2  Petal.Width       0      150 150 1.2  0.76 0.1 0.3   1.3  1.8 2.5
-## 3 Sepal.Length       0      150 150 5.84 0.83 4.3 5.1   5.8  6.4 7.9
-## 4  Sepal.Width       0      150 150 3.06 0.44 2   2.8   3    3.3 4.4
-##       hist
-## 1 ▇▁▁▂▅▅▃▁
-## 2 ▇▁▁▅▃▃▂▂
-## 3 ▂▇▅▇▆▅▂▂
-## 4 ▁▂▅▇▃▂▁▁</code></pre>
+##      variable missing complete   n mean   sd  p0 p25 median p75 p100
+##  Petal.Length       0      150 150 3.76 1.77 1   1.6   4.35 5.1  6.9
+##   Petal.Width       0      150 150 1.2  0.76 0.1 0.3   1.3  1.8  2.5
+##  Sepal.Length       0      150 150 5.84 0.83 4.3 5.1   5.8  6.4  7.9
+##   Sepal.Width       0      150 150 3.06 0.44 2   2.8   3    3.3  4.4
+##      hist
+##  ▇▁▁▂▅▅▃▁
+##  ▇▁▁▅▃▃▂▂
+##  ▂▇▅▇▆▅▂▂
+##  ▁▂▅▇▃▂▁▁</code></pre>
 <p>This distinction is important because the skim_df object is easy to use for additional manipulation if desired and is pipeable. For example all of the results for a particular statistic or for one variable could be selected or an alternative printing method sould be developed.</p>
 <p>The <code>skim_df</code> object always contains 6 columns:</p>
 <ul>
@@ -139,26 +139,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span><span class="kw">skim</span>(iris)
 <span class="kw">head</span>(s, <span class="dv">15</span>)</code></pre></div>
 <pre><code>## # A tibble: 15 x 6
-##        variable    type     stat level       value formatted
-##           &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;     &lt;chr&gt;
-##  1 Sepal.Length numeric  missing  .all   0.0000000         0
-##  2 Sepal.Length numeric complete  .all 150.0000000       150
-##  3 Sepal.Length numeric        n  .all 150.0000000       150
-##  4 Sepal.Length numeric     mean  .all   5.8433333      5.84
-##  5 Sepal.Length numeric       sd  .all   0.8280661      0.83
-##  6 Sepal.Length numeric      min  .all   4.3000000       4.3
-##  7 Sepal.Length numeric      p25  .all   5.1000000       5.1
-##  8 Sepal.Length numeric   median  .all   5.8000000       5.8
-##  9 Sepal.Length numeric      p75  .all   6.4000000       6.4
-## 10 Sepal.Length numeric      max  .all   7.9000000       7.9
-## 11 Sepal.Length numeric     hist  .all          NA  ▂▇▅▇▆▅▂▂
-## 12  Sepal.Width numeric  missing  .all   0.0000000         0
-## 13  Sepal.Width numeric complete  .all 150.0000000       150
-## 14  Sepal.Width numeric        n  .all 150.0000000       150
-## 15  Sepal.Width numeric     mean  .all   3.0573333      3.06</code></pre>
+##    variable     type    stat     level   value formatted
+##    &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    
+##  1 Sepal.Length numeric missing  .all    0     0        
+##  2 Sepal.Length numeric complete .all  150     150      
+##  3 Sepal.Length numeric n        .all  150     150      
+##  4 Sepal.Length numeric mean     .all    5.84  5.84     
+##  5 Sepal.Length numeric sd       .all    0.828 0.83     
+##  6 Sepal.Length numeric p0       .all    4.30  4.3      
+##  7 Sepal.Length numeric p25      .all    5.10  5.1      
+##  8 Sepal.Length numeric median   .all    5.80  5.8      
+##  9 Sepal.Length numeric p75      .all    6.40  6.4      
+## 10 Sepal.Length numeric p100     .all    7.90  7.9      
+## 11 Sepal.Length numeric hist     .all   NA     ▂▇▅▇▆▅▂▂ 
+## 12 Sepal.Width  numeric missing  .all    0     0        
+## 13 Sepal.Width  numeric complete .all  150     150      
+## 14 Sepal.Width  numeric n        .all  150     150      
+## 15 Sepal.Width  numeric mean     .all    3.06  3.06</code></pre>
 <p><code>skim()</code> also supports grouped data. For grouped data one additional column for each grouping variable is added to the skim object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars %&gt;%
-<span class="st">  </span>dplyr::<span class="kw">group_by</span>(gear) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(gear) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">skim</span>()</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 32 
@@ -166,68 +166,68 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  group variables: gear 
 ## 
 ## Variable type: numeric 
-##    gear variable missing complete  n   mean     sd    min    p25 median
-## 1     3       am       0       15 15   0      0      0      0      0   
-## 2     3     carb       0       15 15   2.67   1.18   1      2      3   
-## 3     3      cyl       0       15 15   7.47   1.19   4      8      8   
-## 4     3     disp       0       15 15 326.3   94.85 120.1  275.8  318   
-## 5     3     drat       0       15 15   3.13   0.27   2.76   3.04   3.08
-## 6     3       hp       0       15 15 176.13  47.69  97    150    180   
-## 7     3      mpg       0       15 15  16.11   3.37  10.4   14.5   15.5 
-## 8     3     qsec       0       15 15  17.69   1.35  15.41  17.04  17.42
-## 9     3       vs       0       15 15   0.2    0.41   0      0      0   
-## 10    3       wt       0       15 15   3.89   0.83   2.46   3.45   3.73
-## 11    4       am       0       12 12   0.67   0.49   0      0      1   
-## 12    4     carb       0       12 12   2.33   1.3    1      1      2   
-## 13    4      cyl       0       12 12   4.67   0.98   4      4      4   
-## 14    4     disp       0       12 12 123.02  38.91  71.1   78.92 130.9 
-## 15    4     drat       0       12 12   4.04   0.31   3.69   3.9    3.92
-## 16    4       hp       0       12 12  89.5   25.89  52     65.75  94   
-## 17    4      mpg       0       12 12  24.53   5.28  17.8   21     22.8 
-## 18    4     qsec       0       12 12  18.96   1.61  16.46  18.46  18.75
-## 19    4       vs       0       12 12   0.83   0.39   0      1      1   
-## 20    4       wt       0       12 12   2.62   0.63   1.61   2.13   2.7 
-## 21    5       am       0        5  5   1      0      1      1      1   
-## 22    5     carb       0        5  5   4.4    2.61   2      2      4   
-## 23    5      cyl       0        5  5   6      2      4      4      6   
-## 24    5     disp       0        5  5 202.48 115.49  95.1  120.3  145   
-## 25    5     drat       0        5  5   3.92   0.39   3.54   3.62   3.77
-## 26    5       hp       0        5  5 195.6  102.83  91    113    175   
-## 27    5      mpg       0        5  5  21.38   6.66  15     15.8   19.7 
-## 28    5     qsec       0        5  5  15.64   1.13  14.5   14.6   15.5 
-## 29    5       vs       0        5  5   0.2    0.45   0      0      0   
-## 30    5       wt       0        5  5   2.63   0.82   1.51   2.14   2.77
-##       p75    max     hist
-## 1    0      0    ▁▁▁▇▁▁▁▁
-## 2    4      4    ▅▁▆▁▁▅▁▇
-## 3    8      8    ▁▁▁▁▁▁▁▇
-## 4  380    472    ▂▁▂▇▃▆▂▆
-## 5    3.18   3.73 ▃▃▇▆▁▁▁▃
-## 6  210    245    ▅▁▃▁▇▂▂▅
-## 7   18.4   21.5  ▃▁▃▇▃▃▂▃
-## 8   17.99  20.22 ▃▁▆▇▆▁▂▃
-## 9    0      1    ▇▁▁▁▁▁▁▂
-## 10   3.96   5.42 ▁▁▇▅▁▁▁▃
-## 11   1      1    ▃▁▁▁▁▁▁▇
-## 12   4      4    ▇▁▇▁▁▁▁▇
-## 13   6      6    ▇▁▁▁▁▁▁▃
-## 14 160    167.6  ▇▁▁▂▂▂▂▇
-## 15   4.09   4.93 ▁▇▃▁▁▁▁▁
-## 16 110    123    ▂▇▁▁▃▁▆▃
-## 17  28.08  33.9  ▅▇▅▂▂▁▂▅
-## 18  19.58  22.9  ▃▁▇▆▃▁▁▂
-## 19   1      1    ▂▁▁▁▁▁▁▇
-## 20   3.16   3.44 ▇▃▃▃▃▇▇▇
-## 21   1      1    ▁▁▁▇▁▁▁▁
-## 22   6      8    ▇▁▃▁▁▃▁▃
-## 23   8      8    ▇▁▁▃▁▁▁▇
-## 24 301    351    ▇▃▁▁▁▁▃▃
-## 25   4.22   4.43 ▇▁▃▁▁▁▃▃
-## 26 264    335    ▇▁▃▁▁▃▁▃
-## 27  26     30.4  ▇▁▃▁▁▃▁▃
-## 28  16.7   16.9  ▇▁▁▃▁▁▁▇
-## 29   0      1    ▇▁▁▁▁▁▁▂
-## 30   3.17   3.57 ▇▁▇▁▇▁▇▇</code></pre>
+##  gear variable missing complete  n   mean     sd     p0    p25 median
+##     3       am       0       15 15   0      0      0      0      0   
+##     3     carb       0       15 15   2.67   1.18   1      2      3   
+##     3      cyl       0       15 15   7.47   1.19   4      8      8   
+##     3     disp       0       15 15 326.3   94.85 120.1  275.8  318   
+##     3     drat       0       15 15   3.13   0.27   2.76   3.04   3.08
+##     3       hp       0       15 15 176.13  47.69  97    150    180   
+##     3      mpg       0       15 15  16.11   3.37  10.4   14.5   15.5 
+##     3     qsec       0       15 15  17.69   1.35  15.41  17.04  17.42
+##     3       vs       0       15 15   0.2    0.41   0      0      0   
+##     3       wt       0       15 15   3.89   0.83   2.46   3.45   3.73
+##     4       am       0       12 12   0.67   0.49   0      0      1   
+##     4     carb       0       12 12   2.33   1.3    1      1      2   
+##     4      cyl       0       12 12   4.67   0.98   4      4      4   
+##     4     disp       0       12 12 123.02  38.91  71.1   78.92 130.9 
+##     4     drat       0       12 12   4.04   0.31   3.69   3.9    3.92
+##     4       hp       0       12 12  89.5   25.89  52     65.75  94   
+##     4      mpg       0       12 12  24.53   5.28  17.8   21     22.8 
+##     4     qsec       0       12 12  18.96   1.61  16.46  18.46  18.75
+##     4       vs       0       12 12   0.83   0.39   0      1      1   
+##     4       wt       0       12 12   2.62   0.63   1.61   2.13   2.7 
+##     5       am       0        5  5   1      0      1      1      1   
+##     5     carb       0        5  5   4.4    2.61   2      2      4   
+##     5      cyl       0        5  5   6      2      4      4      6   
+##     5     disp       0        5  5 202.48 115.49  95.1  120.3  145   
+##     5     drat       0        5  5   3.92   0.39   3.54   3.62   3.77
+##     5       hp       0        5  5 195.6  102.83  91    113    175   
+##     5      mpg       0        5  5  21.38   6.66  15     15.8   19.7 
+##     5     qsec       0        5  5  15.64   1.13  14.5   14.6   15.5 
+##     5       vs       0        5  5   0.2    0.45   0      0      0   
+##     5       wt       0        5  5   2.63   0.82   1.51   2.14   2.77
+##     p75   p100     hist
+##    0      0    ▁▁▁▇▁▁▁▁
+##    4      4    ▅▁▆▁▁▅▁▇
+##    8      8    ▁▁▁▁▁▁▁▇
+##  380    472    ▂▁▂▇▃▆▂▆
+##    3.18   3.73 ▃▃▇▆▁▁▁▃
+##  210    245    ▅▁▃▁▇▂▂▅
+##   18.4   21.5  ▃▁▃▇▃▃▂▃
+##   17.99  20.22 ▃▁▆▇▆▁▂▃
+##    0      1    ▇▁▁▁▁▁▁▂
+##    3.96   5.42 ▁▁▇▅▁▁▁▃
+##    1      1    ▃▁▁▁▁▁▁▇
+##    4      4    ▇▁▇▁▁▁▁▇
+##    6      6    ▇▁▁▁▁▁▁▃
+##  160    167.6  ▇▁▁▂▂▂▂▇
+##    4.09   4.93 ▁▇▃▁▁▁▁▁
+##  110    123    ▂▇▁▁▃▁▆▃
+##   28.08  33.9  ▅▇▅▂▂▁▂▅
+##   19.58  22.9  ▃▁▇▆▃▁▁▂
+##    1      1    ▂▁▁▁▁▁▁▇
+##    3.16   3.44 ▇▃▃▃▃▇▇▇
+##    1      1    ▁▁▁▇▁▁▁▁
+##    6      8    ▇▁▃▁▁▃▁▃
+##    8      8    ▇▁▁▃▁▁▁▇
+##  301    351    ▇▃▁▁▁▁▃▃
+##    4.22   4.43 ▇▁▃▁▁▁▃▃
+##  264    335    ▇▁▃▁▁▃▁▃
+##   26     30.4  ▇▁▃▁▁▃▁▃
+##   16.7   16.9  ▇▁▁▃▁▁▁▇
+##    0      1    ▇▁▁▁▁▁▁▂
+##    3.17   3.57 ▇▁▇▁▇▁▇▇</code></pre>
 <p>Individual columns from a data frame may be selected using tidyverse style selectors.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris, Sepal.Length, Species)</code></pre></div>
 <pre><code>## Skim summary statistics
@@ -235,28 +235,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n variables: 5 
 ## 
 ## Variable type: factor 
-##   variable missing complete   n n_unique                       top_counts
-## 1  Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
-##   ordered
-## 1   FALSE
+##  variable missing complete   n n_unique                       top_counts
+##   Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
+##  ordered
+##    FALSE
 ## 
 ## Variable type: numeric 
-##       variable missing complete   n mean   sd min p25 median p75 max
-## 1 Sepal.Length       0      150 150 5.84 0.83 4.3 5.1    5.8 6.4 7.9
-##       hist
-## 1 ▂▇▅▇▆▅▂▂</code></pre>
+##      variable missing complete   n mean   sd  p0 p25 median p75 p100
+##  Sepal.Length       0      150 150 5.84 0.83 4.3 5.1    5.8 6.4  7.9
+##      hist
+##  ▂▇▅▇▆▅▂▂</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris, <span class="kw">starts_with</span>(<span class="st">&quot;Sepal&quot;</span>))</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 150 
 ##  n variables: 5 
 ## 
 ## Variable type: numeric 
-##       variable missing complete   n mean   sd min p25 median p75 max
-## 1 Sepal.Length       0      150 150 5.84 0.83 4.3 5.1    5.8 6.4 7.9
-## 2  Sepal.Width       0      150 150 3.06 0.44 2   2.8    3   3.3 4.4
-##       hist
-## 1 ▂▇▅▇▆▅▂▂
-## 2 ▁▂▅▇▃▂▁▁</code></pre>
+##      variable missing complete   n mean   sd  p0 p25 median p75 p100
+##  Sepal.Length       0      150 150 5.84 0.83 4.3 5.1    5.8 6.4  7.9
+##   Sepal.Width       0      150 150 3.06 0.44 2   2.8    3   3.3  4.4
+##      hist
+##  ▂▇▅▇▆▅▂▂
+##  ▁▂▅▇▃▂▁▁</code></pre>
 <p>If an individual column is of an unsuppported class it is treated as a character variable with a warning.</p>
 </div>
 <div id="alternatives-to-skim" class="section level1">
@@ -270,16 +270,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="skimming-vectors" class="section level1">
 <h1>Skimming vectors</h1>
 <p>The <code>skim</code> function also handles individual vectors that are not part of a data frame. For example the <code>lynx</code> data set is class <code>ts</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(datasets::lynx)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(datasets<span class="op">::</span>lynx)</code></pre></div>
 <pre><code>## Skim summary statistics
 ## 
 ## Variable type: ts 
-##         variable missing complete   n start  end frequency deltat    mean
-## 1 datasets::lynx       0      114 114  1821 1934         1      1 1538.02
-##        sd min  max median line_graph
-## 1 1585.84  39 6991    771   ⡈⢄⡠⢁⣀⠒⣀⠔</code></pre>
+##        variable missing complete   n start  end frequency deltat    mean
+##  datasets::lynx       0      114 114  1821 1934         1      1 1538.02
+##       sd min  max median line_graph
+##  1585.84  39 6991    771   ⡈⢄⡠⢁⣀⠒⣀⠔</code></pre>
 <p>If you attempt to use <code>skim</code> on a class that does not have support, it will coerce it to character (with a warning) and report number of <code>NA</code>s, number complete (non missing), number of rows, the number empty (i.e. “”), minimum length of non empty strings, maximum length of non empty strings, and number of unique values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lynx &lt;-<span class="st"> </span>datasets::lynx
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lynx &lt;-<span class="st"> </span>datasets<span class="op">::</span>lynx
 <span class="kw">class</span>(lynx) &lt;-<span class="st"> &quot;unkown_class&quot;</span>
 <span class="kw">skim</span>(lynx)</code></pre></div>
 <pre><code>## Warning: No summary functions for vectors of class: unkown_class.
@@ -287,8 +287,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## Skim summary statistics
 ## 
 ## Variable type: character 
-##   variable missing complete   n min max empty n_unique
-## 1     lynx       0      114 114   2   4     0      110</code></pre>
+##  variable missing complete   n min max empty n_unique
+##      lynx       0      114 114   2   4     0      110</code></pre>
 </div>
 <div id="the-skim_with-function" class="section level1">
 <h1>The skim_with function</h1>
@@ -296,56 +296,56 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To add a statistic use the a named list for each class using the format below.</p>
 <pre><code>classname = list(mad_name = mad)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with</span>(<span class="dt">numeric =</span> <span class="kw">list</span>(<span class="dt">mad_name =</span> mad))
-<span class="kw">skim</span>(datasets::chickwts)</code></pre></div>
+<span class="kw">skim</span>(datasets<span class="op">::</span>chickwts)</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
 ## Variable type: factor 
-##   variable missing complete  n n_unique                         top_counts
-## 1     feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
-##   ordered
-## 1   FALSE
+##  variable missing complete  n n_unique                         top_counts
+##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
+##  ordered
+##    FALSE
 ## 
 ## Variable type: numeric 
-##   variable missing complete  n   mean    sd min   p25 median   p75 max
-## 1   weight       0       71 71 261.31 78.07 108 204.5    258 323.5 423
-##       hist mad_name
-## 1 ▃▅▅▇▃▇▂▂    91.92</code></pre>
+##  variable missing complete  n   mean    sd  p0   p25 median   p75 p100
+##    weight       0       71 71 261.31 78.07 108 204.5    258 323.5  423
+##      hist mad_name
+##  ▃▅▅▇▃▇▂▂    91.92</code></pre>
 <p>The <code>skim_with_defaults()</code> function resets the list to the defaults. By default <code>skim_with()</code> appends the new statstics, but setting <code>append = FALSE</code> replaces the defaults.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with_defaults</span>()
 <span class="kw">skim_with</span>(<span class="dt">numeric =</span> <span class="kw">list</span>(<span class="dt">mad_name =</span> mad), <span class="dt">append =</span> <span class="ot">FALSE</span>)
-<span class="kw">skim</span>(datasets::chickwts)</code></pre></div>
+<span class="kw">skim</span>(datasets<span class="op">::</span>chickwts)</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
 ## Variable type: factor 
-##   variable missing complete  n n_unique                         top_counts
-## 1     feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
-##   ordered
-## 1   FALSE
+##  variable missing complete  n n_unique                         top_counts
+##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
+##  ordered
+##    FALSE
 ## 
 ## Variable type: numeric 
-##   variable mad_name
-## 1   weight    91.92</code></pre>
+##  variable mad_name
+##    weight    91.92</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with_defaults</span>() <span class="co"># Reset to defaults</span></code></pre></div>
 <p>You can also use <code>skim_with()</code> to remove specific statistics by setting them to <code>NULL</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with</span>(<span class="dt">numeric =</span> <span class="kw">list</span>(<span class="dt">hist =</span> <span class="ot">NULL</span>))
-<span class="kw">skim</span>(datasets::chickwts)</code></pre></div>
+<span class="kw">skim</span>(datasets<span class="op">::</span>chickwts)</code></pre></div>
 <pre><code>## Skim summary statistics
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
 ## Variable type: factor 
-##   variable missing complete  n n_unique                         top_counts
-## 1     feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
-##   ordered
-## 1   FALSE
+##  variable missing complete  n n_unique                         top_counts
+##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
+##  ordered
+##    FALSE
 ## 
 ## Variable type: numeric 
-##   variable missing complete  n   mean    sd min   p25 median   p75 max
-## 1   weight       0       71 71 261.31 78.07 108 204.5    258 323.5 423</code></pre>
+##  variable missing complete  n   mean    sd  p0   p25 median   p75 p100
+##    weight       0       71 71 261.31 78.07 108 204.5    258 323.5  423</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with_defaults</span>() <span class="co">#</span></code></pre></div>
 </div>
 <div id="formatting-individual-values" class="section level1">
@@ -357,11 +357,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Rendering the results of skim()</h1>
 <p>The skim_df object is a long data frame with one row for each combination of variable and statistic (and optionally for group). The horizontal display is created by default using <code>print.skim_df()</code>. This can be called explicitly by applying the <code>print()</code> function to a <code>skim_df</code> object which allows passing in of options. In addition <code>kable()</code> and<code>pander()</code>are supported. These both provide more control over the rendered results, particularly when used to render in conjunction with knitr. Documentation of these options for these functions is covered in more detail in the <code>knitr</code> package for <code>kable()</code> and the <code>pander</code> package for <code>pander()</code>. Using either of these may require use of document or chunk options and fonts.</p>
 <ul>
-<li>For <code>kable()</code> use in a markdown file, use a chunk option of <code>results=asis</code>.</li>
-<li>For <code>pander()</code> use in a markdown file, use a chunk option of <code>results=asis</code>. To prevent using asis by default use <code>panderOptons()</code> to set it to FALSE.</li>
+<li>For <code>kable()</code> use in a markdown file, use a chunk option of <code>results='asis'</code>.</li>
+<li>For <code>pander()</code> use in a markdown file, use a chunk option of <code>results='asis'</code>. To prevent using asis by default use <code>panderOptons()</code> to set it to FALSE.</li>
 </ul>
 <p>This topic is addressed in more detail in the Using Fonts vignette.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) %&gt;%<span class="st"> </span><span class="kw">kable</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">kable</span>()</code></pre></div>
 <p>Skim summary statistics<br />
 n obs: 150<br />
 n variables: 5</p>
@@ -400,11 +400,11 @@ n variables: 5</p>
 <th align="left">n</th>
 <th align="left">mean</th>
 <th align="left">sd</th>
-<th align="left">min</th>
+<th align="left">p0</th>
 <th align="left">p25</th>
 <th align="left">median</th>
 <th align="left">p75</th>
-<th align="left">max</th>
+<th align="left">p100</th>
 <th align="left">hist</th>
 </tr>
 </thead>
@@ -469,7 +469,7 @@ n variables: 5</p>
 </table>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pander)
 <span class="kw">panderOptions</span>(<span class="st">'knitr.auto.asis'</span>, <span class="ot">FALSE</span>)
-<span class="kw">skim</span>(iris) %&gt;%<span class="st"> </span><span class="kw">pander</span>() </code></pre></div>
+<span class="kw">skim</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>() </code></pre></div>
 <pre><code>## Skim summary statistics  
 ##    n obs: 150    
 ##  n variables: 5    
@@ -492,7 +492,7 @@ n variables: 5</p>
 ## 
 ## 
 ## ----------------------------------------------------------------------------
-##    variable     missing   complete    n    mean    sd    min   p25   median 
+##    variable     missing   complete    n    mean    sd    p0    p25   median 
 ## -------------- --------- ---------- ----- ------ ------ ----- ----- --------
 ##  Petal.Length      0        150      150   3.76   1.77    1    1.6    4.35  
 ## 
@@ -506,21 +506,21 @@ n variables: 5</p>
 ## Table: Table continues below
 ## 
 ##  
-## ----------------------
-##  p75   max     hist   
-## ----- ----- ----------
-##  5.1   6.9   ▇▁▁▂▅▅▃▁ 
+## -----------------------
+##  p75   p100     hist   
+## ----- ------ ----------
+##  5.1   6.9    ▇▁▁▂▅▅▃▁ 
 ## 
-##  1.8   2.5   ▇▁▁▅▃▃▂▂ 
+##  1.8   2.5    ▇▁▁▅▃▃▂▂ 
 ## 
-##  6.4   7.9   ▂▇▅▇▆▅▂▂ 
+##  6.4   7.9    ▂▇▅▇▆▅▂▂ 
 ## 
-##  3.3   4.4   ▁▂▅▇▃▂▁▁ 
-## ----------------------</code></pre>
+##  3.3   4.4    ▁▂▅▇▃▂▁▁ 
+## -----------------------</code></pre>
 <div id="solutions-to-common-rendering-problems" class="section level2">
 <h2>Solutions to common rendering problems</h2>
-<p>The details of rendering are dependent on the operating system R is running on, the locale of the installation, and the fonts installed. Rendering may also differ based on whether it occurs in the console or when knitting to specific types of documents such as HTML and PDF. The most commonly reported problems involve rendering the spark graphs (inline histogram and line graphs). This section will summarize known issues.</p>
-<p>Windows cannot print the spark-histogram characters when printing a data-frame. For example, <code>&quot;▂▅▇&quot;</code> is printed as <code>&quot;&lt;U+2582&gt;&lt;U+2585&gt;&lt;U+2587&gt;&quot;</code>. This longstanding problem [originates in the low-level code] (<a href="http://r.789695.n4.nabble.com/Unicode-display-problem-with-data-frames-under-Windows-td4707639.html" class="uri">http://r.789695.n4.nabble.com/Unicode-display-problem-with-data-frames-under-Windows-td4707639.html</a>) for printing dataframes. One workaround for showing these characters in Windows is to set the CTYPE part of your locale to Chinese/Japanese/Korean with <code>Sys.setlocale(&quot;LC_CTYPE&quot;, &quot;Chinese&quot;)</code>. These values do show up by default when printing a data-frame created by <code>skim()</code> as a list (<code>as.list()</code>) or as a matrix (<code>as.matrix()</code>).</p>
+<p>The details of rendering are dependent on the operating system R is running on, the locale of the installation, and the fonts installed. Rendering may also differ based on whether it occurs in the console or when knitting to specific types of documents such as HTML and PDF. The most commonly reported problems involve rendering the spark graphs (inline histogram). This section will summarize known issues.</p>
+<p>Currently pander() does not support inline_histograms on Windows. Also, Windows does not support spark line graphs.</p>
 <p>In order to render the spark graphs in html or PDF histogram you may need to change fonts to one that supports blocks or braille (depending on which you need). Please review the separate vignette and associated template for details on this.</p>
 </div>
 </div>

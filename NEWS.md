@@ -1,4 +1,22 @@
-skimr 0.92 (2017-12-xx)
+skimr 1.0.1 (2018-01-xx)
+========================
+### NEW FEATURES
+   * Add support for spark plots on Windows
+
+### MAJOR CHANGES
+   * spark_line() and spark_bar() are no longer exported
+   * Default statistics for numeric changed from min(x) and max(x) to 
+     quantile(x, probs= c(0)) and quantile(x, probs= c(1))
+
+#### MINOR IMPROVEMENTS
+   * Add minimimum required version for stringr
+   * Improve documentation related to fonts
+
+### BUG FIXES
+  * Fix issue where a histogram for data with all NAs threw an error
+  * Suppress progress bars from dplyr::do
+
+skimr 0.92 (2017-12-19)
 =======================
 
 ### MAJOR CHANGES

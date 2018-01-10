@@ -48,8 +48,8 @@ sorted_count <- function(x) {
 #' @export
 
 inline_hist <- function(x) {
-  # Handle empty vectors
-  if (length(x) < 1) return(structure(" ", class = "spark"))
+  # Handle empty and NA vectors
+  if (length(x) < 1|| all(is.na(x))) return(structure(" ", class = c("spark", "character")))
   
   # Addresses a known bug in cut()
   if (all(x == 0)) x <- x + 1
@@ -57,6 +57,7 @@ inline_hist <- function(x) {
   hist_dt <- hist_dt / max(hist_dt)
   structure(spark_bar(hist_dt), class = c("spark", "character"))
 }
+
 
 #' Draw a sparkline bar graph with unicode block characters
 #'
@@ -79,6 +80,8 @@ inline_hist <- function(x) {
 #'
 #' spark_bar(c(0, NA, 0.5, NA, 1))
 #' }
+#' @noRd
+
 spark_bar <- function(x, safe = TRUE) {
   stopifnot(is.numeric(x))
   
@@ -196,6 +199,7 @@ normalize01 <- function(x) {
   (x - min(x)) / (max(x) - min(x))
 }
 
+
 #' Draw a sparkline line graph with Braille characters.
 #'
 #' @inheritParams spark_bar
@@ -204,6 +208,8 @@ normalize01 <- function(x) {
 #' x <- seq(0, 1, length = 10)
 #' spark_line(x)
 #' }
+#' @noRd
+
 spark_line <- function(x) {
   stopifnot(is.numeric(x))
   
@@ -253,7 +259,7 @@ list_lengths_min <- function(x) {
 list_lengths_median <- function(x) {
   x <- x[!is.na(x)]
   l <- lengths(x)
-  return(stats::median(l))
+  ifelse(length(l) != 0, return(stats::median(l)), return(NA))
 }
 
 

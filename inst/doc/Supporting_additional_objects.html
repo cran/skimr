@@ -12,7 +12,7 @@
 
 <meta name="author" content="Elin Waring" />
 
-<meta name="date" content="2017-12-21" />
+<meta name="date" content="2018-01-09" />
 
 <title>Supporting additional objects</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Supporting additional objects</h1>
 <h4 class="author"><em>Elin Waring</em></h4>
-<h4 class="date"><em>2017-12-21</em></h4>
+<h4 class="date"><em>2018-01-09</em></h4>
 
 
 
@@ -90,9 +90,9 @@ nc &lt;- st_read(system.file(&quot;shape/nc.shp&quot;, package=&quot;sf&quot;))<
 <h1>Create the skim function</h1>
 <p>The <code>skim.sf()</code> function simply replicates the <code>skim.data.frame()</code> function but adds the reference to the functions_sf file. The returned object is a <code>skim_df</code> because it is a tibble containing the standard skim_df data. However, if desired, especially for printing purposes, a different class could be used.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @include functions_sfc.R</span>
-skim.sf &lt;-<span class="st"> </span>function(.data) {
-  rows &lt;-<span class="st"> </span>purrr::<span class="kw">map</span>(.data, skim_v)
-  combined &lt;-<span class="st"> </span>dplyr::<span class="kw">bind_rows</span>(rows, <span class="dt">.id =</span> <span class="st">&quot;var&quot;</span>)
+skim.sf &lt;-<span class="st"> </span><span class="cf">function</span>(.data) {
+  rows &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(.data, skim_v)
+  combined &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_rows</span>(rows, <span class="dt">.id =</span> <span class="st">&quot;var&quot;</span>)
   <span class="kw">return</span>(<span class="kw">structure</span>(combined, <span class="dt">class =</span> <span class="kw">c</span>(<span class="st">&quot;skim_df&quot;</span>, <span class="kw">class</span>(combined))))
 }</code></pre></div>
 </div>
