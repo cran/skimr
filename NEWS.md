@@ -1,35 +1,61 @@
-skimr 1.0.1 (2018-01-xx)
+skimr 1.0.2 (2018-xx-xx)
 ========================
 ### NEW FEATURES
-   * Add support for spark plots on Windows
+  * You can create skimmers with the formula syntax from `rlang`:
+    `skim_with(iqr = ~IQR(.x, na.rm = TRUE))`.
 
 ### MAJOR CHANGES
-   * spark_line() and spark_bar() are no longer exported
-   * Default statistics for numeric changed from min(x) and max(x) to 
-     quantile(x, probs= c(0)) and quantile(x, probs= c(1))
+  * The median label has been changed to p50 for consistency with 
+     the previous changes to p0 and p100. 
 
 #### MINOR IMPROVEMENTS
-   * Add minimimum required version for stringr
-   * Improve documentation related to fonts
+   * Impovements and corrections to to readme and other documentation.
+   * New vignette showing defaults for skimmers and formats.
+   * Vector output match data frame output more closely.
+   * Add minimum required version for testhat.
+   * Add minimum requred version for knitr.
 
 ### BUG FIXES
-  * Fix issue where a histogram for data with all NAs threw an error
-  * Suppress progress bars from dplyr::do
+  * You can use `skim_with()` to add and remove skimmers at the same time, i.e.
+    `skim_with(iqr = IQR, hist = NULL)` works as expected.
+  * Histograms work when Inf or -Inf are present.
+  * Change seq( ) parameter to length.out to avoid problems with name matching.
+  * Summary should not display a data frame name of "." 
+    (which occurs when piping begins with the data frame).
+
+skimr 1.0.1 (2018-01-09)
+========================
+### NEW FEATURES
+  * Add support for spark plots on Windows
+
+### MAJOR CHANGES
+  * `spark_line()` and `spark_bar()` are no longer exported
+  * Default statistics for numeric changed from `min(x)` and `max(x)` to 
+    `quantile(x, probs = 0)` and `quantile(x, probs = 1)`. These changes
+    lead to more predictable behaviors when a column is all NA values.
+
+#### MINOR IMPROVEMENTS
+  * Add minimimum required version for stringr
+  * Improve documentation in general, especially those related to fonts
+
+### BUG FIXES
+  * Fix issue where a histogram for data with all `NA`s threw an error
+  * Suppress progress bars from `dplyr::do()`
 
 skimr 0.92 (2017-12-19)
 =======================
 
 ### MAJOR CHANGES
-  * skim_v() is no longer exported. Vectors are now directly supported by skim()
-    via skim.default().
+  * `skim_v()` is no longer exported. Vectors are now directly supported via
+    `skim.default()`.
   * Change license to GPL 3
 
 ### NEW FEATURES
 
-  * Add support for kable() and pander() for skim_df objects. 
-  * Add summary method for skim_df objects.  
+  * Add support for `kable()` and `pander()` for `skim_df` objects. 
+  * Add summary method for `skim_df` objects.  
   * Add support for tidy select to skim specific columns of a data frame.
-  * Add support for skimming individual vectors via skim.default(). 
+  * Add support for skimming individual vectors via `skim.default()`. 
 
 
 skimr 0.91 (2017-10-14)

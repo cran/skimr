@@ -1,9 +1,17 @@
-# Summary statistic functions
-
-#' Calculate missing values
-#' 
+#' Summary statistic functions
+#'
+#' Skimr provides extensions to a variety of functions with R's stats package
+#' to simplify creating summaries of data. All functions are vectorized and take
+#' a single argument. Other parameters for these functions are set in the
+#' [skim_format()] function.
+#'
 #' @param x A vector
-#' @return The sum of NULL and NA values
+#' @seealso [skim_format()] and [purrr::partial()] for setting arguments of a
+#'   skimmer function.
+#' @name stats
+NULL
+
+#' @describeIn stats Calculate the sum of `NA` and `NULL` (i.e. missing) values.
 #' @export
 
 n_missing <- function(x) {
@@ -11,11 +19,7 @@ n_missing <- function(x) {
 }
 
 
-#' Calculate complete values
-#' 
-#' Complete values are not missing
-#' @param x A vector
-#' @return The sum of non-NULL and non-NA values
+#' @describeIn stats Calculate complete values; complete values are not missing.
 #' @export
 
 n_complete <- function(x) {
@@ -23,36 +27,47 @@ n_complete <- function(x) {
 }
 
 
-#' Create a contingency table and arrange its levels in descending order
-#' 
-#' In case of ties, the ordering of results is alphabetical and depends upon the locale. 
-#' NA is treated as a ordinary value for sorting.
-#' 
-#' @param x An object that can be interpreted as a factor (including logical)
-#' @return A "table" object, which will be treated as a named numeric vector
+#' @describeIn stats Create a contingency table and arrange its levels in
+#'   descending order. In case of ties, the ordering of results is alphabetical
+#'   and depends upon the locale. `NA` is treated as a ordinary value for
+#'   sorting.
 #' @export
 
 sorted_count <- function(x) {
   tab <- table(x, useNA = "always")
-  out <- stats::setNames(as.integer(tab), names(tab))
+  names_tab <- names(tab)
+  if (is.element("",  names_tab)) {
+    names_tab[names_tab == ""] <- "empty"
+    warning(
+ "Variable contains value(s) of \"\" that have been converted to \"empty\".") 
+  }
+  out <- rlang::set_names(as.integer(tab), names_tab)
   sort(out, decreasing = TRUE)
 }
 
-#' Generate inline histogram for numeric variables
-#'
-#' The character length of the histogram is controlled by the formatting
-#' options for character vectors.
-#'  
-#' @param x A numeric vector.
-#' @return A length-one character vector containing the histogram.
+#' @describeIn stats Generate inline histogram for numeric variables. The
+#'   character length of the histogram is controlled by the formatting options
+#'   for character vectors.
 #' @export
 
 inline_hist <- function(x) {
-  # Handle empty and NA vectors
-  if (length(x) < 1|| all(is.na(x))) return(structure(" ", class = c("spark", "character")))
+  # For the purposes of the histogram, treat infinite as NA
+  # (before the test for all NA)
+  if (any(is.infinite(x))){
+    x[is.infinite(x)] <- NA
+    warning(
+      "Variable contains Inf or -Inf value(s) that were converted to NA."
+     )
+  }
   
+  # Handle empty and NA vectors (is.na is TRUE for NaN)
+  if (length(x) < 1 || all(is.na(x)))
+  {
+    return(structure(" ", class = c("spark", "character")))
+  }
+
   # Addresses a known bug in cut()
-  if (all(x == 0)) x <- x + 1
+  if (all(x == 0, na.rm = TRUE)) x <- x + 1
   hist_dt <- table(cut(x, options$formats$character$width))
   hist_dt <- hist_dt / max(hist_dt)
   structure(spark_bar(hist_dt), class = c("spark", "character"))
@@ -61,9 +76,11 @@ inline_hist <- function(x) {
 
 #' Draw a sparkline bar graph with unicode block characters
 #'
-#' Rendered using [block elements](https://en.wikipedia.org/wiki/Block_Elements).
+#' Rendered using
+#' [block elements](https://en.wikipedia.org/wiki/Block_Elements).
 #' In most common fixed width fonts these are rendered wider than regular
 #' characters which means they are not suitable if you need precise alignment.
+#' Based on the function in the pillar package.
 #'
 #' @param x A numeric vector between 0 and 1
 #' @param safe Nominally there are 8 block elements from 1/8 height to full
@@ -84,30 +101,27 @@ inline_hist <- function(x) {
 
 spark_bar <- function(x, safe = TRUE) {
   stopifnot(is.numeric(x))
-  
+
   bars <- vapply(0x2581:0x2588, intToUtf8, character(1))
   if (safe) {
     bars <- bars[-c(4, 8)]
   }
-  
+
   factor <- cut(
     x,
-    breaks = seq(0, 1, length = length(bars) + 1),
+    breaks = seq(0, 1, length.out = length(bars) + 1),
     labels = bars,
     include.lowest = TRUE
   )
   chars <- as.character(factor)
   chars[is.na(chars)] <- bars[length(bars)]
-  
+
   structure(paste0(chars, collapse = ""), class = "spark")
 }
 
 
-#' Calculate the number of blank values in a character vector
-#' 
-#' A "blank" is equal to "".
-#' @param x A vector
-#' @return The number of values in the vector equal to ""
+#' @describeIn stats Calculate the number of blank values in a character vector.
+#'   A "blank" is equal to "".
 #' @export
 
 n_empty <- function(x) {
@@ -116,10 +130,8 @@ n_empty <- function(x) {
 }
 
 
-#' Calculate the minimum number of characters within a character vector
-#' 
-#' @param x A vector
-#' @return The min of calling nchar(x).
+#' @describeIn stats Calculate the minimum number of characters within a
+#'   character vector.
 #' @export
 
 min_char <- function(x) {
@@ -128,10 +140,8 @@ min_char <- function(x) {
 }
 
 
-#' Calculate the maximum number of characters within a character vector
-#' 
-#' @param x A vector
-#' @return The min of calling nchar(x).
+#' @describeIn stats Calculate the maximum number of characters within a
+#'   character vector.
 #' @export
 
 max_char <- function(x) {
@@ -140,10 +150,7 @@ max_char <- function(x) {
 }
 
 
-#' Calculate the number of unique elements but remove NA
-#' 
-#' @param x A vector
-#' @return unique without NA.
+#' @describeIn stats Calculate the number of unique elements but remove `NA`.
 #' @export
 
 n_unique <- function(x) {
@@ -153,10 +160,7 @@ n_unique <- function(x) {
 }
 
 
-#' Get the start for a time series without the frequency
-#' 
-#' @param x A vector of ts data
-#' @return Finish time.
+#' @describeIn stats Get the start for a time series without the frequency.
 #' @export
 
 ts_start <- function(x) {
@@ -164,10 +168,7 @@ ts_start <- function(x) {
 }
 
 
-#' Get the finish for a time series without the frequency
-#' 
-#' @param x A vector of ts data
-#' @return Finish time.
+#' @describeIn stats Get the finish for a time series without the frequency.
 #' @export
 
 ts_end <- function(x) {
@@ -175,16 +176,10 @@ ts_end <- function(x) {
 }
 
 
-#' Generate inline line graph for time series variables
-#' 
-#' Sets all data to a standard length, to match character formatting. This is
-#' twice the number of characters set in the histogram.
-#' 
-#' The character length of the linegraph is controlled by the formatting
-#' options for character vectors.
-#' 
-#' @param x A vector
-#' @return A length-one character vector containing a line graph.
+#' @describeIn stats Generate inline line graph for time series variables. The
+#'   character length of the line graph is controlled by the formatting options
+#'   for character vectors.
+#'   Based on the function in the pillar package.
 #' @export
 
 inline_linegraph <- function(x) {
@@ -212,12 +207,12 @@ normalize01 <- function(x) {
 
 spark_line <- function(x) {
   stopifnot(is.numeric(x))
-  
-  y <- findInterval(x, seq(0, 1, length = 5), all.inside = TRUE)
-  
+
+  y <- findInterval(x, seq(0, 1, length.out = 5), all.inside = TRUE)
+
   ind <- matrix(y, ncol = 2, byrow = TRUE)
   ind[, 2] <- ind[, 2] + 4
-  
+
   chars <- apply(ind, 1, braille)
   structure(paste0(chars, collapse = ""), class = "spark")
 }
@@ -227,59 +222,50 @@ spark_line <- function(x) {
 braille <- function(x) {
   # remap to braille sequence
   x <- c(7L, 3L, 2L, 1L, 8L, 6L, 5L, 4L)[x]
-  
+
   raised <- 1:8 %in% x
   binary <- raised * 2 ^ (0:7)
-  
+
   # offset in hex is 2800
   val <- 10240 + sum(raised * 2 ^ (0:7))
-  
+
   intToUtf8(val)
 }
 
-#' Get the length of the shortest list in a vector of lists
-#' 
-#' @param x A vector of list data
-#' @return Minimum length.
+#' @describeIn stats Get the length of the shortest list in a vector of lists.
 #' @export
 
 list_lengths_min <- function(x) {
   x <- x[!is.na(x)]
   l <- lengths(x)
-  ifelse(length(l) != 0, return(min(l)), return(NA))
+  if (length(l) > 0) min(l)
+  else NA
 }
 
 
-#' Get the median length of the lists
-#' 
-#' @param x A vector of list data
-#' @return Median length.
+#' @describeIn stats Get the median length of the lists.
 #' @export
 
 list_lengths_median <- function(x) {
   x <- x[!is.na(x)]
   l <- lengths(x)
-  ifelse(length(l) != 0, return(stats::median(l)), return(NA))
+  if (length(l) > 0) stats::median(l)
+  else NA
 }
 
 
-#' Get the maximum length of the lists
-#' 
-#' @param x A vector of list data
-#' @return Maximum length.
+#' @describeIn stats Get the maximum length of the lists.
 #' @export
 
 list_lengths_max <- function(x) {
   x <- x[!is.na(x)]
   l <- lengths(x)
-  ifelse(length(l) != 0, max(l), NA)
+  if (length(l) > 0) max(l)
+  else NA
 }
 
 
-#' Get the length of the shortest list in a vector of lists
-#' 
-#' @param x A vector of list data
-#' @return Minimum length.
+#' @describeIn stats Get the length of the shortest list in a vector of lists.
 #' @export
 
 list_min_length <- function(x){
@@ -288,15 +274,10 @@ list_min_length <- function(x){
 }
 
 
-#' Get the length of the longest list in a vector of lists
-#' 
-#' @param x A vector of list data
-#' @return Minimum length.
+#' @describeIn stats Get the length of the longest list in a vector of lists.
 #' @export
 
 list_max_length <- function(x){
   l <- lengths(x)
   max(l)
 }
-
-

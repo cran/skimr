@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
   person("Amelia", "McNamara", email="amcnamara@smith.edu", role = "aut"),
   person("Eduardo", "Arino de la Rubia", email="earino@gmail.com", role = "aut"),
@@ -8,15 +8,19 @@ Authors@R: c(
   person("Julia", "Lowndes", email="lowndes@nceas.ucsb.edu", role = 'ctb'),
   person("Shannon", "Ellis", email="sellis18@jhmi.edu", role = "aut"),
   person("Elin", "Waring", email="elin.waring@gmail.com", role = "cre"),
-  person("Michael", "Quinn", email="msquinn2@illinois.edu", role = "aut"),
+  person("Michael", "Quinn", email="msquinn@google.com", role = "aut"),
   person("Hope", "McLeod", email="hmgit2@gmail.com", role = 'ctb'),
   person("Hadley", "Wickham", email="hadley@rstudio.com", role = 'ctb'),
   person("Kirill", "Müller", email="krlmlr+r@mailbox.org", role = 'ctb'),
   person(family = "RStudio, Inc.", role = "cph", comment = "Spark functions"),
   person("Connor", "Kirkpatrick", email="hello@connorkirkpatrick.com", role = 'ctb'),
-  person("Scott","Brenstuhl", email="brenstsr@miamioh.edu", role = 'ctb')
+  person("Scott", "Brenstuhl", email="brenstsr@miamioh.edu", role = 'ctb'),
+  person("Patrick", "Schratz", email="patrick.schratz@gmail.com", role = 'ctb'),
+  person("lbusett", "", email="lbusett@gmail.com", role='ctb'),
+  person("Mikko","Korpela", email="mvkorpel@iki.fi", role='ctb'),
+  person("Jennifer","Thompson", email="thompson.jennifer@gmail.com", role='ctb'),
+  person("Harris","McGehee", email="mcgehee.harris@gmail.com", role='ctb')
   )
-Maintainer: Elin Waring <elin.waring@gmail.com>
 Description: A simple to use summary function that can be used with pipes
     and displays nicely in the console. The default summary statistics may be 
     modified by the user as can the default formatting. Support for data frames 
@@ -27,8 +31,9 @@ Description: A simple to use summary function that can be used with pipes
     README.
 Depends: R (>= 3.1.2)
 Imports: dplyr (>= 0.7), magrittr, pander, purrr, rlang, stats, stringr
-        (>= 1.1), knitr, tibble (>= 0.6), tidyr (>= 0.7), tidyselect
-Suggests: extrafont, rmarkdown, testthat, withr
+        (>= 1.1), knitr (>= 1.2), tibble (>= 0.6), tidyr (>= 0.7),
+        tidyselect
+Suggests: extrafont, rmarkdown, testthat (>= 2.0.0), withr, covr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -37,10 +42,10 @@ BugReports: https://github.com/ropenscilabs/skimr/issues
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 Collate: 'skimr-package.R' 'formats.R' 'stats.R' 'functions.R'
-        'options.R' 'skim.R' 'skim_print.R' 'skim_v.R' 'summary.R'
-        'utils.R'
+        'kable.R' 'options.R' 'pander.R' 'skim.R' 'skim_print.R'
+        'skim_v.R' 'summary.R' 'utils.R' 'wide.R'
 NeedsCompilation: no
-Packaged: 2018-01-10 01:37:58 UTC; elinwaring
+Packaged: 2018-04-02 16:33:06 UTC; elinwaring
 Author: Amelia McNamara [aut],
   Eduardo Arino de la Rubia [aut],
   Hao Zhu [aut],
@@ -53,6 +58,12 @@ Author: Amelia McNamara [aut],
   Kirill Müller [ctb],
   RStudio, Inc. [cph] (Spark functions),
   Connor Kirkpatrick [ctb],
-  Scott Brenstuhl [ctb]
+  Scott Brenstuhl [ctb],
+  Patrick Schratz [ctb],
+  lbusett [ctb],
+  Mikko Korpela [ctb],
+  Jennifer Thompson [ctb],
+  Harris McGehee [ctb]
+Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-01-10 06:35:37 UTC
+Date/Publication: 2018-04-02 17:47:58 UTC
