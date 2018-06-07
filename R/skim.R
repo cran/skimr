@@ -38,7 +38,7 @@ globalVariables(".")
 #' If the rendered examples show unencoded values such as `<U+2587>` you will
 #' need to change your locale to allow proper rendering. Please review the
 #' *Using Skimr* vignette for more information
-#' (`vignette("Using_skimr" package = "skimr")`).
+#' (`vignette("Using_skimr", package = "skimr")`).
 #'
 #' @param .data A tibble, or an object that can be coerced into a tibble.
 #' @param ...  Additional options, normally used to list individual unquoted
@@ -110,13 +110,12 @@ skim.default <-function(.data, ...){
     return(message("No skim method exists for class ", class(.data), "."))
   }
   skimmed <- skim_v(.data)
+  if (is.null(skimmed)){
+    return(message("The skimmer list is empty for class ", class(.data), "."))
+  }
   skimmed$variable <- deparse(substitute(.data))
-  skimmed <- dplyr::select(skimmed, !!rlang::sym("variable"), 
-                           !!rlang::sym("type"), 
-                           !!rlang::sym("stat"), 
-                           !!rlang::sym("level"), 
-                           !!rlang::sym("value"), 
-                           !!rlang::sym("formatted"))
+  cols <- c("variable", "type", "stat", "level", "value", "formatted")
+  skimmed <- dplyr::select(skimmed, !!!rlang::syms(cols)) 
   structure(skimmed, class = c("skim_vector", "skim_df", class(skimmed)),
             df_name = skimmed$variable[1])
 }

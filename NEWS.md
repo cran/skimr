@@ -1,4 +1,17 @@
-skimr 1.0.2 (2018-xx-xx)
+skimr 1.0.3 (2018-06-06)
+========================
+### NEW FEATURES
+  * You can use skim_with() with a nest list of functions:
+     `skim_with(.list = mylist)` or `skim_with(!!!mylist)`
+  * More polished display of subtables in default printing.
+
+### BUG FIXES
+  * Fix issue with conflict between knitr and skimr versions 
+     of kable() that occurred intermittently.
+  * Do not skim a class when the skimmer list is empty for that class.
+  * Fix a mistake in a test of skim_print for top counts.
+
+skimr 1.0.2 (2018-04-04)
 ========================
 ### NEW FEATURES
   * You can create skimmers with the formula syntax from `rlang`:
@@ -8,7 +21,7 @@ skimr 1.0.2 (2018-xx-xx)
   * The median label has been changed to p50 for consistency with 
      the previous changes to p0 and p100. 
 
-#### MINOR IMPROVEMENTS
+### MINOR IMPROVEMENTS
    * Impovements and corrections to to readme and other documentation.
    * New vignette showing defaults for skimmers and formats.
    * Vector output match data frame output more closely.

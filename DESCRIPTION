@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: c(
   person("Amelia", "McNamara", email="amcnamara@smith.edu", role = "aut"),
   person("Eduardo", "Arino de la Rubia", email="earino@gmail.com", role = "aut"),
@@ -30,9 +30,9 @@ Description: A simple to use summary function that can be used with pipes
     specific operating systems are given in the "Using skimr" vignette and the 
     README.
 Depends: R (>= 3.1.2)
-Imports: dplyr (>= 0.7), magrittr, pander, purrr, rlang, stats, stringr
-        (>= 1.1), knitr (>= 1.2), tibble (>= 0.6), tidyr (>= 0.7),
-        tidyselect
+Imports: cli, dplyr (>= 0.7), magrittr, pander, purrr, rlang, stats,
+        stringr (>= 1.1), knitr (>= 1.2), tibble (>= 0.6), tidyr (>=
+        0.7), tidyselect (>= 0.2.4)
 Suggests: extrafont, rmarkdown, testthat (>= 2.0.0), withr, covr
 License: GPL-3
 Encoding: UTF-8
@@ -45,7 +45,7 @@ Collate: 'skimr-package.R' 'formats.R' 'stats.R' 'functions.R'
         'kable.R' 'options.R' 'pander.R' 'skim.R' 'skim_print.R'
         'skim_v.R' 'summary.R' 'utils.R' 'wide.R'
 NeedsCompilation: no
-Packaged: 2018-04-02 16:33:06 UTC; elinwaring
+Packaged: 2018-06-07 02:23:40 UTC; elinwaring
 Author: Amelia McNamara [aut],
   Eduardo Arino de la Rubia [aut],
   Hao Zhu [aut],
@@ -66,4 +66,4 @@ Author: Amelia McNamara [aut],
   Harris McGehee [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-04-02 17:47:58 UTC
+Date/Publication: 2018-06-07 17:43:08 UTC

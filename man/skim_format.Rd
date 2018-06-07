@@ -6,7 +6,7 @@
 \alias{show_formats}
 \title{Change the formatting options for printed skim objects}
 \usage{
-skim_format(..., append = TRUE)
+skim_format(..., .list = list(), append = TRUE, drop_new = FALSE)
 
 skim_format_defaults()
 
@@ -16,8 +16,14 @@ show_formats(which = NULL)
 \item{...}{Named arguments that contain named lists specifying formats to
 apply.}
 
+\item{.list}{Instead of individual named entries, you can provided a list
+instead. If most \code{...} arguments and \code{.list} is provided, values
+in \code{.list} take precedence.}
+
 \item{append}{Whether the provided options should be in addition to the
 defaults already in \code{skim}. Default is \code{TRUE}.}
+
+\item{drop_new}{Whether types outside of the defaults should be discarded.}
 
 \item{which}{A character vector. One or more of the classes whose formatting
 options you wish to display.}
@@ -57,10 +63,20 @@ For each data type, options are returned as a list of option-value pairs.
 skim_format(numeric = list(digits = 3))
 
 # Show the values for the formats
-show_formats
+show_formats()
 
 # Show 4-character names in factor levels
 skim_format(.levels = list(max_char = 4))
+
+# Set multiple formats
+skim_format(numeric = list(digits = 3), .levels = list(max_char = 4))
+
+# Set multiple formats with a .list argument
+my_formats <- list(numeric = list(digits = 3), .levels = list(max_char = 4))
+skim_format(.list = my_formats)
+
+# Alternatively, use rlang unquoting semantics
+skim_format(!!!my_formats)
 
 # Reset to the defaults
 skim_format_defaults()

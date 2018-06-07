@@ -16,6 +16,9 @@ NULL
 #' 
 #' @param ... A list of functions, with an argument name that matches a
 #'  particular data type.
+#' @param .list Instead of individual named entries, you can provided a list
+#'  instead. If most \code{...} arguments and \code{.list} is provided, values
+#'  in \code{.list} take precedence.
 #' @param append Whether the provided options should be in addition to the
 #'  defaults already in `skim`. Default is `TRUE`.
 #' @return When setting values, `invisible(NULL)`. When looking up values a
@@ -23,6 +26,7 @@ NULL
 #'  summary functions. With [`show_skimmers()`], each entry in the list is a
 #'  character vector of function names. With [`get_skimmers()`], each entry
 #'  in the list is itself a list of named functions.
+#' @param drop_new Whether types outside of the defaults should be discarded.
 #' @examples
 #' # Use new functions for numeric functions
 #' skim_with(numeric = list(median = median, mad = mad), append = FALSE)
@@ -47,6 +51,17 @@ NULL
 #' # Or use an rlang-style formula constructor for the function
 #' skim_with(numeric = list(med = ~median(., na.rm = TRUE)))
 #' 
+#' # Set multiple types of skimmers simultaneously
+#' skim_with(numeric = list(mean = mean), character = list(len = length))
+#' 
+#' # Or pass the same as a list
+#' my_skimmers <- list(numeric = list(mean = mean),
+#'                     character = list(len = length))
+#' skim_with(.list = my_skimmers)
+#' 
+#' # Alternatively, use rlang unquoting semantics
+#' skim_with(!!!my_skimmers)
+#' 
 #' # Go back to defaults
 #' skim_with_defaults()
 #' skim(faithful)
@@ -60,10 +75,12 @@ NULL
 #' skim_with(hms = funs$date)
 #' @export
 
-skim_with <- function(..., append = TRUE) {
-  skimmers <- purrr::modify_depth(rlang::dots_list(...), 1, purrr::map_if,
+skim_with <- function(..., .list = list(), append = TRUE, drop_new = FALSE) {
+  combined <- purrr::list_modify(rlang::dots_list(...), !!! .list)
+  skimmers <- purrr::modify_depth(combined, 1, purrr::map_if,
                                   Negate(is.null), rlang::as_function)
-  skim_options(skimmers, env = "functions", append = append)
+  skim_options(skimmers, env = "functions", append = append,
+               drop_new = drop_new)
 }
 
 
@@ -71,7 +88,7 @@ skim_with <- function(..., append = TRUE) {
 #' @export
 
 skim_with_defaults <- function() {
-  assign("functions", .default, envir = options)
+  skim_with(.list = .default, append = FALSE, drop_new = TRUE)
 }
 
 
@@ -246,5 +263,6 @@ difftime_funs <- date_funs
   AsIs = asis_funs,
   difftime = difftime_funs
 )
+
 # Set the default skimming functions
 options$functions <- .default

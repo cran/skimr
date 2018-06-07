@@ -11,8 +11,8 @@ NULL
 
 print.skim_df <- function(x, ...) {
   defaults <- options(dplyr.show_progress = FALSE)
-  on.exit(options(defaults))
-  
+  on.exit(options(defaults)
+  )
   cat("Skim summary statistics\n")
   cat(" n obs:", attr(x, "data_rows"), "\n")
   cat(" n variables:", attr(x, "data_cols"), "\n")
@@ -33,9 +33,8 @@ print.skim_df <- function(x, ...) {
 #' @export
 
 print.skim_vector <- function(x, ...) {
-  cat("Skim summary statistics\n")
+  cat("\nSkim summary statistics\n")
   skim_render(x, groups = as.null(), print_impl, ...)
-  
 }
 
 
@@ -57,17 +56,18 @@ print.summary_skim_df <- function(x, ...) {
       n_rows, 
       n_cols, 
       "    \nColumn type frequency    \n",
-      type_frequency_string
+      type_frequency_string,
+      "\n"
       ,sep = "")
 }
-
 
 #' Print expanded skim tables with a simple caption
 #' @keywords internal
 #' @noRd
 
 print_impl <- function(transformed_df, skim_type, ...) {
-  cat("\nVariable type:", skim_type, "\n")
+  cat("\n")
+  print(cli::rule(line = 1, left = paste0("Variable type:", skim_type)))
   mat <- as.matrix(transformed_df)
   dimnames(mat)[[1]] <- rep("", nrow(mat))
   print(enc2utf8(mat), quote = FALSE, right = TRUE)
@@ -84,8 +84,7 @@ skim_render <- function(.data, groups, FUN, ...) {
   funs_used <- get_funs(skim_type)
   fun_names <- names(funs_used)
   collapsed <- collapse_levels(.data, groups)
-  wide <- tidyr::spread(collapsed, !!rlang::sym("stat"),
-                        !!rlang::sym("formatted"))
+  wide <- tidyr::spread(collapsed, "stat", "formatted")
   if (options$formats$.align_decimal) {
     wide[fun_names] <- lapply(wide[fun_names], align_decimal)
   }
@@ -95,7 +94,7 @@ skim_render <- function(.data, groups, FUN, ...) {
 }
 
 collapse_levels <- function(.data, groups) {
-  all_groups <- c(groups, rlang::sym("variable"), rlang::sym("stat"))
+  all_groups <- c(groups, rlang::syms(c("variable", "stat")))
   grouped <- dplyr::group_by(.data, !!!all_groups)
   dplyr::summarize(grouped, formatted = collapse_one(.data$formatted))
 }
