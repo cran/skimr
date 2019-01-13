@@ -1,3 +1,13 @@
+skimr 1.0.4 (2018-01-12)
+========================
+This is likely to be the last release of skimr version 1.  Version 2
+has major changes to the API. Users should review and prepare for 
+those changes now. 
+
+### BUG FIXES
+  * Fix failures in handling dplyr verbs related to upcoming release
+     of dplyr 0.0.0.
+
 skimr 1.0.3 (2018-06-06)
 ========================
 ### NEW FEATURES
