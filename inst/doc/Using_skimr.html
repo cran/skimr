@@ -12,14 +12,14 @@
 
 <meta name="author" content="Elin Waring" />
 
-<meta name="date" content="2019-01-13" />
+<meta name="date" content="2019-02-24" />
 
 <title>Using Skimr</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -70,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using Skimr</h1>
 <h4 class="author"><em>Elin Waring</em></h4>
-<h4 class="date"><em>2019-01-13</em></h4>
+<h4 class="date"><em>2019-02-24</em></h4>
 
 
 
@@ -112,13 +134,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n obs: 150 
 ##  n variables: 5 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete   n n_unique                       top_counts
 ##   Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##      variable missing complete   n mean   sd  p0 p25  p50 p75 p100
 ##  Petal.Length       0      150 150 3.76 1.77 1   1.6 4.35 5.1  6.9
 ##   Petal.Width       0      150 150 1.2  0.76 0.1 0.3 1.3  1.8  2.5
@@ -150,24 +172,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span><span class="kw">skim</span>(iris)
 <span class="kw">head</span>(s, <span class="dv">15</span>)</code></pre></div>
-<pre><code>## # A tibble: 15 x 6
-##    variable     type    stat     level   value formatted
-##    &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    
-##  1 Sepal.Length numeric missing  .all    0.    0        
-##  2 Sepal.Length numeric complete .all  150.    150      
-##  3 Sepal.Length numeric n        .all  150.    150      
-##  4 Sepal.Length numeric mean     .all    5.84  5.84     
-##  5 Sepal.Length numeric sd       .all    0.828 0.83     
-##  6 Sepal.Length numeric p0       .all    4.30  4.3      
-##  7 Sepal.Length numeric p25      .all    5.10  5.1      
-##  8 Sepal.Length numeric p50      .all    5.80  5.8      
-##  9 Sepal.Length numeric p75      .all    6.40  6.4      
-## 10 Sepal.Length numeric p100     .all    7.90  7.9      
-## 11 Sepal.Length numeric hist     .all   NA     ▂▇▅▇▆▅▂▂ 
-## 12 Sepal.Width  numeric missing  .all    0.    0        
-## 13 Sepal.Width  numeric complete .all  150.    150      
-## 14 Sepal.Width  numeric n        .all  150.    150      
-## 15 Sepal.Width  numeric mean     .all    3.06  3.06</code></pre>
+<pre><code>## Skim summary statistics
+##  n obs: 150 
+##  n variables: 5 
+## 
+## ── Variable type:numeric ────────────────────────────────────────────
+##      variable missing complete   n mean    sd   p0  p25  p50  p75 p100
+##  Sepal.Length       0      150 150 5.84 NA.83 NA.3 NA.1 NA.8 NA.4 NA.9
+##   Sepal.Width       0      150 150 3.06 NA    NA   NA   NA   NA   NA  
+##      hist
+##  ▂▇▅▇▆▅▂▂
+##      &lt;NA&gt;</code></pre>
 <p><code>skim()</code> also supports grouped data. In this case, one additional column for each grouping variable is added to the <code>skim_df</code> object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(gear) <span class="op">%&gt;%</span>
@@ -177,7 +192,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n variables: 11 
 ##  group variables: gear 
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  gear variable missing complete  n   mean     sd     p0    p25    p50
 ##     3       am       0       15 15   0      0      0      0      0   
 ##     3     carb       0       15 15   2.67   1.18   1      2      3   
@@ -246,13 +261,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n obs: 150 
 ##  n variables: 5 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete   n n_unique                       top_counts
 ##   Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##      variable missing complete   n mean   sd  p0 p25 p50 p75 p100     hist
 ##  Sepal.Length       0      150 150 5.84 0.83 4.3 5.1 5.8 6.4  7.9 ▂▇▅▇▆▅▂▂</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris, <span class="kw">starts_with</span>(<span class="st">&quot;Sepal&quot;</span>))</code></pre></div>
@@ -260,7 +275,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##  n obs: 150 
 ##  n variables: 5 
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##      variable missing complete   n mean   sd  p0 p25 p50 p75 p100     hist
 ##  Sepal.Length       0      150 150 5.84 0.83 4.3 5.1 5.8 6.4  7.9 ▂▇▅▇▆▅▂▂
 ##   Sepal.Width       0      150 150 3.06 0.44 2   2.8 3   3.3  4.4 ▁▂▅▇▃▂▁▁</code></pre>
@@ -273,7 +288,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## 
 ## Skim summary statistics
 ## 
-## ── Variable type:ts ─────────────────────────────────────────
+## ── Variable type:ts ─────────────────────────────────────────────────
 ##        variable missing complete   n start  end frequency deltat    mean
 ##  datasets::lynx       0      114 114  1821 1934         1      1 1538.02
 ##       sd min  max median line_graph
@@ -287,7 +302,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## 
 ## Skim summary statistics
 ## 
-## ── Variable type:character ──────────────────────────────────
+## ── Variable type:character ──────────────────────────────────────────
 ##  variable missing complete   n min max empty n_unique
 ##      lynx       0      114 114   2   4     0      110</code></pre>
 </div>
@@ -312,7 +327,7 @@ m</code></pre></div>
 ##  n obs: 4 
 ##  n variables: 3 
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete n mean   sd p0  p25  p50   p75 p100     hist
 ##        V1       0        4 4  2.5 1.29  1 1.75  2.5  3.25    4 ▇▁▇▁▁▇▁▇
 ##        V2       0        4 4  6.5 1.29  5 5.75  6.5  7.25    8 ▇▁▇▁▁▇▁▇
@@ -322,7 +337,7 @@ m</code></pre></div>
 ##  n obs: 3 
 ##  n variables: 4 
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete n mean sd p0 p25 p50 p75 p100     hist
 ##        V1       0        3 3    5  4  1   3   5   7    9 ▇▁▁▇▁▁▁▇
 ##        V2       0        3 3    6  4  2   4   6   8   10 ▇▁▁▇▁▁▁▇
@@ -332,7 +347,7 @@ m</code></pre></div>
 <pre><code>## 
 ## Skim summary statistics
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete  n mean   sd p0  p25 p50  p75 p100     hist
 ##      c(m)       0       12 12  6.5 3.61  1 3.75 6.5 9.25   12 ▇▃▇▃▃▇▃▇</code></pre>
 <p>You can skim a single row or column in the same way as any vector.</p>
@@ -340,14 +355,14 @@ m</code></pre></div>
 <pre><code>## 
 ## Skim summary statistics
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete n mean   sd p0  p25 p50  p75 p100     hist
 ##    m[, 1]       0        4 4  2.5 1.29  1 1.75 2.5 3.25    4 ▇▁▇▁▁▇▁▇</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(m[<span class="dv">1</span>,])</code></pre></div>
 <pre><code>## 
 ## Skim summary statistics
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete n mean sd p0 p25 p50 p75 p100     hist
 ##    m[1, ]       0        3 3    5  4  1   3   5   7    9 ▇▁▁▇▁▁▁▇</code></pre>
 </div>
@@ -365,13 +380,13 @@ m</code></pre></div>
 ##  n obs: 150 
 ##  n variables: 5 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete   n n_unique                       top_counts
 ##   Species       0      150 150        3 set: 50, ver: 50, vir: 50, NA: 0
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##      variable missing complete   n mean   sd  p0 p25  p50 p75 p100
 ##  Petal.Length       0      150 150 3.76 1.77 1   1.6 4.35 5.1  6.9
 ##   Petal.Width       0      150 150 1.2  0.76 0.1 0.3 1.3  1.8  2.5
@@ -383,24 +398,24 @@ m</code></pre></div>
 ##  ▂▇▅▇▆▅▂▂
 ##  ▁▂▅▇▃▂▁▁</code></pre>
 <ul>
-<li><code>skim_to_list()</code> returns a nqmed list of the wide data frames for each data type. These data frames contain the formatted, character values, meaning that they are most useful for display. In general, users will want to store the results in an object for further handling.</li>
+<li><code>skim_to_list()</code> returns a named list of the wide data frames for each data type. These data frames contain the formatted, character values, meaning that they are most useful for display. In general, users will want to store the results in an object for further handling.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">skim_to_list</span>()</code></pre></div>
 <pre><code>## $factor
 ## # A tibble: 1 x 7
-##   variable missing complete n     n_unique top_counts              ordered
-## * &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;                   &lt;chr&gt;  
-## 1 Species  0       150      150   3        set: 50, ver: 50, vir:… FALSE  
+##   variable missing complete n     n_unique top_counts               ordered
+## * &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;                    &lt;chr&gt;  
+## 1 Species  0       150      150   3        set: 50, ver: 50, vir: … FALSE  
 ## 
 ## $numeric
 ## # A tibble: 4 x 12
-##   variable     missing complete n     mean   sd    p0    p25   p50   p75  
-## * &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-## 1 Petal.Length 0       150      150   3.76   1.77  &quot;1  &quot; 1.6   4.35  5.1  
-## 2 Petal.Width  0       150      150   &quot;1.2 &quot; 0.76  0.1   0.3   &quot;1.3… 1.8  
-## 3 Sepal.Length 0       150      150   5.84   0.83  4.3   5.1   &quot;5.8… 6.4  
-## 4 Sepal.Width  0       150      150   3.06   0.44  &quot;2  &quot; 2.8   &quot;3  … 3.3  
-## # ... with 2 more variables: p100 &lt;chr&gt;, hist &lt;chr&gt;</code></pre>
+##   variable missing complete n     mean  sd    p0    p25   p50   p75   p100 
+## * &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 Petal.L… 0       150      150   3.76  1.77  &quot;1  &quot; 1.6   4.35  5.1   6.9  
+## 2 Petal.W… 0       150      150   &quot;1.2… 0.76  0.1   0.3   &quot;1.3… 1.8   2.5  
+## 3 Sepal.L… 0       150      150   5.84  0.83  4.3   5.1   &quot;5.8… 6.4   7.9  
+## 4 Sepal.W… 0       150      150   3.06  0.44  &quot;2  &quot; 2.8   &quot;3  … 3.3   4.4  
+## # … with 1 more variable: hist &lt;chr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris_skimmed &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">skim_to_list</span>()
 iris_skimmed[[<span class="st">&quot;numeric&quot;</span>]] <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(mean, sd)</code></pre></div>
 <pre><code>## # A tibble: 4 x 2
@@ -415,14 +430,14 @@ iris_skimmed[[<span class="st">&quot;numeric&quot;</span>]] <span class="op">%&g
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">skim_to_wide</span>(iris)</code></pre></div>
 <pre><code>## # A tibble: 5 x 16
-##   type   variable missing complete n     n_unique top_counts ordered mean 
-##   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;
-## 1 factor Species  0       150      150   3        set: 50, … FALSE   &lt;NA&gt; 
-## 2 numer… Petal.L… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    3.76 
-## 3 numer… Petal.W… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    &quot;1.2…
-## 4 numer… Sepal.L… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    5.84 
-## 5 numer… Sepal.W… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    3.06 
-## # ... with 7 more variables: sd &lt;chr&gt;, p0 &lt;chr&gt;, p25 &lt;chr&gt;, p50 &lt;chr&gt;,
+##   type  variable missing complete n     n_unique top_counts ordered mean 
+##   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;
+## 1 fact… Species  0       150      150   3        set: 50, … FALSE   &lt;NA&gt; 
+## 2 nume… Petal.L… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    3.76 
+## 3 nume… Petal.W… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    &quot;1.2…
+## 4 nume… Sepal.L… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    5.84 
+## 5 nume… Sepal.W… 0       150      150   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;    3.06 
+## # … with 7 more variables: sd &lt;chr&gt;, p0 &lt;chr&gt;, p25 &lt;chr&gt;, p50 &lt;chr&gt;,
 ## #   p75 &lt;chr&gt;, p100 &lt;chr&gt;, hist &lt;chr&gt;</code></pre>
 </div>
 </div>
@@ -438,13 +453,13 @@ iris_skimmed[[<span class="st">&quot;numeric&quot;</span>]] <span class="op">%&g
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete  n n_unique                         top_counts
 ##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete  n   mean    sd  p0   p25 p50   p75 p100
 ##    weight       0       71 71 261.31 78.07 108 204.5 258 323.5  423
 ##      hist mad_name
@@ -458,13 +473,13 @@ iris_skimmed[[<span class="st">&quot;numeric&quot;</span>]] <span class="op">%&g
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete  n n_unique                         top_counts
 ##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable mad_name
 ##    weight    91.92</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with_defaults</span>() <span class="co"># Reset to defaults</span></code></pre></div>
@@ -475,13 +490,13 @@ iris_skimmed[[<span class="st">&quot;numeric&quot;</span>]] <span class="op">%&g
 ##  n obs: 71 
 ##  n variables: 2 
 ## 
-## ── Variable type:factor ─────────────────────────────────────
+## ── Variable type:factor ─────────────────────────────────────────────
 ##  variable missing complete  n n_unique                         top_counts
 ##      feed       0       71 71        6 soy: 14, cas: 12, lin: 12, sun: 12
 ##  ordered
 ##    FALSE
 ## 
-## ── Variable type:numeric ────────────────────────────────────
+## ── Variable type:numeric ────────────────────────────────────────────
 ##  variable missing complete  n   mean    sd  p0   p25 p50   p75 p100
 ##    weight       0       71 71 261.31 78.07 108 204.5 258 323.5  423</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_with_defaults</span>()</code></pre></div>

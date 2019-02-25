@@ -11,14 +11,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-01-13" />
+<meta name="date" content="2019-02-24" />
 
 <title>Skimr defaults</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -54,7 +54,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -68,7 +90,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Skimr defaults</h1>
-<h4 class="date"><em>2019-01-13</em></h4>
+<h4 class="date"><em>2019-02-24</em></h4>
 
 
 
@@ -77,6 +99,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Skimmers</h2>
 <p>The <code>show_skimmers()</code> function displays the named list of skimmers by type.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'skimr'</span>
+<span class="co">#&gt; The following object is masked from 'package:stats':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     filter</span>
 <span class="kw">show_skimmers</span>()
 <span class="co">#&gt; $numeric</span>
 <span class="co">#&gt;  [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;mean&quot;     &quot;sd&quot;       &quot;p0&quot;      </span>
@@ -152,39 +179,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$mean</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
+<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$sd</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$p0</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$p25</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.25, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$p50</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.5, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$p75</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.75, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$p100</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 1, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $numeric$hist</span>
 <span class="co">#&gt; function (x) </span>
@@ -224,39 +251,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$mean</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
+<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$sd</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$p0</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$p25</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.25, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$p50</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.5, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$p75</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 0.75, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$p100</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; quantile(probs = 1, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $integer$hist</span>
 <span class="co">#&gt; function (x) </span>
@@ -321,7 +348,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $factor$ordered</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; inherits(x, &quot;ordered&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7f99fb9aa580&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7fa42cd098e0&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:base&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -346,7 +373,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $character$min</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; {</span>
-<span class="co">#&gt;     characters &lt;- nchar(x)</span>
+<span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
 <span class="co">#&gt;     min(characters, na.rm = TRUE)</span>
 <span class="co">#&gt; }</span>
 <span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
@@ -354,7 +381,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $character$max</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; {</span>
-<span class="co">#&gt;     characters &lt;- nchar(x)</span>
+<span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
 <span class="co">#&gt;     max(characters, na.rm = TRUE)</span>
 <span class="co">#&gt; }</span>
 <span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
@@ -396,9 +423,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $logical$mean</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
+<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $logical$count</span>
 <span class="co">#&gt; function (x) </span>
@@ -453,19 +480,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $date$min</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $date$max</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $date$median</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $date$n_unique</span>
 <span class="co">#&gt; function (x) </span>
@@ -496,19 +523,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Date$min</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Date$max</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Date$median</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $Date$n_unique</span>
 <span class="co">#&gt; function (x) </span>
@@ -555,39 +582,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $ts$frequency</span>
 <span class="co">#&gt; function (x, ...) </span>
 <span class="co">#&gt; UseMethod(&quot;frequency&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7f99f931d830&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7fa42d6378d8&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$deltat</span>
 <span class="co">#&gt; function (x, ...) </span>
 <span class="co">#&gt; UseMethod(&quot;deltat&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7f99f931d670&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7fa42d637a98&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$mean</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
+<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$sd</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$min</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$max</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$median</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$line_graph</span>
 <span class="co">#&gt; function (x) </span>
@@ -619,19 +646,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $POSIXct$min</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $POSIXct$max</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $POSIXct$median</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $POSIXct$n_unique</span>
 <span class="co">#&gt; function (x) </span>
@@ -767,19 +794,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $difftime$min</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $difftime$max</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $difftime$median</span>
+<span class="co">#&gt; &lt;partialised&gt;</span>
 <span class="co">#&gt; function (...) </span>
 <span class="co">#&gt; median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $difftime$n_unique</span>
 <span class="co">#&gt; function (x) </span>
