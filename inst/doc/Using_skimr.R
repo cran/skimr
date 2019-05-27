@@ -61,7 +61,7 @@ skim(m[1,])
 
 ## ------------------------------------------------------------------------
 iris_setosa <- iris %>%
-  skim_tee(iris) %>%
+  skim_tee() %>%
   dplyr::filter(Species == "setosa")
 
 

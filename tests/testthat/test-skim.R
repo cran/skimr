@@ -38,12 +38,29 @@ test_that("Using skim_tee returns the object", {
 })
 
 test_that("Using skim_tee prints out the object", {
+  skip_if_not( l10n_info()$`UTF-8` )
   expect_output(skim_tee(chickwts), "Skim summary statistics")
   expect_output(skim_tee(chickwts), "n obs: 71")
   expect_output(skim_tee(chickwts), "n variables: 2")
   expect_output(skim_tee(chickwts), 
 "── Variable type:factor ────────────────────────────────────────────────────────"
    )
+})
+
+test_that("skim_tee prints only selected columns, but returns full object", {
+  expect_output(skim_tee(iris, Species), "Species")
+  expect_output(skim_tee(iris, Species), "^(?s)(?!.*Petal).*$", perl = TRUE)
+  expect_output(
+    skim_tee(iris, starts_with("Sepal")), "^(?s)(?!.*Petal).*$", perl = TRUE)
+  expect_output(skim_tee(iris, -Species), "^(?s)(?!.*Species).*$", perl = TRUE)
+  skim_with(numeric = list(hist = NULL))
+  iris_grouped <- dplyr::group_by(iris, Species)
+  expect_output(
+    skim_tee(iris_grouped, Sepal.Length), "Species")
+  expect_output(
+    skim_tee(iris_grouped, Sepal.Length), "^(?s)(?!.*Petal).*$", perl = TRUE)
+  expect_identical(skim_tee(iris, Species), iris)
+  skim_with_defaults()
 })
 
 test_that("Skimming a grouped data frame works as expected", {

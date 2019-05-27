@@ -1,3 +1,10 @@
+skimr 1.0.6 (2019-05-26)
+=======================
+### BUG FIXES
+  * Fix CRAN issue related to support for ISO8859-15.
+  * Fix issue where skim_tee() was not respecting ... options.
+  * Fix issue where all NA character vectors were not returning NA for 
+    max() and min()
 
 skimr 1.0.5 (2019-01-05)
 ========================

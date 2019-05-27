@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-02-24" />
+<meta name="date" content="2019-05-26" />
 
 <title>Skimr defaults</title>
 
@@ -90,7 +90,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Skimr defaults</h1>
-<h4 class="date"><em>2019-02-24</em></h4>
+<h4 class="date"><em>2019-05-26</em></h4>
 
 
 
@@ -348,7 +348,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $factor$ordered</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; inherits(x, &quot;ordered&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fa42cd098e0&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7ff679338190&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:base&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
@@ -373,6 +373,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $character$min</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; {</span>
+<span class="co">#&gt;     if (all(is.na(x))) </span>
+<span class="co">#&gt;         return(NA)</span>
 <span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
 <span class="co">#&gt;     min(characters, na.rm = TRUE)</span>
 <span class="co">#&gt; }</span>
@@ -381,6 +383,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $character$max</span>
 <span class="co">#&gt; function (x) </span>
 <span class="co">#&gt; {</span>
+<span class="co">#&gt;     if (all(is.na(x))) </span>
+<span class="co">#&gt;         return(NA)</span>
 <span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
 <span class="co">#&gt;     max(characters, na.rm = TRUE)</span>
 <span class="co">#&gt; }</span>
@@ -582,13 +586,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co">#&gt; $ts$frequency</span>
 <span class="co">#&gt; function (x, ...) </span>
 <span class="co">#&gt; UseMethod(&quot;frequency&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fa42d6378d8&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7ff677fa0800&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$deltat</span>
 <span class="co">#&gt; function (x, ...) </span>
 <span class="co">#&gt; UseMethod(&quot;deltat&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fa42d637a98&gt;</span>
+<span class="co">#&gt; &lt;bytecode: 0x7ff677f9feb0&gt;</span>
 <span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $ts$mean</span>

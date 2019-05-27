@@ -1,14 +1,14 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 1.0.5
+Version: 1.0.6
 Authors@R: c(
+  person("Elin", "Waring", email="elin.waring@gmail.com", role = "cre"),
+  person("Michael", "Quinn", email="msquinn@google.com", role = "aut"),
   person("Amelia", "McNamara", email="amcnamara@smith.edu", role = "aut"),
   person("Eduardo", "Arino de la Rubia", email="earino@gmail.com", role = "aut"),
   person("Hao", "Zhu", email="haozhu233@gmail.com", role = "aut"),
   person("Julia", "Lowndes", email="lowndes@nceas.ucsb.edu", role = 'ctb'),
   person("Shannon", "Ellis", email="sellis18@jhmi.edu", role = "aut"),
-  person("Elin", "Waring", email="elin.waring@gmail.com", role = "cre"),
-  person("Michael", "Quinn", email="msquinn@google.com", role = "aut"),
   person("Hope", "McLeod", email="hmgit2@gmail.com", role = 'ctb'),
   person("Hadley", "Wickham", email="hadley@rstudio.com", role = 'ctb'),
   person("Kirill", "Müller", email="krlmlr+r@mailbox.org", role = 'ctb'),
@@ -20,7 +20,8 @@ Authors@R: c(
   person("Mikko", "Korpela", email="mvkorpel@iki.fi", role='ctb'),
   person("Jennifer", "Thompson", email="thompson.jennifer@gmail.com", role='ctb'),
   person("Harris", "McGehee", email="mcgehee.harris@gmail.com", role='ctb'),
-  person("Patrick", "Kennedy", email="pkqstr@protonmail.com", role='ctb')
+  person("Patrick", "Kennedy", email="pkqstr@protonmail.com", role='ctb'),
+  person("Daniel", "Possenriede", email="possenriede@gmail.com", role='ctb')
   )
 Description: A simple to use summary function that can be used with pipes
     and displays nicely in the console. The default summary statistics may be 
@@ -46,14 +47,14 @@ Collate: 'dplyr.r' 'skimr-package.R' 'formats.R' 'stats.R'
         'functions.R' 'kable.R' 'options.R' 'pander.R' 'skim.R'
         'skim_print.R' 'skim_v.R' 'summary.R' 'utils.R' 'wide.R'
 NeedsCompilation: no
-Packaged: 2019-02-24 20:32:48 UTC; elinwaring
-Author: Amelia McNamara [aut],
+Packaged: 2019-05-27 00:34:18 UTC; elinwaring
+Author: Elin Waring [cre],
+  Michael Quinn [aut],
+  Amelia McNamara [aut],
   Eduardo Arino de la Rubia [aut],
   Hao Zhu [aut],
   Julia Lowndes [ctb],
   Shannon Ellis [aut],
-  Elin Waring [cre],
-  Michael Quinn [aut],
   Hope McLeod [ctb],
   Hadley Wickham [ctb],
   Kirill Müller [ctb],
@@ -65,7 +66,8 @@ Author: Amelia McNamara [aut],
   Mikko Korpela [ctb],
   Jennifer Thompson [ctb],
   Harris McGehee [ctb],
-  Patrick Kennedy [ctb]
+  Patrick Kennedy [ctb],
+  Daniel Possenriede [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-02-25 05:50:02 UTC
+Date/Publication: 2019-05-27 05:10:03 UTC
