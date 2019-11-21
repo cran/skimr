@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-06-20" />
+<meta name="date" content="2019-11-12" />
 
 <title>Skimr defaults</title>
 
@@ -69,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -93,796 +94,70 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Skimr defaults</h1>
-<h4 class="date">2019-06-20</h4>
+<h4 class="date">2019-11-12</h4>
 
 
 
-<p>This vignette simply displays the defaults for skimr functions. All of these may be overloaded as explained in the <em>Using skimr</em> vignette_.</p>
-<div id="skimmers" class="section level2">
-<h2>Skimmers</h2>
-<p>The <code>show_skimmers()</code> function displays the named list of skimmers by type.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This vignette simply displays the default data types and summary functions for <code>skimr</code>. Customizing <code>skimr</code> is explained in the <strong>Using Skimr</strong> vignette.</p>
+</div>
+<div id="the-base-skimmers" class="section level2">
+<h2>The base skimmers</h2>
+<p><code>skimr</code> has a group of functions that it applies to all data types. We call these the “base”&quot; skimmers:</p>
+<ul>
+<li><code>n_missing</code>: The number of missing values in the column.</li>
+<li><code>complete_rate</code>: The ratio of non-missing values to the total values in the column.</li>
+</ul>
+</div>
+<div id="default-skimmers" class="section level2">
+<h2>Default skimmers</h2>
+<p>To learn more about the functions used in this package, use the function <code>get_default_skimmer_names()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'skimr'</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter</span>
-<span class="kw">show_skimmers</span>()
-<span class="co">#&gt; $numeric</span>
-<span class="co">#&gt;  [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;mean&quot;     &quot;sd&quot;       &quot;p0&quot;      </span>
-<span class="co">#&gt;  [7] &quot;p25&quot;      &quot;p50&quot;      &quot;p75&quot;      &quot;p100&quot;     &quot;hist&quot;    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer</span>
-<span class="co">#&gt;  [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;mean&quot;     &quot;sd&quot;       &quot;p0&quot;      </span>
-<span class="co">#&gt;  [7] &quot;p25&quot;      &quot;p50&quot;      &quot;p75&quot;      &quot;p100&quot;     &quot;hist&quot;    </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor</span>
-<span class="co">#&gt; [1] &quot;missing&quot;    &quot;complete&quot;   &quot;n&quot;          &quot;n_unique&quot;   &quot;top_counts&quot;</span>
-<span class="co">#&gt; [6] &quot;ordered&quot;   </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;min&quot;      &quot;max&quot;      &quot;empty&quot;   </span>
-<span class="co">#&gt; [7] &quot;n_unique&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;mean&quot;     &quot;count&quot;   </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $complex</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;       </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;min&quot;      &quot;max&quot;      &quot;median&quot;  </span>
-<span class="co">#&gt; [7] &quot;n_unique&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;min&quot;      &quot;max&quot;      &quot;median&quot;  </span>
-<span class="co">#&gt; [7] &quot;n_unique&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts</span>
-<span class="co">#&gt;  [1] &quot;missing&quot;    &quot;complete&quot;   &quot;n&quot;          &quot;start&quot;      &quot;end&quot;       </span>
-<span class="co">#&gt;  [6] &quot;frequency&quot;  &quot;deltat&quot;     &quot;mean&quot;       &quot;sd&quot;         &quot;min&quot;       </span>
-<span class="co">#&gt; [11] &quot;max&quot;        &quot;median&quot;     &quot;line_graph&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;min&quot;      &quot;max&quot;      &quot;median&quot;  </span>
-<span class="co">#&gt; [7] &quot;n_unique&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list</span>
-<span class="co">#&gt; [1] &quot;missing&quot;       &quot;complete&quot;      &quot;n&quot;             &quot;n_unique&quot;     </span>
-<span class="co">#&gt; [5] &quot;min_length&quot;    &quot;median_length&quot; &quot;max_length&quot;   </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs</span>
-<span class="co">#&gt; [1] &quot;missing&quot;    &quot;complete&quot;   &quot;n&quot;          &quot;n_unique&quot;   &quot;min_length&quot;</span>
-<span class="co">#&gt; [6] &quot;max_length&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime</span>
-<span class="co">#&gt; [1] &quot;missing&quot;  &quot;complete&quot; &quot;n&quot;        &quot;min&quot;      &quot;max&quot;      &quot;median&quot;  </span>
-<span class="co">#&gt; [7] &quot;n_unique&quot;</span></code></pre></div>
-</div>
-<div id="skimmer-functions" class="section level2">
-<h2>Skimmer functions</h2>
-<p>The <code>get_skimmers()</code> function shows the actual functions used, including function defaults such as NA handling.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_skimmers</span>()
-<span class="co">#&gt; $numeric</span>
-<span class="co">#&gt; $numeric$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$mean</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$sd</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$p0</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$p25</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.25, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$p50</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.5, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$p75</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.75, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$p100</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 1, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$hist</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     if (any(is.infinite(x))) {</span>
-<span class="co">#&gt;         x[is.infinite(x)] &lt;- NA</span>
-<span class="co">#&gt;         warning(&quot;Variable contains Inf or -Inf value(s) that were converted to NA.&quot;)</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     if (length(x) &lt; 1 || all(is.na(x))) {</span>
-<span class="co">#&gt;         return(structure(&quot; &quot;, class = c(&quot;spark&quot;, &quot;character&quot;)))</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     if (all(x == 0, na.rm = TRUE)) </span>
-<span class="co">#&gt;         x &lt;- x + 1</span>
-<span class="co">#&gt;     hist_dt &lt;- table(cut(x, options$formats$character$width))</span>
-<span class="co">#&gt;     hist_dt &lt;- hist_dt/max(hist_dt)</span>
-<span class="co">#&gt;     structure(spark_bar(hist_dt), class = c(&quot;spark&quot;, &quot;character&quot;))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer</span>
-<span class="co">#&gt; $integer$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$mean</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$sd</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$p0</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$p25</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.25, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$p50</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.5, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$p75</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 0.75, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$p100</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::quantile(probs = 1, na.rm = TRUE, names = FALSE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer$hist</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     if (any(is.infinite(x))) {</span>
-<span class="co">#&gt;         x[is.infinite(x)] &lt;- NA</span>
-<span class="co">#&gt;         warning(&quot;Variable contains Inf or -Inf value(s) that were converted to NA.&quot;)</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     if (length(x) &lt; 1 || all(is.na(x))) {</span>
-<span class="co">#&gt;         return(structure(&quot; &quot;, class = c(&quot;spark&quot;, &quot;character&quot;)))</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     if (all(x == 0, na.rm = TRUE)) </span>
-<span class="co">#&gt;         x &lt;- x + 1</span>
-<span class="co">#&gt;     hist_dt &lt;- table(cut(x, options$formats$character$width))</span>
-<span class="co">#&gt;     hist_dt &lt;- hist_dt/max(hist_dt)</span>
-<span class="co">#&gt;     structure(spark_bar(hist_dt), class = c(&quot;spark&quot;, &quot;character&quot;))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor</span>
-<span class="co">#&gt; $factor$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor$top_counts</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     tab &lt;- table(x, useNA = &quot;always&quot;)</span>
-<span class="co">#&gt;     names_tab &lt;- names(tab)</span>
-<span class="co">#&gt;     if (is.element(&quot;&quot;, names_tab)) {</span>
-<span class="co">#&gt;         names_tab[names_tab == &quot;&quot;] &lt;- &quot;empty&quot;</span>
-<span class="co">#&gt;         warning(&quot;Variable contains value(s) of \&quot;\&quot; that have been converted to \&quot;empty\&quot;.&quot;)</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     out &lt;- rlang::set_names(as.integer(tab), names_tab)</span>
-<span class="co">#&gt;     sort(out, decreasing = TRUE)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $factor$ordered</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; inherits(x, &quot;ordered&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fc7348dc320&gt;</span>
-<span class="co">#&gt; &lt;environment: namespace:base&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character</span>
-<span class="co">#&gt; $character$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$min</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     if (all(is.na(x))) </span>
-<span class="co">#&gt;         return(NA)</span>
-<span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
-<span class="co">#&gt;     min(characters, na.rm = TRUE)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$max</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     if (all(is.na(x))) </span>
-<span class="co">#&gt;         return(NA)</span>
-<span class="co">#&gt;     characters &lt;- nchar(x, allowNA = TRUE)</span>
-<span class="co">#&gt;     max(characters, na.rm = TRUE)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$empty</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     empty.strings &lt;- c(&quot;&quot;)</span>
-<span class="co">#&gt;     sum(x %in% empty.strings)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical</span>
-<span class="co">#&gt; $logical$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical$mean</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical$count</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     tab &lt;- table(x, useNA = &quot;always&quot;)</span>
-<span class="co">#&gt;     names_tab &lt;- names(tab)</span>
-<span class="co">#&gt;     if (is.element(&quot;&quot;, names_tab)) {</span>
-<span class="co">#&gt;         names_tab[names_tab == &quot;&quot;] &lt;- &quot;empty&quot;</span>
-<span class="co">#&gt;         warning(&quot;Variable contains value(s) of \&quot;\&quot; that have been converted to \&quot;empty\&quot;.&quot;)</span>
-<span class="co">#&gt;     }</span>
-<span class="co">#&gt;     out &lt;- rlang::set_names(as.integer(tab), names_tab)</span>
-<span class="co">#&gt;     sort(out, decreasing = TRUE)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $complex</span>
-<span class="co">#&gt; $complex$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $complex$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $complex$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date</span>
-<span class="co">#&gt; $date$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$min</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$max</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$median</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date</span>
-<span class="co">#&gt; $Date$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$min</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$max</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$median</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Date$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts</span>
-<span class="co">#&gt; $ts$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$start</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     stats::start(x)[1]</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$end</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     stats::end(x)[1]</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$frequency</span>
-<span class="co">#&gt; function (x, ...) </span>
-<span class="co">#&gt; UseMethod(&quot;frequency&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fc73640d028&gt;</span>
-<span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$deltat</span>
-<span class="co">#&gt; function (x, ...) </span>
-<span class="co">#&gt; UseMethod(&quot;deltat&quot;)</span>
-<span class="co">#&gt; &lt;bytecode: 0x7fc735656310&gt;</span>
-<span class="co">#&gt; &lt;environment: namespace:stats&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$mean</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; mean.default(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$sd</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::sd(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$min</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$max</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$median</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $ts$line_graph</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     t &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     id &lt;- seq(1, length(t), length.out = 2 * options$formats$character$width)</span>
-<span class="co">#&gt;     normalized &lt;- normalize01(t[floor(id)])</span>
-<span class="co">#&gt;     structure(spark_line(normalized), class = c(&quot;spark&quot;, &quot;character&quot;))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct</span>
-<span class="co">#&gt; $POSIXct$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$min</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$max</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$median</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $POSIXct$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list</span>
-<span class="co">#&gt; $list$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$min_length</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     x &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     l &lt;- lengths(x)</span>
-<span class="co">#&gt;     if (length(l) &gt; 0) </span>
-<span class="co">#&gt;         min(l)</span>
-<span class="co">#&gt;     else NA</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$median_length</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     x &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     l &lt;- lengths(x)</span>
-<span class="co">#&gt;     if (length(l) &gt; 0) </span>
-<span class="co">#&gt;         stats::median(l)</span>
-<span class="co">#&gt;     else NA</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $list$max_length</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     x &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     l &lt;- lengths(x)</span>
-<span class="co">#&gt;     if (length(l) &gt; 0) </span>
-<span class="co">#&gt;         max(l)</span>
-<span class="co">#&gt;     else NA</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs</span>
-<span class="co">#&gt; $AsIs$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs$min_length</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     l &lt;- lengths(x)</span>
-<span class="co">#&gt;     min(l)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $AsIs$max_length</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     l &lt;- lengths(x)</span>
-<span class="co">#&gt;     max(l)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime</span>
-<span class="co">#&gt; $difftime$missing</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     sum(is.na(x) | is.null(x))</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$complete</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     length(x) - n_missing(x)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$n</span>
-<span class="co">#&gt; function (x)  .Primitive(&quot;length&quot;)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$min</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; min(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$max</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; max(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$median</span>
-<span class="co">#&gt; &lt;partialised&gt;</span>
-<span class="co">#&gt; function (...) </span>
-<span class="co">#&gt; stats::median(na.rm = TRUE, ...)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime$n_unique</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     un &lt;- x[!is.na(x)]</span>
-<span class="co">#&gt;     un &lt;- unique(un)</span>
-<span class="co">#&gt;     length(un)</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;environment: namespace:skimr&gt;</span></code></pre></div>
-</div>
-<div id="formats" class="section level2">
-<h2>Formats</h2>
-<p>Skimmer creates formatted values to use in printing. The show_formats() function shows the default formats.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">show_formats</span>()
-<span class="co">#&gt; $.levels</span>
-<span class="co">#&gt; $.levels$max_char</span>
-<span class="co">#&gt; [1] 3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $.levels$max_levels</span>
-<span class="co">#&gt; [1] 4</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $.align_decimal</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric</span>
-<span class="co">#&gt; $numeric$digits</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$nsmall</span>
-<span class="co">#&gt; [1] 2</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $numeric$drop0trailing</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $integer</span>
-<span class="co">#&gt; $integer$drop0trailing</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $character</span>
-<span class="co">#&gt; $character$width</span>
-<span class="co">#&gt; [1] 8</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $date</span>
-<span class="co">#&gt; $date$format</span>
-<span class="co">#&gt; [1] &quot;%Y-%m-%d&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $posixct</span>
-<span class="co">#&gt; $posixct$format</span>
-<span class="co">#&gt; [1] &quot;%Y-%m-%d&quot;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $logical</span>
-<span class="co">#&gt; list()</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $asis</span>
-<span class="co">#&gt; list()</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $difftime</span>
-<span class="co">#&gt; list()</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $spark</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<span class="kw">get_default_skimmer_names</span>()</code></pre></div>
+<pre><code>## $AsIs
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $Date
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $POSIXct
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $character
+## [1] &quot;min&quot;        &quot;max&quot;        &quot;empty&quot;      &quot;n_unique&quot;   &quot;whitespace&quot;
+## 
+## $complex
+## [1] &quot;mean&quot;
+## 
+## $difftime
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $factor
+## [1] &quot;ordered&quot;    &quot;n_unique&quot;   &quot;top_counts&quot;
+## 
+## $list
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $logical
+## [1] &quot;mean&quot;  &quot;count&quot;
+## 
+## $numeric
+## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;
+## 
+## $ts
+##  [1] &quot;start&quot;      &quot;end&quot;        &quot;frequency&quot;  &quot;deltat&quot;     &quot;mean&quot;      
+##  [6] &quot;sd&quot;         &quot;min&quot;        &quot;max&quot;        &quot;median&quot;     &quot;line_graph&quot;</code></pre>
+<p>The counterpart to this function is <code>get_default_skimmers()</code>, which returns the functions themselves. If you are interested in a particular class within <code>skimr</code>, pass it as a string to either function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_default_skimmer_names</span>(<span class="st">&quot;numeric&quot;</span>)</code></pre></div>
+<pre><code>## $numeric
+## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;</code></pre>
+<p>The same information is stored in the <code>skimmers_used</code> attribute of the object returned by <code>skim()</code>.</p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -3,30 +3,84 @@
 \name{print}
 \alias{print}
 \alias{print.skim_df}
-\alias{print.skim_vector}
+\alias{print.one_skim_df}
+\alias{print.skim_list}
 \alias{print.summary_skim_df}
 \title{Print \code{skim} objects}
 \usage{
-\method{print}{skim_df}(x, ...)
+\method{print}{skim_df}(x, include_summary = TRUE, n = Inf,
+  width = Inf, n_extra = NULL,
+  strip_metadata = getOption("skimr_strip_metadata", TRUE), ...)
 
-\method{print}{skim_vector}(x, ...)
+\method{print}{one_skim_df}(x, n = Inf, width = Inf, n_extra = NULL,
+  strip_metadata = getOption("skimr_strip_metadata", TRUE), ...)
+
+\method{print}{skim_list}(x, n = Inf, width = Inf, n_extra = NULL,
+  ...)
 
 \method{print}{summary_skim_df}(x, ...)
 }
 \arguments{
-\item{x}{Either a \code{skim_df}, \code{skim_vector} or \code{skim_summary} object.}
+\item{x}{Object to format or print.}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{include_summary}{Whether a summary of the data frame should be printed}
+
+\item{n}{Number of rows to show. If \code{NULL}, the default, will print all rows
+if less than option \code{tibble.print_max}. Otherwise, will print
+\code{tibble.print_min} rows.}
+
+\item{width}{Width of text output to generate. This defaults to \code{NULL}, which
+means use \code{getOption("tibble.width")} or (if also \code{NULL})
+\code{getOption("width")}; the latter displays only the columns that fit on one
+screen. You can also set \code{options(tibble.width = Inf)} to override this
+default and always print all columns.}
+
+\item{n_extra}{Number of extra columns to print abbreviated information for,
+if the width is too small for the entire tibble. If \code{NULL}, the default,
+will print information about at most \code{tibble.max_extra_cols} extra columns.}
+
+\item{strip_metadata}{Whether tibble metadata should be removed.}
+
+\item{...}{Other arguments passed on to individual methods.}
 }
 \description{
-Print \code{skim} objects
+\code{skimr} has custom print methods for all supported objects. Default printing
+methods for \code{knitr}/ \code{rmarkdown} documents is also provided.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{skim_df}: Prints a skimmed data frame (\code{skim_df} from \code{\link[=skim]{skim()}})
+\item \code{skim_df}: Print a skimmed data frame (\code{skim_df} from \code{\link[=skim]{skim()}}).
 
-\item \code{skim_vector}: Manages print for \code{skim_vector} objects.
+\item \code{one_skim_df}: Print an entry within a partitioned \code{skim_df}.
+
+\item \code{skim_list}: Print a \code{skim_list}, a list of \code{skim_df} objects.
 
 \item \code{summary_skim_df}: Print method for a \code{summary_skim_df} object.
 }}
+
+\section{Printing options}{
+
+
+For better or for worse, \code{skimr} often produces more output than can fit in
+the standard R console. Fortunately, most modern environments like RStudio
+and Jupyter support more than 80 character outputs. Call
+\code{options(width = 90)} to get a better experience with \code{skimr}.
+}
+
+\section{Behavior in \code{dplyr} pipelines}{
+
+
+Printing a \code{skim_df} requires specific columns that might be dropped when
+using \code{\link[dplyr:select]{dplyr::select()}} or \code{\link[dplyr:summarize]{dplyr::summarize()}} on a \code{skim_df}. In those
+cases, this method falls back to \code{\link[tibble:print.tbl]{tibble::print.tbl()}}.
+}
+
+\section{Controlling metadata behavior}{
+
+
+By default, \code{skimr} removes the tibble metadata when generating output. On
+some platforms, this can lead to all output getting removed. To disable that
+behavior, set either \code{strip_metadata = FALSE} when calling print or use
+\code{options(skimr_strip_metadata = FALSE)}.
+}
 

@@ -1,203 +1,126 @@
 context("Print a skim_df object")
 
 test_that("Skim prints a header for the entire output and each type", {
-  skip_if_not( l10n_info()$`UTF-8` )
   input <- skim(iris)
-  expect_output(print(input), "Skim summary statistics")
-  expect_output(print(input), "n obs: 150")
-  expect_output(print(input), "n variables: 5 \n")
-  expect_output(print(input), 
-"── Variable type:factor ────────────────────────────────────────────────────────"
-)
-  expect_output(print(input), 
-"── Variable type:factor ────────────────────────────────────────────────────────"
-)
+  expect_print_matches_file(input, "print/default.txt")
+
+  input$numeric.hist <- NULL
+  expect_print_matches_file(input, "print/no-hist.txt",
+    skip_on_windows = FALSE
+  )
 })
 
 test_that("Skim prints a special header for grouped data frames", {
   input <- skim(dplyr::group_by(iris, Species))
-  expect_output(print(input), " group variables: Species")
-  expect_output(print(input), "n obs: 150")
-  expect_output(print(input), "n variables: 5 \n")
+  expect_print_matches_file(input, "print/groups.txt")
 })
 
-test_that("Skim prints a special header for vectors", {
-  skip_if_not( l10n_info()$`UTF-8` )
-  input <- skim(lynx)
-  expect_output(print(input), "Skim summary statistics")
-  expect_output(print(input), 
-"── Variable type:ts ───────────────────────────────────────────────────────────"
-                )
-})
-
-test_that("Skim collapses counts and other multivalue stats into one cell", {
-  input <- skim(iris)
-  expect_output(print(input, "set: 50, ver: 50, vir: 50, NA: 0"))
-})
-
-test_that("Skim aligns numeric vectors at the decimal point by default", {
-  input <- skim(mtcars)
-  expect_output(print(input), "  am       0       32 32   0.41   0.5   0")
-  expect_output(print(input), "carb       0       32 32   2.81   1.62  1")
-  expect_output(print(input), "drat       0       32 32   3.6    0.53  2.76")
-  expect_output(print(input), "gear       0       32 32   3.69   0.74  3")
-})
-
-test_that("spark.print returns the correct result", {
-  input <- inline_hist(chickwts$weight)
-  correct <- structure("▃▅▅▇▃▇▂▂", class = c("spark", "character"))
-  expect_identical(input, correct)
-})
-
-test_that("Skimr kable prints as expected, 64-bit", {
-  skip_if(R.Version()$arch == "i386")
-  skip_if_not( l10n_info()$`UTF-8` )
+test_that("Skim lists print as expected", {
   skimmed <- skim(iris)
-  inputRaw <- capture.output(skimr::kable(skimmed))
-  input <- skimr:::fix_unicode(inputRaw)
-  
-  expect_length(input, 18)
-  # Intentional long lines in this test
-  expect_equal(input[1], "Skim summary statistics  ")
-  expect_equal(input[2], " n obs: 150    ")
-  expect_equal(input[3], " n variables: 5    ")
-  expect_equal(input[4], "")
-  expect_equal(input[5], "Variable type: factor")
-  expect_equal(input[6], "")
-  expect_equal(input[7], 
-"| variable | missing | complete |  n  | n_unique |            top_counts            | ordered |"
-   )
-  expect_equal(input[8], 
-"|----------|---------|----------|-----|----------|----------------------------------|---------|"
-   )
-  expect_equal(input[9], 
-"| Species  |    0    |   150    | 150 |    3     | set: 50, ver: 50, vir: 50, NA: 0 |  FALSE  |"
-  )
-  expect_equal(input[10], "")
-  expect_equal(input[11], "Variable type: numeric")
-  expect_equal(input[12], "")  
-  expect_equal(input[15], 
-"| Petal.Length |    0    |   150    | 150 | 3.76 | 1.77 |  1  | 1.6 | 4.35 | 5.1 | 6.9  | ▇▁▁▂▅▅▃▁ |"
-  )
-  expect_equal(input[16], 
-"| Petal.Width  |    0    |   150    | 150 | 1.2  | 0.76 | 0.1 | 0.3 | 1.3  | 1.8 | 2.5  | ▇▁▁▅▃▃▂▂ |"
-  )
-  expect_equal(input[17],
-"| Sepal.Length |    0    |   150    | 150 | 5.84 | 0.83 | 4.3 | 5.1 | 5.8  | 6.4 | 7.9  | ▂▇▅▇▆▅▂▂ |"
-   )
-  expect_equal(input[18], 
-"| Sepal.Width  |    0    |   150    | 150 | 3.06 | 0.44 |  2  | 2.8 |  3   | 3.3 | 4.4  | ▁▂▅▇▃▂▁▁ |"
-   )
-  
-  # The headers are different on windows
-  # Just ignore them
-  skip_on_os("windows")
-  skip_if_not( l10n_info()$`UTF-8` )
-  expect_equal(input[13], 
-  "|   variable   | missing | complete |  n  | mean |  sd  | p0  | p25 | p50  | p75 | p100 |   hist   |"
-  )
-  expect_equal(input[14], 
- "|--------------|---------|----------|-----|------|------|-----|-----|------|-----|------|----------|"
-  )
+  input <- partition(skimmed)
+  expect_print_matches_file(input, "print/list.txt")
 })
 
-test_that("Skimr kable prints as expected, 32-bit windows", {
-  skip_if_not(R.Version()$arch == "i386")
-  skip_on_os(c("mac", "linux", "solaris"))
+test_that("knit_print produces expected results", {
   skimmed <- skim(iris)
-  inputRaw <- capture.output(skimr::kable(skimmed))
-  input <- skimr:::fix_unicode(inputRaw)
-  
-  expect_length(input, 18)
-  expect_equal(input[15], 
-"| Petal.Length |    0    |   150    | 150 | 3.76 | 1.77 |  1  | 1.6 | 4.35 | 5.1 | 6.9  | ▇▁▁▂▅▅▃▁ |"
-  )
-  expect_equal(input[16], 
-"| Petal.Width  |    0    |   150    | 150 | 1.2  | 0.76 | 0.1 | 0.3 | 1.3  | 1.8 | 2.5  | ▇▁▁▃▃▃▂▂ |"
-)
-  expect_equal(input[17], 
-"| Sepal.Length |    0    |   150    | 150 | 5.84 | 0.83 | 4.3 | 5.1 | 5.8  | 6.4 | 7.9  | ▂▇▅▇▆▅▂▂ |"
-  )
-  expect_equal(input[18], 
-"| Sepal.Width  |    0    |   150    | 150 | 3.06 | 0.44 |  2  | 2.8 |  3   | 3.3 | 4.4  | ▁▂▅▇▃▂▁▁ |"
-  )
+  input <- knit_print(skimmed)
+  expect_is(input, "knit_asis")
+  expect_length(input, 1)
+  expect_matches_file(input, "print/knit_print.txt")
 })
 
-test_that("skimr::pander prints as expected", {
-  # This assumes the default option for line length (80).
-  skip_on_os("windows")
-  skip_if_not( l10n_info()$`UTF-8` )
-  input <- utils::capture.output(skim(chickwts) %>% pander())
-  expect_length(input, 36)
-  expect_equal(input[1], "Skim summary statistics  ")
-  expect_equal(input[2], "   n obs: 71    ")
-  expect_equal(input[3], " n variables: 2    ")
-  expect_equal(input[4], "")
-  expect_equal(input[5], 
- "----------------------------------------------------------------------------"
- )
-  expect_equal(input[6], 
- " variable   missing   complete   n    n_unique           top_counts         "
- )
-  expect_equal(input[7], 
- "---------- --------- ---------- ---- ---------- ----------------------------"
- )
-  expect_equal(input[8], 
- "   feed        0         71      71      6       soy: 14, cas: 12, lin: 12, "
- )
-  expect_equal(input[9], 
- "                                                          sun: 12           "
- )
-  expect_equal(input[10], 
- "----------------------------------------------------------------------------"
-  )
-  expect_equal(input[11], "")
-  expect_equal(input[12], "Table: Table continues below")
-  expect_equal(input[13], "")
-  expect_equal(input[14], " ")
-  expect_equal(input[15], "---------")
-  expect_equal(input[16], " ordered ")
-  expect_equal(input[17], "---------")
-  expect_equal(input[18], "  FALSE  ")
-  expect_equal(input[19], "---------")
-  expect_equal(input[20], "")
-  expect_equal(input[21], "")
-  expect_equal(input[22], 
-  "-------------------------------------------------------------------------"
-  )
-  expect_equal(input[23], 
- " variable   missing   complete   n     mean     sd     p0     p25    p50 "
-  )
-  expect_equal(input[24], 
-    "---------- --------- ---------- ---- -------- ------- ----- ------- -----"
-  )
-  expect_equal(input[25], 
-   "  weight       0         71      71   261.31   78.07   108   204.5   258 "
-  )
-  expect_equal(input[26], 
-   "-------------------------------------------------------------------------"
-  )
-  expect_equal(input[27], "")
-  expect_equal(input[28], "Table: Table continues below")
-  expect_equal(input[29], "")
-  expect_equal(input[30], " ")
-  expect_equal(input[31], "-------------------------")
-  expect_equal(input[32], "  p75    p100     hist   ")
-  expect_equal(input[33], "------- ------ ----------")
-  expect_equal(input[34], " 323.5   423    ▃▅▅▇▃▇▂▂ ")
-  expect_equal(input[35], "-------------------------")
-  expect_equal(input[36], "")
+test_that("knit_print works with skim summaries", {
+  skimmed <- skim(iris)
+  summarized <- summary(skimmed)
+  input <- knitr::knit_print(summarized)
+  expect_matches_file(input, "print/knit_print-summary.txt")
 })
 
-test_that("Pander warns on windows and drops histograms", {
-  skip_on_os(c("mac", "linux", "solaris"))
-  expect_warning(input <- utils::capture.output(skim(chickwts) %>% pander()))
-  expect_length(input, 27)
-  expect_false(grepl("hist", input[32]))
+test_that("knit_print appropriately falls back to tibble printing", {
+  skimmed <- skim(iris)
+  reduced <- dplyr::select(skimmed, skim_variable, numeric.mean)
+  expect_known_output(
+    input <- knit_print(reduced),
+    "print/knit_print-fallback.txt"
+  )
+  expect_is(input, "data.frame")
+})
+
+test_that("Summaries can be suppressed within knitr", {
+  skimmed <- skim(iris)
+  options <- list(skimr_include_summary = FALSE)
+  input <- knitr::knit_print(skimmed, options = options)
+  expect_matches_file(input, "print/knit_print-suppressed.txt")
+})
+
+test_that("Skim lists have a separate knit_print method", {
+  skimmed <- skim(iris)
+  skim_list <- partition(skimmed)
+  input <- knit_print(skim_list)
+  expect_matches_file(input, "print/knit_print-skim_list.txt")
+})
+
+test_that("You can yank a type from a skim_df and call knit_print", {
+  skimmed <- skim(iris)
+  skim_one <- yank(skimmed, "factor")
+  input <- knit_print(skim_one)
+  expect_matches_file(input, "print/knit_print-yank.txt")
 })
 
 test_that("make_utf8 produces the correct result ", {
   input <- make_utf8(c("<U+2585><U+2587>"))
   correct <- "▅"
   expect_identical(input, correct)
+})
+
+test_that("Skim falls back to tibble::print.tbl() appropriately", {
+  input <- skim(iris)
+  mean_only <- dplyr::select(input, numeric.mean)
+  expect_print_matches_file(mean_only, "print/fallback.txt")
+})
+
+test_that("Print focused objects appropriately", {
+  skimmed <- skim(iris)
+  input <- focus(skimmed, n_missing)
+  expect_print_matches_file(input, "print/focus.txt")
+})
+
+test_that("Metadata is stripped from smaller consoles", {
+  skimmed <- skim(iris)
+  expect_print_matches_file(skimmed, "print/smaller.txt", width = 50)
+})
+
+test_that("Crayon is supported", {
+  withr::with_options(list(crayon.enabled = TRUE), {
+    with_mock(
+      .env = "skimr",
+      render_skim_body = function(...) {
+        paste0(..., sep = "\n", collapse = "\n")
+      },
+      {
+        skimmed <- skim(iris)
+        numeric <- yank(skimmed, "numeric")
+        rendered <- print(numeric)
+      }
+    )
+    expect_match(rendered, "\\\033")
+  })
+})
+
+test_that("skimr creates appropriate output for Jupyter", {
+  skimmed <- skim(iris)
+  expect_known_output(repr_text(skimmed), "print/repr.txt")
+})
+
+test_that("Metadata can be included: print", {
+  skimmed <- skim(iris)
+  expect_known_output(print(skimmed, strip_metadata = FALSE), "print/strip.txt")
+})
+
+
+test_that("Metadata can be included: option", {
+  skimmed <- skim(iris)
+  withr::with_options(list(skimr_strip_metadata = FALSE), {
+    expect_known_output(print(skimmed), "print/strip-opt.txt")
+  })
 })

@@ -1,47 +1,46 @@
 ---
 title: "Skimr defaults"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    latex_engine: xelatex
 vignette: >
   %\VignetteIndexEntry{Skimr defaults}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+## Introduction
 
-This vignette simply displays the defaults for skimr functions.
-All of these may be overloaded as explained in the _Using skimr_ vignette_.
+This vignette simply displays the default data types and summary functions for
+`skimr`. Customizing `skimr` is explained in the **Using Skimr** vignette.
 
-## Skimmers
+## The base skimmers
 
-The `show_skimmers()` function displays the named list of skimmers by type.
+`skimr` has a group of functions that it applies to all data types. We call
+these the "base"" skimmers:
+
+*  `n_missing`: The number of missing values in the column.
+*  `complete_rate`: The ratio of non-missing values to the total values in the
+   column.
+
+## Default skimmers
+
+To learn more about the functions used in this package, use the function
+`get_default_skimmer_names()`.
 
 ```{r}
 library(skimr)
-show_skimmers()
+get_default_skimmer_names()
 ```
 
-## Skimmer functions
-
-The `get_skimmers()` function shows the actual functions used, including 
-function defaults such as NA handling.  
+The counterpart to this function is `get_default_skimmers()`, which returns the
+functions themselves. If you are interested in a particular class within
+`skimr`, pass it as a string to either function.
 
 ```{r}
-get_skimmers()
+get_default_skimmer_names("numeric")
 ```
 
-## Formats
-
-Skimmer creates formatted values to use in printing. The show_formats()
-function shows the default formats. 
-
-```{r}
-show_formats()
-```
-
+The same information is stored in the `skimmers_used` attribute of the object
+returned by `skim()`.

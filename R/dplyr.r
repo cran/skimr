@@ -1,80 +1,32 @@
-#' Use dplyr verb filter on skim_df objects.
-#' 
-#' @seealso [`dplyr::filter()`]
-#' @param  .data A skim object
-#' @param  ... Logical predicates defined in terms of the variables in .data.
-#' @param  .preserve When FALSE (the default) the grouping structuree is recalculated
-#'                   based on the resulting data.
-#' @return  skim_df object coerced to a data frame.
+#' Mutate a skim_df
+#'
+#' [dplyr::mutate()] currently drops attributes, but we need to keep them around
+#' for other skim behaviors. Otherwise the behavior is exactly the same. For
+#' more information, see <https://github.com/tidyverse/dplyr/issues/3429>.
+#'
+#' @param .data A `skim_df`, which behaves like a `tbl.`
+#' @param ... Name-value pairs of expressions, each with length 1 or the same
+#'   length as the number of rows in the group, if using [dplyr::group_by()], or
+#'   in the entire input (if not using groups). The name of each argument will
+#'   be the name of a new variable, and the value will be its corresponding
+#'   value. Use `NULL` value in `mutate` to drop a variable. New variables
+#'   overwrite existing variables of the same name.
+#'
+#'   The arguments in `...` are automatically quoted with [rlang::quo()] and
+#'   evaluated with [rlang::eval_tidy()] in the context of the data frame. They
+#'   support unquoting [`rlang::quasiquotation`] and splicing. See
+#'   `vignette("programming", package = "dplyr")` for an introduction to these
+#'   concepts.
+#' @return A `skim_df` object, which also inherits the class(es) of the input
+#'   data. In many ways, the object behaves like a [tibble::tibble()].
+#' @seealso [dplyr::mutate()] for the function's expected behavior.
+#' @importFrom dplyr mutate
 #' @export
-filter.skim_df <-function (.data, ..., .preserve = FALSE) {
-  .data <- as.data.frame(.data)
-  .data <- dplyr::filter(.data, ...)
-  class(.data)  <- c("tbl_df", "tbl", "data.frame")
-  .data
-}
-
-#' Use dplyr verb select on skim_df objects.
-#' 
-#' @seealso [`dplyr::select()`]
-#' @param  .data A skim object
-#' @param  ... One or more unquoted expressions separated by commas.
-#' @return  skim_df object coerced to a data frame.
-#' @export
-select.skim_df <-function (.data, ...) {
-  .data <- as.data.frame(.data)
-  .data <- dplyr::select(.data, ...)
-  class(.data)  <- c("tbl_df", "tbl", "data.frame")
-  .data
-}
-
-#' Use dplyr verb mutate on skim_df objects.
-#' 
-#' @seealso [`dplyr::mutate()`]
-#' @param  .data A skim object
-#' @param  ... Name-value pairs of expressions. The name of each argument will 
-#'             be the name of a new variable, and the value will be its 
-#'             corresponding value.
-#' @return  skim_df object coerced to a data frame.
-#' @export
-mutate.skim_df <-function (.data, ...) {
-  .data <- as.data.frame(.data)
-  .data <- dplyr::mutate(.data, ...)
-  class(.data)  <- c("tbl_df", "tbl", "data.frame")
-  .data
-}
-
-#' Use dplyr verb arrange on skim_df objects.
-#' 
-#' @seealso [`dplyr::arrange()`]
-#' @param  .data A skim object
-#' @param  ... Comma separated list of unquoted variable names, or expressions 
-#'             involving variable names.
-#' @param  .by_group	If TRUE, will sort first by grouping variable. 
-#'                    Applies to grouped data frames only.
-#' @return  skim_df object coerced to a data frame.
-#' @export
-arrange.skim_df <-function (.data, ..., .by_group = FALSE) {
-  .data <- as.data.frame(.data)
-  .data <- dplyr::arrange(.data, ...)
-  class(.data)  <- c("tbl_df", "tbl", "data.frame")
-  .data
-}
-
-#' Use dplyr verb slice on skim_df objects.
-#' 
-#' @seealso [`dplyr::slice()`]
-#' @param  .data A skim object
-#' @param  ... Integer row calues. Provide either positive values to keep or
-#'             negative values to drop.
-#' @param  .preserve  when FALSE (the default), the grouping structure is 
-#'                    recalculated based on the resulting data, otherwise 
-#'                    it is kept as is.
-#' @return  skim_df object coerced to a data frame.
-#' @export
-slice.skim_df <-function (.data, ..., .preserve = FALSE) {
-  .data <- as.data.frame(.data)
-  .data <- dplyr::slice(.data, ...)
-  class(.data)  <- c("tbl_df", "tbl", "data.frame")
-  .data
+mutate.skim_df <- function(.data, ...) {
+  mutated <- NextMethod("mutate")
+  if (could_be_skim_df(mutated)) {
+    reassign_skim_attrs(mutated, .data)
+  } else {
+    strip_skim_attrs(mutated)
+  }
 }

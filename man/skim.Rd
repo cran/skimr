@@ -3,21 +3,28 @@
 \name{skim}
 \alias{skim}
 \alias{skim_tee}
+\alias{skim_without_charts}
 \title{Skim a data frame, getting useful summary statistics}
 \usage{
-skim(.data, ...)
+skim(data, ...)
 
-skim_tee(.data, ...)
+skim_tee(data, ..., skim_fun = skim)
+
+skim_without_charts(data, ...)
 }
 \arguments{
-\item{.data}{A tibble, or an object that can be coerced into a tibble.}
+\item{data}{A tibble, or an object that can be coerced into a tibble.}
 
-\item{...}{Additional options, normally used to list individual unquoted
-column names.}
+\item{...}{Columns to select for skimming. When none are provided, the
+default is to skim all columns.}
+
+\item{skim_fun}{The skim function used.}
+
+\item{skim}{The skimming function to use in \code{skim_tee()}.}
 }
 \value{
-A \code{skim_df} object, which can be treated like a tibble in most
-instances.
+A \code{skim_df} object, which also inherits the class(es) of the input
+data. In many ways, the object behaves like a \code{\link[tibble:tibble]{tibble::tibble()}}.
 }
 \description{
 \code{skim()} is an alternative to \code{\link[=summary]{summary()}}, quickly providing a broad
@@ -27,19 +34,27 @@ frame.
 }
 \details{
 Each call produces a \code{skim_df}, which is a fundamentally a tibble with a
-special print method. Instead of showing the result in a long format, \code{skim}
-prints a wide version of your data with formatting applied to each column.
-Printing does not change the structure of the \code{skim_df}, which remains a long
-tibble.
+special print method. One unusual feature of this data frame is pseudo-
+namespace for columns. \code{skim()} computes statistics by data type, and it
+stores them in the data frame as \code{<type>.<statistic>}. These types are
+stripped when printing the results. The "base" skimmers (\code{n_missing} and
+\code{complete_rate}) are the only columns that don't follow this behavior.
+See \code{\link[=skim_with]{skim_with()}} for more details on customizing \code{skim()} and
+\code{\link[=get_default_skimmers]{get_default_skimmers()}} for a list of default functions.
 
 If you just want to see the printed output, call \code{skim_tee()} instead.
-This function returns the original data frame.
+This function returns the original data. \code{skim_tee()} uses the default
+\code{skim()}, but you can replace it with the \code{skim} argument.
 
-If you want to work with a data frame that resembles the printed output,
-call \code{\link[=skim_to_wide]{skim_to_wide()}} or for a named list of data frames by type
-\code{\link[=skim_to_list]{skim_to_list()}}. Note that all of the columns in the data frames produced
-by these functions are character. The intent is that you will be processing
-the \strong{printed} result further, not the original data.
+The data frame produced by \code{skim} is wide and sparse. To avoid type coercion
+\code{skimr} uses a type namespace for all summary statistics. Columns for numeric
+summary statistics all begin \code{numeric}; for factor summary statistics
+begin \code{factor}; and so on.
+
+See \code{\link[=partition]{partition()}} and \code{\link[=yank]{yank()}} for methods for transforming this wide data
+frame. The first function splits it into a list, with each entry
+corresponding to a data type. The latter pulls a single subtable for a
+particular type from the \code{skim_df}.
 
 \code{skim()} is designed to operate in pipes and to generally play nicely with
 other \code{tidyverse} functions. This means that you can use \code{tidyselect} helpers
@@ -51,8 +66,7 @@ further work with a \code{skim_df} using \code{dplyr} functions in a pipeline.
 \code{skim()} is an intentionally simple function, with minimal arguments like
 \code{\link[=summary]{summary()}}. Nonetheless, this package provides two broad approaches to
 how you can customize \code{skim()}'s behavior. You can customize the functions
-that are called to produce summary statistics with \code{\link[=skim_with]{skim_with()}}. You
-can customize how the output is displayed with \code{\link[=skim_format]{skim_format()}}.
+that are called to produce summary statistics with \code{\link[=skim_with]{skim_with()}}.
 }
 
 \section{Unicode rendering}{
@@ -61,6 +75,9 @@ If the rendered examples show unencoded values such as \code{<U+2587>} you will
 need to change your locale to allow proper rendering. Please review the
 \emph{Using Skimr} vignette for more information
 (\code{vignette("Using_skimr", package = "skimr")}).
+
+Otherwise, we export \code{skim_without_charts()} to produce summaries without the
+spark graphs. These are the source of the unicode dependency.
 }
 
 \examples{
@@ -71,18 +88,29 @@ skim(iris, Species)
 skim(iris, starts_with("Sepal"))
 
 # Skim also works groupwise
-dplyr::group_by(iris, Species) \%>\% skim()
+iris \%>\%
+  dplyr::group_by(Species) \%>\%
+  skim()
 
-# Skim pipelines; now we work with the tall format
-skim(iris) \%>\% as.data.frame()
-skim(iris) \%>\% dplyr::filter(type == "factor")
+# Which five numeric columns have the greatest mean value?
+# Look in the `numeric.mean` column.
+iris \%>\%
+  skim() \%>\%
+  dplyr::select(numeric.mean) \%>\%
+  dplyr::top_n(5)
 
-# Which column as the greatest mean value?
-skim(iris) \%>\%
-  dplyr::filter(stat == "mean") \%>\%
-  dplyr::arrange(dplyr::desc(value))
+# Which of my columns have missing values? Use the base skimmer n_missing.
+iris \%>\%
+  skim() \%>\%
+  dplyr::filter(n_missing > 0)
 
 # Use skim_tee to view the skim results and
 # continue using the original data.
-chickwts \%>\% skim_tee() \%>\% dplyr::filter(feed == "sunflower")
+chickwts \%>\%
+  skim_tee() \%>\%
+  dplyr::filter(feed == "sunflower")
+
+# Produce a summary without spark graphs
+iris \%>\%
+  skim_without_charts()
 }

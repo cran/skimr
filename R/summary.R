@@ -1,32 +1,56 @@
 #' Summary function for skim_df
-#' 
-#' This is a method of the generic function [`summary()`].
-#' 
+#'
+#' This is a method of the generic function [summary()].
+#'
 #' @param object a skim dataframe.
 #' @param ... Additional arguments affecting the summary produced. Not used.
 #' @return A summary of the skim data frame.
 #' @examples
-#' \dontrun{
-#'  a <- skim(mtcars)
-#'  summary(a)
-#' }
+#' a <- skim(mtcars)
+#' summary(a)
 #' @export
- 
-summary.skim_df <- function(object, ...){
+summary.skim_df <- function(object, ...) {
   if (is.null(object)) {
     stop("dataframe is null.")
   }
-  
-  duplicated <- duplicated(object$variable)
-  counts <- table(type = object$type[!duplicated])
-  type_frequencies <- tibble::as_tibble(counts)
-  
-  summary_object <- list(
-    df_name = attr(object, "df_name"),
-    n_rows = attr(object, "data_rows"),
-    n_cols = attr(object, "data_cols"),
-    type_frequencies = type_frequencies
+  data_name <- df_name(object)
+  data_name <- ifelse(data_name %in% c("`.`", ".data"), "Piped data", data_name)
+  data_name <- gsub("`", "", data_name)
+  data_name <- ifelse(nchar(data_name) > 25,
+    paste0(substring(data_name, 1, 25), "..."),
+    data_name
   )
-  
-  structure(summary_object, class = c("summary_skim_df", "list"))
+
+  duplicated <- duplicated(object$skim_variable)
+  counts <- table(type = object$skim_type[!duplicated])
+  types <- dimnames(counts)[[1]]
+  types <- paste0("  ", types)
+  possible_groups <- ifelse(
+    is.null(possible_names <- group_names(object)),
+    "None",
+    paste(possible_names, collapse = ", ")
+  )
+
+  summary_object <- c(
+    data_name,
+    data_rows(object),
+    data_cols(object),
+    " ",
+    " ",
+    unname(counts),
+    "  ",
+    possible_groups
+  )
+
+  summary_object <- array(summary_object, dim = c(length(summary_object), 1))
+  dnames <- c(
+    "Name", "Number of rows ", "Number of columns ", "_______________________ ",
+    "Column type frequency: ", types, "________________________  ",
+    "Group variables"
+  )
+
+  summary_object <- as.table(as.array(summary_object))
+  dimnames(summary_object) <- list(dnames, c("Values"))
+  class(summary_object) <- c("summary_skim_df", "table")
+  summary_object
 }

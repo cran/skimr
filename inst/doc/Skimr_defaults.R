@@ -1,16 +1,7 @@
-## ----setup, include = FALSE----------------------------------------------
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-
 ## ------------------------------------------------------------------------
 library(skimr)
-show_skimmers()
+get_default_skimmer_names()
 
 ## ------------------------------------------------------------------------
-get_skimmers()
-
-## ------------------------------------------------------------------------
-show_formats()
+get_default_skimmer_names("numeric")
 

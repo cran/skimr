@@ -4,24 +4,30 @@
 #' within R. The package's API is tidy, functions take data frames, return
 #' data frames and can work as part of a pipeline. The returned `skimr`
 #' object is subsettable and offers a human readable output.
-#' 
+#'
 #' `skimr` is opinionated, providing a strong set of summary statistics
 #' that are generated for a variety of different data types. It is also
 #' provides an API for customization. Users can change both the functions
 #' dispatched and the way the results are formatted.
-#' 
+#'
+#' @importFrom rlang .data
 #' @name skimr-package
 #' @aliases skimr
 #' @docType package
-
 NULL
 
-
-# Create global package options
-options <- new.env()
+.onLoad <- function(libname, pkgname) {
+  options(
+    skimr_strip_metadata = TRUE
+  )
+}
 
 
 # Imports -----------------------------------------------------------------
+
+#' @importFrom rlang %||%
+
+#' @importFrom knitr knit_print
 
 #' @importFrom magrittr %>%
 #' @export
@@ -55,24 +61,3 @@ tidyselect::one_of
 #' @importFrom tidyselect starts_with
 #' @export
 tidyselect::starts_with
-
-#' @importFrom dplyr select
-dplyr::select
-
-#' @importFrom dplyr arrange
-dplyr::arrange
-
-#' @importFrom dplyr filter
-#' @export
-dplyr::filter
-
-#' @importFrom dplyr mutate
-dplyr::mutate
-
-#' @importFrom dplyr slice
-dplyr::slice
-
-
-.onLoad <- function(lib, pkg) {
-  init_functions()
-}

@@ -7,12 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Elin Waring" />
 
-<meta name="date" content="2019-06-20" />
+<meta name="date" content="2019-11-12" />
 
 <title>Supporting additional objects</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -94,226 +94,579 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Supporting additional objects</h1>
-<h4 class="author">Elin Waring</h4>
-<h4 class="date">2019-06-20</h4>
+<h4 class="date">2019-11-12</h4>
 
 
 
-<p>Please note that this is based on the skimr 0.9 master branch and it is likely it will have minor modifications.</p>
-<p>Skimr’s <code>skim()</code> function supports the skimming of data frames through <code>skim.data.frame()</code>. The <code>skim()</code> function is a generic which means that, as with <code>print()</code> or <code>summary()</code> it is possible to create support for additional object types. Package authors can add support for skim to their packages or users can create their own <code>skim.object_name</code> functions.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The <code>skim()</code> function summarizes data types contained within data frames. It comes with a set of default summary functions for a wide variety of data types, but this is not comprehensive. Package authors can add support for skimming their specific data types in their packages, and they can provide different defaults in their own summary functions.</p>
 <p>This example will illustrate this by creating support for the <code>sf</code> object produced by the “sf: Simple Features for R” package. For any object this involves two required elements and one optional element.</p>
 <ul>
-<li>create the skim function, in this case <code>skim.sf()</code></li>
-<li>create the list of functions to be calculated</li>
-<li>if needed, define any custom statistics.</li>
+<li>experiment with interactive changes</li>
+<li>create methods to <code>get_skimmers</code> for different objects within this package</li>
+<li>if needed, define any custom statistics</li>
 </ul>
-<p>If you are adding skim support to a package you will also need to add <code>skimr</code> to the list of imports and to the list of remotes (since it is currently only available at github). The code in this vignette is focused on what to do if you are a package user who wants to use <code>skim</code> rather than incorporating into a package.</p>
-<p>Note that in this vignette the actual analysis will not be run because that would require importing the <code>sf</code> package just for this example. However to run it on your own you can install <code>sf</code> and then run</p>
-<pre><code>library(sf)
-nc &lt;- st_read(system.file(&quot;shape/nc.shp&quot;, package=&quot;sf&quot;))</code></pre>
-<div id="create-the-skim-function" class="section level1">
-<h1>Create the skim function</h1>
-<p>The <code>skim.sf()</code> function simply replicates the <code>skim.data.frame()</code> function but adds the reference to the functions_sf file. The returned object is a <code>skim_df</code> because it is a tibble containing the standard skim_df data. However, if desired, especially for printing purposes, a different class could be used.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @include functions_sfc.R</span>
-skim.sf &lt;-<span class="st"> </span><span class="cf">function</span>(.data) {
-  rows &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(.data, skim_v)
-  combined &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">bind_rows</span>(rows, <span class="dt">.id =</span> <span class="st">&quot;var&quot;</span>)
-  <span class="kw">return</span>(<span class="kw">structure</span>(combined, <span class="dt">class =</span> <span class="kw">c</span>(<span class="st">&quot;skim_df&quot;</span>, <span class="kw">class</span>(combined))))
-}</code></pre></div>
+<p>If you are adding skim support to a package you will also need to add <code>skimr</code> to the list of imports. Note that in this vignette the actual analysis will not be run because that would require importing the <code>sf</code> package just for this example. However to run it on your own you can install <code>sf</code> and then run the following code. Note that code in this vignette was not evaluated when rendering the vignette in order to avoid forcing installation of sf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
+<span class="kw">library</span>(sf)</code></pre></div>
+<pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;shape/nc.shp&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;sf&quot;</span>))</code></pre></div>
+<pre><code>## Reading layer `nc' from data source `/Users/elinwaring/Library/R/3.6/library/sf/shape/nc.shp' using driver `ESRI Shapefile'
+## Simple feature collection with 100 features and 14 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+## epsg (SRID):    4267
+## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(nc)</code></pre></div>
+<pre><code>## [1] &quot;sf&quot;         &quot;data.frame&quot;</code></pre>
+<p>Unlike the example of having a new type of data in a column of a simple data frame in the “Using skimr” vignette, this is a different type of object with special attributes.</p>
+<p>In this object there is also a column of a class that does not have default skimmers. By default, skimr falls back to use the sfl for character variables.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(nc<span class="op">$</span>geometry)</code></pre></div>
+<pre><code>## Warning: Couldn't find skimmers for class: sfc_MULTIPOLYGON, sfc; No user-
+## defined `sfl` provided. Falling back to `character`.</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">nc$geometry</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">100</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">geometry</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">232</td>
+<td align="right">1965</td>
+<td align="right">0</td>
+<td align="right">100</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="create-the-list-of-functions-to-be-calculated" class="section level1">
-<h1>Create the list of functions to be calculated</h1>
-<p>Skimr works by having an opinionated list of functions for each class (e.g. numeric, factor) of data. The core package supports many commonly used classes, but there are many others. The list and the functions themselves are stored in an environment. Collectively these are called skimmers. The <code>show_skimmers()</code> function returns the class names and the names of the functions to be calculated and returned.</p>
-<p>In this example we are assuming you have extracted the nc,shp data using <code>st_read</code> as described earlier. The same structure as used here can be used for other sf data and any other data.</p>
-<p>In the case of the nc object there many specific classes of data. The example here will build support for sfc_LINESTRING, sfc_POLYGON, sfc_MULTIPOINT, sfc_MULTILINESTRING, sfc_MULTIPOLYGON, and sfc_GEOMETRY. Below is the complete file. There are several parts to this file which we’ll look at separately, with the complete file at that end of the section. The order of the code matters so in this case we are going to go through the sections of the complete file starting at the bottom.</p>
-<p>For each class we create a list of functions that will be used when that class is skimmed. Each of those will have a name. Note that in our example we will create a name but putting the class name in lower case and appending “_funs&quot; to the end.</p>
-<p>The <code>skim_with()</code> function is used to update the list of default skimmers. In this case we are going to append the new skimmers to the existing default skimmers.</p>
-<p>(This code is not ready to run yet because we have not created the lists.)</p>
-<pre><code>skim_with(
-  sfc_POINT = sfc_point_funs,
-  sfc_LINESTRING = sfc_linestring_funs,
-  sfc_POLYGON = sfc_polygon_funs,
-  sfc_MULTIPOINT = sfc_multipoint_funs,
-  sfc_MULTILINESTRING = sfc_multilinestring_funs,
-  sfc_MULTIPOLYGON= sfc_multipolygon_funs,
-  sfc_GEOMETRY = sfc_geometry_funs
-)</code></pre>
-<p>Each of these named elements is a list of functions to be used for data of that class. Each element in the list has a name (which will become a column name in the results data frame so should be a valid column name) and the name of a function. These can be:</p>
+<div id="experiment-interactively" class="section level2">
+<h2>Experiment interactively</h2>
+<p><code>skimr</code> has an opinionated list of functions for each class (e.g. numeric, factor) of data. The core package supports many commonly used classes, but there are many others. You can investigate these defaults by calling <code>get_default_skimmer_names()</code>.</p>
+<p>What if your data type isn’t covered by defaults? <code>skimr</code> usually falls back to treating the type as a character, which isn’t necessarily helpful. In this case, you’re best off adding your data type with <code>skim_with()</code>.</p>
+<p>Before we begin, we’ll be using the following custom summary statistic throughout. It’s a naive example, but covers the requirements of what we need.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">funny_sf &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
+  <span class="kw">length</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+}</code></pre></div>
+<p>This function, like all summary functions used by <code>skimr</code> has two notable features.</p>
 <ul>
-<li>exisitng functions from base, stats, or other packages,</li>
-<li>composition of existing functions using <code>purrr::compose()</code></li>
-<li>custom functions that have been definted in the skimr package</li>
+<li>It accepts a vector as its single argument</li>
+<li>It returns a scalar</li>
+</ul>
+<p>There are a lot of functions that fulfill these criteria:</p>
+<ul>
+<li>existing functions from base, stats, or other packages,</li>
+<li>lambda’s created using the Tidyverse-style syntax</li>
+<li>custom functions that have been defined in the <code>skimr</code> package</li>
 <li>custom functions that you have defined.</li>
 </ul>
-<p>In the example <code>sfc_point_funs</code> there are examples of all four types with <code>funny</code> representing a self define custom function.</p>
-<pre><code>sfc_point_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid),
-  funny = funny_sf
-)
-
-sfc_linestring_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_polygon_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multipoint_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multilinestring_funs &lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multipolygon_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid),
-  funny = funny_sf
-)
-
-sfc_geometry_funs &lt;- list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-</code></pre>
-<p>Finally if custom functions are created you need to include the file that contains them, in this case stats_sfc.R.</p>
-<pre><code>#' @include stats_sfc.R
-NULL
-</code></pre>
-<p>Below is the complete file in the correct order.</p>
-<pre><code>#' @include stats_sfc.R
-NULL
-
-sfc_point_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid),
-  funny = funny_sf
-)
-
-sfc_linestring_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_polygon_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multipoint_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multilinestring_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-sfc_multipolygon_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid),
-  funny = funny_sf
-)
-
-sfc_geometry_funs&lt;-list(
-  missing = n_missing,
-  complete = n_complete,
-  n = length,
-  n_unique = purrr::compose(length, n_unique),
-  valid = purrr::compose(sum, sf::st_is_valid)
-)
-
-
-skim_with(
-  sfc_POINT = sfc_point_funs,
-  sfc_LINESTRING = sfc_linestring_funs,
-  sfc_POLYGON = sfc_polygon_funs,
-  sfc_MULTIPOINT = sfc_multipoint_funs,
-  sfc_MULTILINESTRING = sfc_multilinestring_funs,
-  sfc_MULTIPOLYGON = sfc_multipolygon_funs,
-  sfc_GEOMETRY = sfc_geometry_funs
-)
-</code></pre>
+<p>Not fulfilling the two criteria can lead to some very confusing behavior within <code>skimr</code>. Beware! An example of this issue is the base <code>quantile()</code> function in default <code>skimr</code> percentiles are returned by using <code>quantile()</code> five times.</p>
+<p>Next, we create a custom skimming function. To do this, we need to think about the many specific classes of data in the <code>sf</code> package. The following example will build support for <code>sfc_MULTIPOLYGON</code>, but note that we’ll have to eventually think about <code>sfc_LINESTRING</code>, <code>sfc_POLYGON</code>, <code>sfc_MULTIPOINT</code> and others if we want to fully support <code>sf</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skim_sf &lt;-<span class="st"> </span><span class="kw">skim_with</span>(
+  <span class="dt">sfc_MULTIPOLYGON =</span> <span class="kw">sfl</span>(
+    <span class="dt">n_unique =</span> n_unique,
+    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
+    <span class="dt">funny =</span> funny_sf
+  )
+)</code></pre></div>
+<pre><code>## Creating new skimming functions for the following classes: sfc_MULTIPOLYGON.
+## They did not have recognized defaults. Call get_default_skimmers() for more information.</code></pre>
+<p>The example above creates a new <em>function</em>, and you can call that function on a specific column with <code>sfc_MULTIPOLYGON</code> data to get the appropriate summary statistics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_sf</span>(nc<span class="op">$</span>geometry)</code></pre></div>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">nc$geometry</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">100</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">sfc_MULTIPOLYGON</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: sfc_MULTIPOLYGON</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">n_unique</th>
+<th align="right">valid</th>
+<th align="right">funny</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">geometry</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">100</td>
+<td align="right">100</td>
+<td align="right">101</td>
+</tr>
+</tbody>
+</table>
+<p>Creating a function that is a method of the skim_by_type generic for the data type allows skimming of an entire data frame that contains some columns of that type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skim_by_type.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(mangled, columns, data) {
+  skimmed &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarize_at</span>(data, columns, mangled<span class="op">$</span>funs)
+  <span class="kw">build_results</span>(skimmed, columns, <span class="ot">NULL</span>)
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_sf</span>(nc)</code></pre></div>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">nc</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">100</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">15</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">12</td>
+</tr>
+<tr class="even">
+<td align="left">sfc_MULTIPOLYGON</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NAME</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">100</td>
+<td align="left">Ala: 1, Ale: 1, All: 1, Ans: 1</td>
+</tr>
+<tr class="even">
+<td align="left">FIPS</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">100</td>
+<td align="left">370: 1, 370: 1, 370: 1, 370: 1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AREA</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0.13</td>
+<td align="right">0.05</td>
+<td align="right">0.04</td>
+<td align="right">0.09</td>
+<td align="right">0.12</td>
+<td align="right">0.15</td>
+<td align="right">0.24</td>
+<td align="left">▆▇▆▃▂</td>
+</tr>
+<tr class="even">
+<td align="left">PERIMETER</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.67</td>
+<td align="right">0.48</td>
+<td align="right">1.00</td>
+<td align="right">1.32</td>
+<td align="right">1.61</td>
+<td align="right">1.86</td>
+<td align="right">3.64</td>
+<td align="left">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">CNTY_</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1985.96</td>
+<td align="right">106.52</td>
+<td align="right">1825.00</td>
+<td align="right">1902.25</td>
+<td align="right">1982.00</td>
+<td align="right">2067.25</td>
+<td align="right">2241.00</td>
+<td align="left">▇▆▆▅▁</td>
+</tr>
+<tr class="even">
+<td align="left">CNTY_ID</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1985.96</td>
+<td align="right">106.52</td>
+<td align="right">1825.00</td>
+<td align="right">1902.25</td>
+<td align="right">1982.00</td>
+<td align="right">2067.25</td>
+<td align="right">2241.00</td>
+<td align="left">▇▆▆▅▁</td>
+</tr>
+<tr class="odd">
+<td align="left">FIPSNO</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">37100.00</td>
+<td align="right">58.02</td>
+<td align="right">37001.00</td>
+<td align="right">37050.50</td>
+<td align="right">37100.00</td>
+<td align="right">37149.50</td>
+<td align="right">37199.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">CRESS_ID</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">50.50</td>
+<td align="right">29.01</td>
+<td align="right">1.00</td>
+<td align="right">25.75</td>
+<td align="right">50.50</td>
+<td align="right">75.25</td>
+<td align="right">100.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="odd">
+<td align="left">BIR74</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3299.62</td>
+<td align="right">3848.17</td>
+<td align="right">248.00</td>
+<td align="right">1077.00</td>
+<td align="right">2180.50</td>
+<td align="right">3936.00</td>
+<td align="right">21588.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">SID74</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">6.67</td>
+<td align="right">7.78</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="right">4.00</td>
+<td align="right">8.25</td>
+<td align="right">44.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">NWBIR74</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1050.81</td>
+<td align="right">1432.91</td>
+<td align="right">1.00</td>
+<td align="right">190.00</td>
+<td align="right">697.50</td>
+<td align="right">1168.50</td>
+<td align="right">8027.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">BIR79</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4223.92</td>
+<td align="right">5179.46</td>
+<td align="right">319.00</td>
+<td align="right">1336.25</td>
+<td align="right">2636.00</td>
+<td align="right">4889.00</td>
+<td align="right">30757.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">SID79</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">8.36</td>
+<td align="right">9.43</td>
+<td align="right">0.00</td>
+<td align="right">2.00</td>
+<td align="right">5.00</td>
+<td align="right">10.25</td>
+<td align="right">57.00</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">NWBIR79</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1352.81</td>
+<td align="right">1976.00</td>
+<td align="right">3.00</td>
+<td align="right">250.50</td>
+<td align="right">874.50</td>
+<td align="right">1406.75</td>
+<td align="right">11631.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: sfc_MULTIPOLYGON</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">n_unique</th>
+<th align="right">valid</th>
+<th align="right">funny</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">geometry</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">100</td>
+<td align="right">100</td>
+<td align="right">101</td>
+</tr>
+</tbody>
+</table>
+<p>Sharing these functions within a separate package requires an export. The simplest way to do this is with Roxygen.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' Skimming functions for `sfc_MULTIPOLYGON` objects.</span>
+<span class="co">#' @export</span>
+skim_sf &lt;-<span class="st"> </span><span class="kw">skim_with</span>(
+  <span class="dt">sfc_MULTIPOLYGON =</span> <span class="kw">sfl</span>(
+    <span class="dt">missing =</span> n_missing,
+    <span class="dt">n =</span> length,
+    <span class="dt">n_unique =</span> n_unique,
+    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
+    <span class="dt">funny =</span> funny_sf
+  )
+)</code></pre></div>
+<pre><code>## Creating new skimming functions for the following classes: sfc_MULTIPOLYGON.
+## They did not have recognized defaults. Call get_default_skimmers() for more information.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' A skim_by_type function for `sfc_MULTIPOLYGON` objects.</span>
+<span class="co">#' @export</span>
+skim_by_type.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(mangled, columns, data) {
+  skimmed &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarize_at</span>(data, columns, mangled<span class="op">$</span>funs)
+  skimr<span class="op">::</span><span class="kw">build_results</span>(skimmed, columns, <span class="ot">NULL</span>)
+}</code></pre></div>
+<p>While this works within any package, there is an even better approach in this case. To take full advantage of <code>skimr</code>, we’ll dig a bit into its API.</p>
 </div>
-<div id="define-custom-statistics" class="section level1">
-<h1>Define custom statistics</h1>
-<p>The last, optional, step is to support custom statistics. You would want to do this if you wish to have customization of an existing statistic, a user-defined statistic or custom formatting (if using the develop branch).</p>
-<p>In this case we create a file (called stats_sfc.R) that is the same name as the file imported in the functions file. This creates the statistic funny which is referenced in the list of statistics for sfc_points. For some statistics creation of a customized formatted value will also be handled here.</p>
-<pre><code># Summary statistic functions for sfc
+<div id="adding-new-methods" class="section level2">
+<h2>Adding new methods</h2>
+<p><code>skimr</code> has a lookup mechanism, based on the function <code>get_skimmers()</code>, to find default summary functions for each class. This is based on the S3 class system. You can learn more about it in <a href="https://adv-r.hadley.nz/s3.html"><em>Advanced R</em></a>.</p>
+<p>To export a new set of defaults for a data type, create a method for the generic function <code>get_skimmers</code>. Each of those methods returns an <code>sfl</code>, a <code>skimr</code> function list. This is the same list-like data structure used in the <code>skim_with()</code> example above. But note! There is one key difference. When adding a generic we also want to identify the <code>skim_type</code> in the <code>sfl</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @importFrom skimr get_skimmers</span>
+<span class="co">#' @export</span>
+get_skimmers.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
+  <span class="kw">sfl</span>(
+    <span class="dt">skim_type =</span> <span class="st">&quot;sfc_MULTIPOLYGON&quot;</span>,
+    <span class="dt">n_unique =</span> n_unique,
+    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
+    <span class="dt">funny =</span> funny_sf
+  )
+}</code></pre></div>
+<p>The same strategy follows for other data types.</p>
+<ul>
+<li>Create a method</li>
+<li>return an <code>sfl</code></li>
+<li>make sure that the <code>skim_type</code> is there</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @export</span>
+get_skimmers.sfc_POINT &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
+  <span class="kw">sfl</span>(
+    <span class="dt">skim_type =</span> <span class="st">&quot;sfc_POINT&quot;</span>,
+    <span class="dt">n_unique =</span> n_unique,
+    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.))
+  )
+}</code></pre></div>
+<p>Users of your package should load <code>skimr</code> to get the <code>skim()</code> function. Once loaded, a call to <code>get_default_skimmer_names()</code> will return defaults for your data types as well!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_default_skimmer_names</span>()</code></pre></div>
+<pre><code>## $AsIs
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $Date
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $POSIXct
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $character
+## [1] &quot;min&quot;        &quot;max&quot;        &quot;empty&quot;      &quot;n_unique&quot;   &quot;whitespace&quot;
+## 
+## $complex
+## [1] &quot;mean&quot;
+## 
+## $difftime
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $factor
+## [1] &quot;ordered&quot;    &quot;n_unique&quot;   &quot;top_counts&quot;
+## 
+## $list
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $logical
+## [1] &quot;mean&quot;  &quot;count&quot;
+## 
+## $numeric
+## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;
+## 
+## $sfc_MULTIPOLYGON
+## [1] &quot;n_unique&quot; &quot;valid&quot;    &quot;funny&quot;   
+## 
+## $sfc_POINT
+## [1] &quot;n_unique&quot; &quot;valid&quot;   
+## 
+## $ts
+##  [1] &quot;start&quot;      &quot;end&quot;        &quot;frequency&quot;  &quot;deltat&quot;     &quot;mean&quot;      
+##  [6] &quot;sd&quot;         &quot;min&quot;        &quot;max&quot;        &quot;median&quot;     &quot;line_graph&quot;</code></pre>
+<p>```</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This is a very simple example. For a package such as sf the custom statistics will likely be much more complex. The flexibility of <code>skimr</code> allows you to manage that.</p>
+<p>Thanks to Jakub Nowosad, Tiernan Martin, Edzer Pebesma and Michael Sumner for inspiring and helping with the development of this code.</p>
+</div>
 
-#' Funny_sf
-#' 
-#' @param x A vector
-#' @return Length + 1
-#' @export
-funny_sf &lt;- function(x) {
-  length(x) + 1
-}</code></pre>
-</div>
-<div id="testing" class="section level1">
-<h1>Testing</h1>
-<p>At this point using <code>skim(nc)</code> should produce your output that includes skimming of the classes in your object.</p>
-<p>In our example the last tibble will be</p>
-<pre><code>Sfc_multipolygon Variables
-# A tibble: 1 x 7
-       var missing complete     n n_unique valid funny
-     &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-1 geometry       0      100   100        1   100   101</code></pre>
-<p>while the other tibbles will be standard skimr results.</p>
-</div>
-<div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
-<p>This is a very simple example. For a package such as sf the custom statistics will likely be much more complex. The flexibility of skimr allows you to manage that.</p>
-<p>Thanks to Jakub Nowosad, Tiernan Martin, Edzer Pebesma, and Michael Sumner for inspiring and helping with the development of this code.</p>
-</div>
 
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

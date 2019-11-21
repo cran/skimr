@@ -3,8 +3,10 @@
 \name{stats}
 \alias{stats}
 \alias{n_missing}
-\alias{n_complete}
+\alias{complete_rate}
+\alias{n_whitespace}
 \alias{sorted_count}
+\alias{top_counts}
 \alias{inline_hist}
 \alias{n_empty}
 \alias{min_char}
@@ -22,11 +24,15 @@
 \usage{
 n_missing(x)
 
-n_complete(x)
+complete_rate(x)
+
+n_whitespace(x)
 
 sorted_count(x)
 
-inline_hist(x)
+top_counts(x, max_char = 3, max_levels = 4)
+
+inline_hist(x, n_bins = 8)
 
 n_empty(x)
 
@@ -40,7 +46,7 @@ ts_start(x)
 
 ts_end(x)
 
-inline_linegraph(x)
+inline_linegraph(x, length.out = 16)
 
 list_lengths_min(x)
 
@@ -54,23 +60,40 @@ list_max_length(x)
 }
 \arguments{
 \item{x}{A vector}
+
+\item{max_char}{In \code{top} = 3, max_levels = 4}
+
+\item{max_levels}{The maximum number of levels to be displayed.}
+
+\item{n_bins}{In \code{inline_hist}, the number of histogram bars.}
+
+\item{length.out}{In \code{inline_linegraph}, the length of the character time
+series.}
 }
 \description{
-Skimr provides extensions to a variety of functions with R's stats package
-to simplify creating summaries of data. All functions are vectorized and take
-a single argument. Other parameters for these functions are set in the
-\code{\link[=skim_format]{skim_format()}} function.
+\code{skimr} provides extensions to a variety of functions with R's stats package
+to simplify creating summaries of data. All functions are vectorized over the
+first argument. Additional arguments should be set in the \code{\link[=sfl]{sfl()}} that sets
+the appropriate skimmers for a data type. You can use these, along with other
+vectorized R functions, for creating custom sets of summary functions for
+a given data type.
 }
 \section{Functions}{
 \itemize{
 \item \code{n_missing}: Calculate the sum of \code{NA} and \code{NULL} (i.e. missing) values.
 
-\item \code{n_complete}: Calculate complete values; complete values are not missing.
+\item \code{complete_rate}: Calculate complete values; complete values are not missing.
+
+\item \code{n_whitespace}: Calculate the number of rows containing only whitespace
+values using s+ regex.
 
 \item \code{sorted_count}: Create a contingency table and arrange its levels in
 descending order. In case of ties, the ordering of results is alphabetical
 and depends upon the locale. \code{NA} is treated as a ordinary value for
 sorting.
+
+\item \code{top_counts}: Compute and collapse a contingency table into a single
+character scalar. Wraps \code{\link[=sorted_count]{sorted_count()}}.
 
 \item \code{inline_hist}: Generate inline histogram for numeric variables. The
 character length of the histogram is controlled by the formatting options
@@ -108,6 +131,5 @@ Based on the function in the pillar package.
 }}
 
 \seealso{
-\code{\link[=skim_format]{skim_format()}} and \code{\link[purrr:partial]{purrr::partial()}} for setting arguments of a
-skimmer function.
+\code{\link[=get_skimmers]{get_skimmers()}} for customizing the functions called by \code{\link[=skim]{skim()}}.
 }
