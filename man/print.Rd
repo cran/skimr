@@ -8,15 +8,26 @@
 \alias{print.summary_skim_df}
 \title{Print \code{skim} objects}
 \usage{
-\method{print}{skim_df}(x, include_summary = TRUE, n = Inf,
-  width = Inf, n_extra = NULL,
-  strip_metadata = getOption("skimr_strip_metadata", TRUE), ...)
+\method{print}{skim_df}(
+  x,
+  include_summary = TRUE,
+  n = Inf,
+  width = Inf,
+  n_extra = NULL,
+  strip_metadata = getOption("skimr_strip_metadata", TRUE),
+  ...
+)
 
-\method{print}{one_skim_df}(x, n = Inf, width = Inf, n_extra = NULL,
-  strip_metadata = getOption("skimr_strip_metadata", TRUE), ...)
+\method{print}{one_skim_df}(
+  x,
+  n = Inf,
+  width = Inf,
+  n_extra = NULL,
+  strip_metadata = getOption("skimr_strip_metadata", TRUE),
+  ...
+)
 
-\method{print}{skim_list}(x, n = Inf, width = Inf, n_extra = NULL,
-  ...)
+\method{print}{skim_list}(x, n = Inf, width = Inf, n_extra = NULL, ...)
 
 \method{print}{summary_skim_df}(x, ...)
 }
@@ -65,6 +76,9 @@ For better or for worse, \code{skimr} often produces more output than can fit in
 the standard R console. Fortunately, most modern environments like RStudio
 and Jupyter support more than 80 character outputs. Call
 \code{options(width = 90)} to get a better experience with \code{skimr}.
+
+The print methods in \code{skimr} wrap those in the \link[tibble:formatting]{tibble}
+package. You can control printing behavior using the same global options.
 }
 
 \section{Behavior in \code{dplyr} pipelines}{
@@ -84,3 +98,7 @@ behavior, set either \code{strip_metadata = FALSE} when calling print or use
 \code{options(skimr_strip_metadata = FALSE)}.
 }
 
+\seealso{
+\code{\link[tibble:trunc_mat]{tibble::trunc_mat()}} For a list of global options for customizing
+print formatting.
+}

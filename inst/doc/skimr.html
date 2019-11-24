@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-11-12" />
+<meta name="date" content="2019-11-24" />
 
 <title>Using Skimr</title>
 
@@ -94,7 +94,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Using Skimr</h1>
-<h4 class="date">2019-11-12</h4>
+<h4 class="date">2019-11-24</h4>
 
 
 
@@ -182,16 +182,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span>
 <span class="st">  </span>tibble<span class="op">::</span><span class="kw">as_tibble</span>()</code></pre></div>
 <pre><code>## # A tibble: 5 x 15
-##   skim_type skim_variable n_missing complete_rate factor.ordered
-##   &lt;chr&gt;     &lt;chr&gt;             &lt;int&gt;         &lt;dbl&gt; &lt;lgl&gt;         
-## 1 factor    Species               0             1 FALSE         
-## 2 numeric   Sepal.Length          0             1 NA            
-## 3 numeric   Sepal.Width           0             1 NA            
-## 4 numeric   Petal.Length          0             1 NA            
-## 5 numeric   Petal.Width           0             1 NA            
-## # … with 10 more variables: factor.n_unique &lt;int&gt;,
-## #   factor.top_counts &lt;chr&gt;, numeric.mean &lt;dbl&gt;, numeric.sd &lt;dbl&gt;,
-## #   numeric.p0 &lt;dbl&gt;, numeric.p25 &lt;dbl&gt;, numeric.p50 &lt;dbl&gt;,
+##   skim_type skim_variable n_missing complete_rate factor.ordered factor.n_unique
+##   &lt;chr&gt;     &lt;chr&gt;             &lt;int&gt;         &lt;dbl&gt; &lt;lgl&gt;                    &lt;int&gt;
+## 1 factor    Species               0             1 FALSE                        3
+## 2 numeric   Sepal.Length          0             1 NA                          NA
+## 3 numeric   Sepal.Width           0             1 NA                          NA
+## 4 numeric   Petal.Length          0             1 NA                          NA
+## 5 numeric   Petal.Width           0             1 NA                          NA
+## # … with 9 more variables: factor.top_counts &lt;chr&gt;, numeric.mean &lt;dbl&gt;,
+## #   numeric.sd &lt;dbl&gt;, numeric.p0 &lt;dbl&gt;, numeric.p25 &lt;dbl&gt;, numeric.p50 &lt;dbl&gt;,
 ## #   numeric.p75 &lt;dbl&gt;, numeric.p100 &lt;dbl&gt;, numeric.hist &lt;chr&gt;</code></pre>
 <p>This is in contrast to <code>summary.data.frame()</code>, which stores statistics in a <code>table</code>. The distinction is important, because the <code>skim_df</code> object is pipeable and easy to use for additional manipulation: for example, the user could select all of the variable means, or all summary statistics for a specific variable.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span>
@@ -369,10 +368,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Group variables            None  
 ## 
 ## ── Variable type: ts ─────────────────────────────────────────────
-##   skim_variable n_missing complete_rate start   end frequency deltat  mean
-## 1 x                     0             1  1821  1934         1      1 1538.
-##      sd   min   max median line_graph
-## 1 1586.    39  6991    771 ⡈⢄⡠⢁⣀⠒⣀⠔</code></pre>
+##   skim_variable n_missing complete_rate start   end frequency deltat  mean    sd
+## 1 x                     0             1  1821  1934         1      1 1538. 1586.
+##     min   max median line_graph
+## 1    39  6991    771 ⡈⢄⡠⢁⣀⠒⣀⠔</code></pre>
 <p>Which is the same as coercing to a data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">all.equal</span>(<span class="kw">skim</span>(lynx), <span class="kw">skim</span>(<span class="kw">as.data.frame</span>(lynx)))</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
