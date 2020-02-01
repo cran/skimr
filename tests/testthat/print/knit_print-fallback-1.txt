@@ -1,0 +1,8 @@
+# A tibble: 5 x 1
+  skim_variable
+  <chr>        
+1 Species      
+2 Sepal.Length 
+3 Sepal.Width  
+4 Petal.Length 
+5 Petal.Width  

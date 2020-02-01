@@ -14,22 +14,32 @@
   n = Inf,
   width = Inf,
   n_extra = NULL,
-  strip_metadata = getOption("skimr_strip_metadata", TRUE),
+  strip_metadata = getOption("skimr_strip_metadata", FALSE),
+  rule_width = base::options()$width,
+  summary_rule_width = 40,
   ...
 )
 
 \method{print}{one_skim_df}(
   x,
   n = Inf,
-  width = Inf,
+  .width = Inf,
   n_extra = NULL,
-  strip_metadata = getOption("skimr_strip_metadata", TRUE),
+  strip_metadata = getOption("skimr_strip_metadata", FALSE),
+  .rule_width = base::options()$width,
   ...
 )
 
-\method{print}{skim_list}(x, n = Inf, width = Inf, n_extra = NULL, ...)
+\method{print}{skim_list}(
+  x,
+  n = Inf,
+  width = Inf,
+  n_extra = NULL,
+  .rule_width = base::options()$width,
+  ...
+)
 
-\method{print}{summary_skim_df}(x, ...)
+\method{print}{summary_skim_df}(x, .summary_rule_width = 40, ...)
 }
 \arguments{
 \item{x}{Object to format or print.}
@@ -52,7 +62,18 @@ will print information about at most \code{tibble.max_extra_cols} extra columns.
 
 \item{strip_metadata}{Whether tibble metadata should be removed.}
 
+\item{rule_width}{Width of the cli rules in printed skim object. Defaults
+to base::options()$width}
+
+\item{summary_rule_width}{Width of Data Summary cli rule, defaults to 40.}
+
 \item{...}{Other arguments passed on to individual methods.}
+
+\item{.width}{Width for the tibble for each type.}
+
+\item{.rule_width}{Width for the rule above the skim results for each type.}
+
+\item{.summary_rule_width}{the width for the main rule above the summary.}
 }
 \description{
 \code{skimr} has custom print methods for all supported objects. Default printing
@@ -92,13 +113,16 @@ cases, this method falls back to \code{\link[tibble:print.tbl]{tibble::print.tbl
 \section{Controlling metadata behavior}{
 
 
-By default, \code{skimr} removes the tibble metadata when generating output. On
-some platforms, this can lead to all output getting removed. To disable that
-behavior, set either \code{strip_metadata = FALSE} when calling print or use
-\code{options(skimr_strip_metadata = FALSE)}.
+On POSIX systems, \code{skimr} removes the tibble metadata when generating output.
+On some platforms, this can lead to all output getting removed. To disable
+that behavior, set either \code{strip_metadata = FALSE} when calling print or use
+\code{options(skimr_strip_metadata = FALSE)}. The \code{crayon} package and the color
+support within \code{tibble} is also a factor. If your \code{skimr} results tables are
+empty you may need to run the following \code{options(crayon.enabled = FALSE)}.
 }
 
 \seealso{
 \code{\link[tibble:trunc_mat]{tibble::trunc_mat()}} For a list of global options for customizing
-print formatting.
+print formatting. \code{\link[crayon:has_color]{crayon::has_color()}} for the variety of issues that
+affect tibble's color support.
 }
