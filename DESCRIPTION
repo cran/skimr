@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 2.1
+Version: 2.1.1
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
@@ -84,14 +84,14 @@ Authors@R:
              family = "Possenriede",
              role = "ctb",
              email = "possenriede@gmail.com"))
-Description: A simple to use summary function that can be used
-    with pipes and displays nicely in the console. The default summary
-    statistics may be modified by the user as can the default formatting.
-    Support for data frames and vectors is included, and users can
-    implement their own skim methods for specific object types as
-    described in a vignette. Default summaries include support for inline
-    spark graphs. Instructions for managing these on specific operating
-    systems are given in the "Using skimr" vignette and the README.
+Description: A simple to use summary function that can be used with pipes
+    and displays nicely in the console. The default summary statistics may
+    be modified by the user as can the default formatting.  Support for
+    data frames and vectors is included, and users can implement their own
+    skim methods for specific object types as described in a vignette.
+    Default summaries include support for inline spark graphs.
+    Instructions for managing these on specific operating systems are
+    given in the "Using skimr" vignette and the README.
 License: GPL-3
 URL: https://docs.ropensci.org/skimr (website),
         https://github.com/ropensci/skimr
@@ -99,7 +99,8 @@ BugReports: https://github.com/ropensci/skimr/issues
 Depends: R (>= 3.1.2)
 Imports: cli, crayon, dplyr (>= 0.8.0), knitr (>= 1.2), magrittr (>=
         1.5), purrr, repr, rlang (>= 0.3.1), stats, stringr (>= 1.1),
-        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 0.2.5), withr
+        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 0.2.5),
+        vctrs, withr
 Suggests: covr, extrafont, rmarkdown, sf, testthat (>= 2.0.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
@@ -109,7 +110,7 @@ Collate: 'deprecated.R' 'dplyr.R' 'stats.R' 'skim_with.R'
         'get_skimmers.R' 'reshape.R' 'sfl.R' 'skim.R' 'skim_obj.R'
         'skim_print.R' 'skimr-package.R' 'summary.R' 'utils.R'
 NeedsCompilation: no
-Packaged: 2020-02-01 18:40:30 UTC; elinwaring
+Packaged: 2020-04-16 13:06:46 UTC; elinwaring
 Author: Elin Waring [cre, aut],
   Michael Quinn [aut],
   Amelia McNamara [aut],
@@ -133,4 +134,4 @@ Author: Elin Waring [cre, aut],
   Daniel Possenriede [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-02-01 19:00:02 UTC
+Date/Publication: 2020-04-16 14:00:02 UTC

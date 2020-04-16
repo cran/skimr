@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-02-01" />
+<meta name="date" content="2020-04-16" />
 
 <title>Using Skimr</title>
 
@@ -93,7 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Using Skimr</h1>
-<h4 class="date">2020-02-01</h4>
+<h4 class="date">2020-04-16</h4>
 
 
 
@@ -170,13 +170,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>Unlike many other objects within <code>R</code>, these columns are intrinsic to the <code>skim_df</code> class. Dropping these variables will result in a coercion to a <code>tibble</code>. The <code>is_skim_df()</code> function is used to assert that an object is a skim_df.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">is_skim_df</span>()</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] TRUE
+## attr(,&quot;message&quot;)
+## character(0)</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>skim_type, <span class="op">-</span>skim_variable) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">is_skim_df</span>()</code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] FALSE
+## attr(,&quot;message&quot;)
+## [1] &quot;Object is not a `skim_df`: missing column `skim_type`; missing column `skim_variable`&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>n_missing) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">is_skim_df</span>()</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] TRUE
+## attr(,&quot;message&quot;)
+## character(0)</code></pre>
 <p>In order to avoid type coercion, columns for summary statistics for different types are prefixed with the corresponding <code>skim_type</code>. This means that the columns of the <code>skim_df</code> are somewhat sparse, with quite a few missing values. This is because for some statistics the representations for different types of variables is different. For example, the mean of a Date variable and of a numeric variable are represented differently when printing, but this cannot be supported in a single vector. The exception to this are <code>n_missing</code> and <code>complete_rate</code> (missing/number of observations) which are the same for all types of variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(iris) <span class="op">%&gt;%</span>
 <span class="st">  </span>tibble<span class="op">::</span><span class="kw">as_tibble</span>()</code></pre></div>
@@ -373,7 +379,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 1    39  6991    771 ⡈⢄⡠⢁⣀⠒⣀⠔</code></pre>
 <p>Which is the same as coercing to a data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">all.equal</span>(<span class="kw">skim</span>(lynx), <span class="kw">skim</span>(<span class="kw">as.data.frame</span>(lynx)))</code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## [1] &quot;Attributes: &lt; Component \&quot;df_name\&quot;: 1 string mismatch &gt;&quot;</code></pre>
 </div>
 <div id="skimming-matrices" class="section level2">
 <h2>Skimming matrices</h2>
@@ -504,7 +510,7 @@ m</code></pre></div>
 <div id="reshaping-the-results-from-skim" class="section level2">
 <h2>Reshaping the results from <code>skim()</code></h2>
 <p>As noted above, <code>skim()</code> returns a wide data frame. This is usually the most sensible format for the majority of operations when investigating data, but the package has some other functions to help with edge cases.</p>
-<p>First, <code>partition()</code> returns a named list of the wide data frames for each data type. Unlike the original data the partitioned data only has columns corresponding to the skimming functions use for this data type. These data frames are, therefore, not <code>skim_df</code> objects.</p>
+<p>First, <code>partition()</code> returns a named list of the wide data frames for each data type. Unlike the original data the partitioned data only has columns corresponding to the skimming functions used for this data type. These data frames are, therefore, not <code>skim_df</code> objects.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">skim</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">partition</span>()</code></pre></div>
