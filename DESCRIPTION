@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 2.1.1
+Version: 2.1.2
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
@@ -83,8 +83,16 @@ Authors@R:
       person(given = "Daniel",
              family = "Possenriede",
              role = "ctb",
-             email = "possenriede@gmail.com"))
-Description: A simple to use summary function that can be used with pipes
+             email = "possenriede@gmail.com"),
+      person(given = "David",
+             family = "Zimmermann",
+             role = "ctb",
+             email = "david_j_zimmermann@hotmail.com"),
+      person(given = "Kyle", 
+             family = "Butts",
+             role ="ctb",
+             email = ""))
+Description: A simple to use summary function that can be used buttskyle96@gmail.comwith pipes
     and displays nicely in the console. The default summary statistics may
     be modified by the user as can the default formatting.  Support for
     data frames and vectors is included, and users can implement their own
@@ -99,18 +107,18 @@ BugReports: https://github.com/ropensci/skimr/issues
 Depends: R (>= 3.1.2)
 Imports: cli, crayon, dplyr (>= 0.8.0), knitr (>= 1.2), magrittr (>=
         1.5), purrr, repr, rlang (>= 0.3.1), stats, stringr (>= 1.1),
-        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 0.2.5),
-        vctrs, withr
-Suggests: covr, extrafont, rmarkdown, sf, testthat (>= 2.0.0)
+        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 0.2.5), withr
+Suggests: covr, extrafont, lubridate, rmarkdown, sf, testthat (>=
+        2.0.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Collate: 'deprecated.R' 'dplyr.R' 'stats.R' 'skim_with.R'
         'get_skimmers.R' 'reshape.R' 'sfl.R' 'skim.R' 'skim_obj.R'
         'skim_print.R' 'skimr-package.R' 'summary.R' 'utils.R'
 NeedsCompilation: no
-Packaged: 2020-04-16 13:06:46 UTC; elinwaring
+Packaged: 2020-07-05 21:56:47 UTC; elinwaring
 Author: Elin Waring [cre, aut],
   Michael Quinn [aut],
   Amelia McNamara [aut],
@@ -131,7 +139,9 @@ Author: Elin Waring [cre, aut],
   Harris McGehee [ctb],
   Mark Roepke [ctb],
   Patrick Kennedy [ctb],
-  Daniel Possenriede [ctb]
+  Daniel Possenriede [ctb],
+  David Zimmermann [ctb],
+  Kyle Butts [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-04-16 14:00:02 UTC
+Date/Publication: 2020-07-06 05:10:03 UTC

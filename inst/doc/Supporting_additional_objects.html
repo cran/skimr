@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-04-16" />
+<meta name="date" content="2020-07-05" />
 
 <title>Supporting additional objects</title>
 
@@ -93,34 +93,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Supporting additional objects</h1>
-<h4 class="date">2020-04-16</h4>
+<h4 class="date">2020-07-05</h4>
 
 
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>The <code>skim()</code> function summarizes data types contained within data frames. It comes with a set of default summary functions for a wide variety of data types, but this is not comprehensive. Package authors can add support for skimming their specific data types in their packages, and they can provide different defaults in their own summary functions.</p>
-<p>This example will illustrate this by creating support for the <code>sf</code> object produced by the “sf: Simple Features for R” package. For any object this involves two required elements and one optional element.</p>
+<p>This example will illustrate this by creating support for the <code>sf</code> object produced by the &quot;sf: Simple Features for R&quot; package. For any object this involves two required elements and one optional element.</p>
 <ul>
 <li>experiment with interactive changes</li>
 <li>create methods to <code>get_skimmers</code> for different objects within this package</li>
 <li>if needed, define any custom statistics</li>
 </ul>
-<p>If you are adding skim support to a package you will also need to add <code>skimr</code> to the list of imports. Note that in this vignette the actual analysis will not be run because that would require importing the <code>sf</code> package just for this example. However to run it on your own you can install <code>sf</code> and then run the following code. Note that code in this vignette was not evaluated when rendering the vignette in order to avoid forcing installation of sf.</p>
+<p>If you are adding skim support to a package you will also need to add <code>skimr</code> to the list of imports. Note that to run the code in this vignette you will need to install the <code>sf</code> package. We suggest not doing that, and instead substitute whatever package you are working with.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(skimr)
 <span class="kw">library</span>(sf)</code></pre></div>
 <pre><code>## Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc &lt;-<span class="st"> </span><span class="kw">st_read</span>(<span class="kw">system.file</span>(<span class="st">&quot;shape/nc.shp&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;sf&quot;</span>))</code></pre></div>
-<pre><code>## Reading layer `nc' from data source `/Users/elinwaring/Library/R/3.6/library/sf/shape/nc.shp' using driver `ESRI Shapefile'
+<pre><code>## Reading layer `nc' from data source `/Library/Frameworks/R.framework/Versions/4.0/Resources/library/sf/shape/nc.shp' using driver `ESRI Shapefile'
 ## Simple feature collection with 100 features and 14 fields
 ## geometry type:  MULTIPOLYGON
 ## dimension:      XY
 ## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-## epsg (SRID):    4267
-## proj4string:    +proj=longlat +datum=NAD27 +no_defs</code></pre>
+## CRS:            4267</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(nc)</code></pre></div>
 <pre><code>## [1] &quot;sf&quot;         &quot;data.frame&quot;</code></pre>
-<p>Unlike the example of having a new type of data in a column of a simple data frame in the “Using skimr” vignette, this is a different type of object with special attributes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(nc<span class="op">$</span>geometry)</code></pre></div>
+<pre><code>## [1] &quot;sfc_MULTIPOLYGON&quot; &quot;sfc&quot;</code></pre>
+<p>Unlike the example of having a new type of data in a column of a simple data frame in the &quot;Using skimr&quot; vignette, this is a different type of object with special attributes.</p>
 <p>In this object there is also a column of a class that does not have default skimmers. By default, skimr falls back to use the sfl for character variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(nc<span class="op">$</span>geometry)</code></pre></div>
 <pre><code>## Warning: Couldn't find skimmers for class: sfc_MULTIPOLYGON, sfc; No user-
@@ -192,11 +193,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="experiment-interactively" class="section level2">
 <h2>Experiment interactively</h2>
-<p><code>skimr</code> has an opinionated list of functions for each class (e.g. numeric, factor) of data. The core package supports many commonly used classes, but there are many others. You can investigate these defaults by calling <code>get_default_skimmer_names()</code>.</p>
-<p>What if your data type isn’t covered by defaults? <code>skimr</code> usually falls back to treating the type as a character, which isn’t necessarily helpful. In this case, you’re best off adding your data type with <code>skim_with()</code>.</p>
-<p>Before we begin, we’ll be using the following custom summary statistic throughout. It’s a naive example, but covers the requirements of what we need.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">funny_sf &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
-  <span class="kw">length</span>(x) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+<p><code>skimr</code> has an opinionated list of functions for each class (e.g. numeric, factor) of data. The core package supports many commonly used classes, but there are many others. You can investigate these defaults by calling <code>get_default_skimmer_names()</code>.</p>
+<p>What if your data type isn't covered by defaults? <code>skimr</code> usually falls back to treating the type as a character, which isn't necessarily helpful. In this case, you're best off adding your data type with <code>skim_with()</code>.</p>
+<p>Before we begin, we'll be using the following custom summary statistic throughout. The function gets the geometry's crs and combines it into a string.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">get_crs &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
+  crs &lt;-<span class="st"> </span>sf<span class="op">::</span><span class="kw">st_crs</span>(column)
+
+  <span class="kw">paste0</span>(<span class="st">&quot;epsg: &quot;</span>, crs[[<span class="st">&quot;epsg&quot;</span>]], <span class="st">&quot; proj4string: '&quot;</span>, crs[[<span class="st">&quot;proj4string&quot;</span>]], <span class="st">&quot;'&quot;</span>)
 }</code></pre></div>
 <p>This function, like all summary functions used by <code>skimr</code> has two notable features.</p>
 <ul>
@@ -206,22 +209,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>There are a lot of functions that fulfill these criteria:</p>
 <ul>
 <li>existing functions from base, stats, or other packages,</li>
-<li>lambda’s created using the Tidyverse-style syntax</li>
+<li>lambda's created using the Tidyverse-style syntax</li>
 <li>custom functions that have been defined in the <code>skimr</code> package</li>
 <li>custom functions that you have defined.</li>
 </ul>
 <p>Not fulfilling the two criteria can lead to some very confusing behavior within <code>skimr</code>. Beware! An example of this issue is the base <code>quantile()</code> function in default <code>skimr</code> percentiles are returned by using <code>quantile()</code> five times.</p>
-<p>Next, we create a custom skimming function. To do this, we need to think about the many specific classes of data in the <code>sf</code> package. The following example will build support for <code>sfc_MULTIPOLYGON</code>, but note that we’ll have to eventually think about <code>sfc_LINESTRING</code>, <code>sfc_POLYGON</code>, <code>sfc_MULTIPOINT</code> and others if we want to fully support <code>sf</code>.</p>
+<p>Next, we create a custom skimming function. To do this, we need to think about the many specific classes of data in the <code>sf</code> package. From above, you can see the geometry column has two classes: 1st the specific geometry type (e.g. <code>sfc_MULTIPOLYGON</code> <code>sfc_LINESTRING</code>, <code>sfc_POLYGON</code>, <code>sfc_MULTIPOINT</code>) and 2nd the general sfc class. Skimr will try to find a sfl() helper function for the classes in the order they appear in <code>class(.)</code> (see S3 classes for more detail <a href="https://adv-r.hadley.nz/s3.html"><em>Advanced R</em></a>). The following example will build support for <code>sfc</code>, which encompasses all <code>sf</code> objects: <code>sfc_MULTIPOLYGON</code> <code>sfc_LINESTRING</code>, <code>sfc_POLYGON</code>, <code>sfc_MULTIPOINT</code>. If we want custom skim_with functions we can write <code>sfl()</code> helper functions for the geometry type.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skim_sf &lt;-<span class="st"> </span><span class="kw">skim_with</span>(
-  <span class="dt">sfc_MULTIPOLYGON =</span> <span class="kw">sfl</span>(
+  <span class="dt">sfc =</span> <span class="kw">sfl</span>(
     <span class="dt">n_unique =</span> n_unique,
     <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
-    <span class="dt">funny =</span> funny_sf
+    <span class="dt">crs =</span> get_crs
   )
 )</code></pre></div>
-<pre><code>## Creating new skimming functions for the following classes: sfc_MULTIPOLYGON.
+<pre><code>## Creating new skimming functions for the following classes: sfc.
 ## They did not have recognized defaults. Call get_default_skimmers() for more information.</code></pre>
-<p>The example above creates a new <em>function</em>, and you can call that function on a specific column with <code>sfc_MULTIPOLYGON</code> data to get the appropriate summary statistics.</p>
+<p>The example above creates a new <em>function</em>, and you can call that function on a specific column with <code>sfc</code> data to get the appropriate summary statistics. The <code>skim_with</code> factory also uses the default skimrs for things like factors, characters, and numerics. Therefore our <code>skim_sf</code> is like the regular <code>skim</code> function with the added ability to summarize <code>sfc</code> columns.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_sf</span>(nc<span class="op">$</span>geometry)</code></pre></div>
 <table>
 <caption>Data summary</caption>
@@ -247,7 +250,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">sfc_MULTIPOLYGON</td>
+<td align="left">sfc</td>
 <td align="left">1</td>
 </tr>
 <tr class="odd">
@@ -260,7 +263,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 </tbody>
 </table>
-<p><strong>Variable type: sfc_MULTIPOLYGON</strong></p>
+<p><strong>Variable type: sfc</strong></p>
 <table>
 <thead>
 <tr class="header">
@@ -269,7 +272,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <th align="right">complete_rate</th>
 <th align="right">n_unique</th>
 <th align="right">valid</th>
-<th align="right">funny</th>
+<th align="left">crs</th>
 </tr>
 </thead>
 <tbody>
@@ -279,16 +282,76 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="right">1</td>
 <td align="right">100</td>
 <td align="right">100</td>
-<td align="right">101</td>
+<td align="left">epsg: proj4string: ''</td>
 </tr>
 </tbody>
 </table>
-<p>Creating a function that is a method of the skim_by_type generic for the data type allows skimming of an entire data frame that contains some columns of that type.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skim_by_type.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(mangled, columns, data) {
-  skimmed &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarize_at</span>(data, columns, mangled<span class="op">$</span>funs)
-  <span class="kw">build_results</span>(skimmed, columns, <span class="ot">NULL</span>)
+<p>While this works for any data type and you can also include it within any package (assuming your users load skimr), there is an even better approach in this case. To take full advantage of <code>skimr</code>, we'll dig a bit into its API.</p>
+</div>
+<div id="adding-new-methods" class="section level2">
+<h2>Adding new methods</h2>
+<p><code>skimr</code> has a lookup mechanism, based on the function <code>get_skimmers()</code>, to find default summary functions for each class. This is based on the S3 class system. You can learn more about it in <a href="https://adv-r.hadley.nz/s3.html"><em>Advanced R</em></a>.</p>
+<p>This requires that you add <code>skimr</code> to your list of dependencies.</p>
+<p>To export a new set of defaults for a data type, create a method for the generic function <code>get_skimmers</code>. Each of those methods returns an <code>sfl</code>, a <code>skimr</code> function list. This is the same list-like data structure used in the <code>skim_with()</code> example above. But note! There is one key difference. When adding a generic we also want to identify the <code>skim_type</code> in the <code>sfl</code>. You will probably want to use <code>skimr::get_skimmers.sfc()</code> but that will not work in a vignette.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @importFrom skimr get_skimmers</span>
+<span class="co">#' @export</span>
+get_skimmers.sfc &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
+  <span class="kw">sfl</span>(
+    <span class="dt">skim_type =</span> <span class="st">&quot;sfc&quot;</span>,
+    <span class="dt">n_unique =</span> n_unique,
+    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
+    <span class="dt">crs =</span> get_crs
+  )
 }</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim_sf</span>(nc)</code></pre></div>
+<p>The same strategy follows for other data types.</p>
+<ul>
+<li>Create a method</li>
+<li>return an <code>sfl</code></li>
+<li>make sure that the <code>skim_type</code> is there</li>
+</ul>
+<p>Users of your package should load <code>skimr</code> to get the <code>skim()</code> function (although you could import and reexport it). Once loaded, a call to <code>get_default_skimmer_names()</code> will return defaults for your data types as well!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_default_skimmer_names</span>()</code></pre></div>
+<pre><code>## $AsIs
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $Date
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $POSIXct
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $Timespan
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $character
+## [1] &quot;min&quot;        &quot;max&quot;        &quot;empty&quot;      &quot;n_unique&quot;   &quot;whitespace&quot;
+## 
+## $complex
+## [1] &quot;mean&quot;
+## 
+## $difftime
+## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
+## 
+## $factor
+## [1] &quot;ordered&quot;    &quot;n_unique&quot;   &quot;top_counts&quot;
+## 
+## $list
+## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
+## 
+## $logical
+## [1] &quot;mean&quot;  &quot;count&quot;
+## 
+## $numeric
+## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;
+## 
+## $sfc
+## [1] &quot;n_unique&quot; &quot;valid&quot;    &quot;crs&quot;     
+## 
+## $ts
+##  [1] &quot;start&quot;      &quot;end&quot;        &quot;frequency&quot;  &quot;deltat&quot;     &quot;mean&quot;      
+##  [6] &quot;sd&quot;         &quot;min&quot;        &quot;max&quot;        &quot;median&quot;     &quot;line_graph&quot;</code></pre>
+<p>They will then be able to use <code>skim()</code> directly.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">skim</span>(nc)</code></pre></div>
 <table>
 <caption>Data summary</caption>
 <tbody>
@@ -313,7 +376,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="left"></td>
 </tr>
 <tr class="even">
-<td align="left">factor</td>
+<td align="left">character</td>
 <td align="left">2</td>
 </tr>
 <tr class="odd">
@@ -321,25 +384,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="left">12</td>
 </tr>
 <tr class="even">
+<td align="left">sfc</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
 <td align="left">________________________</td>
 <td align="left"></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Group variables</td>
-<td align="left">geometry</td>
+<td align="left">None</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Variable type: factor</strong></p>
+<p><strong>Variable type: character</strong></p>
 <table>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
 <th align="right">n_missing</th>
 <th align="right">complete_rate</th>
-<th align="left">ordered</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
 <th align="right">n_unique</th>
-<th align="left">top_counts</th>
+<th align="right">whitespace</th>
 </tr>
 </thead>
 <tbody>
@@ -347,17 +416,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td align="left">NAME</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="right">12</td>
+<td align="right">0</td>
 <td align="right">100</td>
-<td align="left">Ala: 1, Ale: 1, All: 1, Ans: 1</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="left">FIPS</td>
 <td align="right">0</td>
 <td align="right">1</td>
-<td align="left">FALSE</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
 <td align="right">100</td>
-<td align="left">370: 1, 370: 1, 370: 1, 370: 1</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -537,103 +610,34 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </tr>
 </tbody>
 </table>
-<p>Sharing these functions within a separate package requires an export. The simplest way to do this is with Roxygen.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' Skimming functions for `sfc_MULTIPOLYGON` objects.</span>
-<span class="co">#' @export</span>
-skim_sf &lt;-<span class="st"> </span><span class="kw">skim_with</span>(
-  <span class="dt">sfc_MULTIPOLYGON =</span> <span class="kw">sfl</span>(
-    <span class="dt">missing =</span> n_missing,
-    <span class="dt">n =</span> length,
-    <span class="dt">n_unique =</span> n_unique,
-    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
-    <span class="dt">funny =</span> funny_sf
-  )
-)</code></pre></div>
-<pre><code>## Creating new skimming functions for the following classes: sfc_MULTIPOLYGON.
-## They did not have recognized defaults. Call get_default_skimmers() for more information.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' A skim_by_type function for `sfc_MULTIPOLYGON` objects.</span>
-<span class="co">#' @export</span>
-skim_by_type.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(mangled, columns, data) {
-  skimmed &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarize_at</span>(data, columns, mangled<span class="op">$</span>funs)
-  skimr<span class="op">::</span><span class="kw">build_results</span>(skimmed, columns, <span class="ot">NULL</span>)
-}</code></pre></div>
-<p>While this works within any package, there is an even better approach in this case. To take full advantage of <code>skimr</code>, we’ll dig a bit into its API.</p>
-</div>
-<div id="adding-new-methods" class="section level2">
-<h2>Adding new methods</h2>
-<p><code>skimr</code> has a lookup mechanism, based on the function <code>get_skimmers()</code>, to find default summary functions for each class. This is based on the S3 class system. You can learn more about it in <a href="https://adv-r.hadley.nz/s3.html"><em>Advanced R</em></a>.</p>
-<p>To export a new set of defaults for a data type, create a method for the generic function <code>get_skimmers</code>. Each of those methods returns an <code>sfl</code>, a <code>skimr</code> function list. This is the same list-like data structure used in the <code>skim_with()</code> example above. But note! There is one key difference. When adding a generic we also want to identify the <code>skim_type</code> in the <code>sfl</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @importFrom skimr get_skimmers</span>
-<span class="co">#' @export</span>
-get_skimmers.sfc_MULTIPOLYGON &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
-  <span class="kw">sfl</span>(
-    <span class="dt">skim_type =</span> <span class="st">&quot;sfc_MULTIPOLYGON&quot;</span>,
-    <span class="dt">n_unique =</span> n_unique,
-    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.)),
-    <span class="dt">funny =</span> funny_sf
-  )
-}</code></pre></div>
-<p>The same strategy follows for other data types.</p>
-<ul>
-<li>Create a method</li>
-<li>return an <code>sfl</code></li>
-<li>make sure that the <code>skim_type</code> is there</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#' @export</span>
-get_skimmers.sfc_POINT &lt;-<span class="st"> </span><span class="cf">function</span>(column) {
-  <span class="kw">sfl</span>(
-    <span class="dt">skim_type =</span> <span class="st">&quot;sfc_POINT&quot;</span>,
-    <span class="dt">n_unique =</span> n_unique,
-    <span class="dt">valid =</span> <span class="op">~</span><span class="st"> </span><span class="kw">sum</span>(sf<span class="op">::</span><span class="kw">st_is_valid</span>(.))
-  )
-}</code></pre></div>
-<p>Users of your package should load <code>skimr</code> to get the <code>skim()</code> function. Once loaded, a call to <code>get_default_skimmer_names()</code> will return defaults for your data types as well!</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_default_skimmer_names</span>()</code></pre></div>
-<pre><code>## $AsIs
-## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
-## 
-## $Date
-## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
-## 
-## $POSIXct
-## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
-## 
-## $character
-## [1] &quot;min&quot;        &quot;max&quot;        &quot;empty&quot;      &quot;n_unique&quot;   &quot;whitespace&quot;
-## 
-## $complex
-## [1] &quot;mean&quot;
-## 
-## $difftime
-## [1] &quot;min&quot;      &quot;max&quot;      &quot;median&quot;   &quot;n_unique&quot;
-## 
-## $factor
-## [1] &quot;ordered&quot;    &quot;n_unique&quot;   &quot;top_counts&quot;
-## 
-## $list
-## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
-## 
-## $logical
-## [1] &quot;mean&quot;  &quot;count&quot;
-## 
-## $numeric
-## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;
-## 
-## $sfc_MULTIPOLYGON
-## [1] &quot;n_unique&quot; &quot;valid&quot;    &quot;funny&quot;   
-## 
-## $sfc_POINT
-## [1] &quot;n_unique&quot; &quot;valid&quot;   
-## 
-## $ts
-##  [1] &quot;start&quot;      &quot;end&quot;        &quot;frequency&quot;  &quot;deltat&quot;     &quot;mean&quot;      
-##  [6] &quot;sd&quot;         &quot;min&quot;        &quot;max&quot;        &quot;median&quot;     &quot;line_graph&quot;</code></pre>
-<p>```</p>
+<p><strong>Variable type: sfc</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">n_unique</th>
+<th align="right">valid</th>
+<th align="left">crs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">geometry</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">100</td>
+<td align="right">100</td>
+<td align="left">epsg: proj4string: ''</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
-<p>This is a very simple example. For a package such as sf the custom statistics will likely be much more complex. The flexibility of <code>skimr</code> allows you to manage that.</p>
-<p>Thanks to Jakub Nowosad, Tiernan Martin, Edzer Pebesma and Michael Sumner for inspiring and helping with the development of this code.</p>
+<p>This is a very simple example. For a package such as <code>sf</code> the custom statistics will likely be much more complex. The flexibility of <code>skimr</code> allows you to manage that.</p>
+<p>Thanks to Jakub Nowosad, Tiernan Martin, Edzer Pebesma, Michael Sumner, and Kyle Butts for inspiring and helping with the development of this code.</p>
 </div>
 
 

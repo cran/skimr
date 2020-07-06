@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-04-16" />
+<meta name="date" content="2020-07-05" />
 
 <title>Using Skimr</title>
 
@@ -93,7 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Using Skimr</h1>
-<h4 class="date">2020-04-16</h4>
+<h4 class="date">2020-07-05</h4>
 
 
 
@@ -127,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="the-skim-function" class="section level2">
 <h2>The <code>skim()</code> function</h2>
-<p>The core function of <code>skimr</code> is <code>skim()</code>, which is designed to work with (grouped) data frames, and will try coerce other objects to data frames if possible. Like <code>summary()</code>, <code>skim()</code>’s method for data frames presents results for every column; the statistics it provides depend on the class of the variable.</p>
+<p>The core function of <code>skimr</code> is <code>skim()</code>, which is designed to work with (grouped) data frames, and will try coerce other objects to data frames if possible. Like <code>summary()</code>, <code>skim()</code>'s method for data frames presents results for every column; the statistics it provides depend on the class of the variable.</p>
 <div id="skimming-data-frames" class="section level3">
 <h3>Skimming data frames</h3>
 <p>By design, the main focus of <code>skimr</code> is on data frames; it is intended to fit well within a data <a href="http://r4ds.had.co.nz/pipes.html">pipeline</a> and relies extensively on <a href="https://www.tidyverse.org/">tidyverse</a> vocabulary, which focuses on data frames.</p>
@@ -565,7 +565,7 @@ m</code></pre></div>
 ## 4 numeric   Petal.Length  n_missing     0        
 ## 5 numeric   Petal.Width   n_missing     0        
 ## 6 factor    Species       complete_rate 1</code></pre>
-<p>Since the <code>skim_variable</code> and <code>skim_type</code> columns are a core component of the <code>skim_df</code> class, it’s possible to get unwanted side effects when using <code>dplyr::select()</code>. Instead, use <code>focus()</code> to select columns of the skimmed results and keep them as a <code>skim_df</code>; it always keeps the metadata column.</p>
+<p>Since the <code>skim_variable</code> and <code>skim_type</code> columns are a core component of the <code>skim_df</code> class, it's possible to get unwanted side effects when using <code>dplyr::select()</code>. Instead, use <code>focus()</code> to select columns of the skimmed results and keep them as a <code>skim_df</code>; it always keeps the metadata column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">iris <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">skim</span>() <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">focus</span>(n_missing, numeric.mean)</code></pre></div>
@@ -855,7 +855,7 @@ m</code></pre></div>
 </tr>
 </tbody>
 </table>
-<p>As the previous example suggests, the default is to append <em>new</em> summary statistics to the preexisting set. This behavior isn’t always desirable, especially when you want lots of changes. To stop appending, set <code>append = FALSE</code>.</p>
+<p>As the previous example suggests, the default is to append <em>new</em> summary statistics to the preexisting set. This behavior isn't always desirable, especially when you want lots of changes. To stop appending, set <code>append = FALSE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_skim &lt;-<span class="st"> </span><span class="kw">skim_with</span>(<span class="dt">numeric =</span> <span class="kw">sfl</span>(<span class="dt">new_mad =</span> mad), <span class="dt">append =</span> <span class="ot">FALSE</span>)
 <span class="kw">my_skim</span>(faithful)</code></pre></div>
 <table>
@@ -961,7 +961,21 @@ m</code></pre></div>
 </tbody>
 </table>
 <p><strong>Variable type: ts</strong></p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="13%"></col>
+<col width="10%"></col>
+<col width="13%"></col>
+<col width="6%"></col>
+<col width="5%"></col>
+<col width="10%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="7%"></col>
+<col width="4%"></col>
+<col width="5%"></col>
+<col width="7%"></col>
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -1100,7 +1114,7 @@ m</code></pre></div>
 </tr>
 </tbody>
 </table>
-<p>To modify the “base” skimmers, refer to them in a similar manner. Since base skimmers are usually a small group, they must return the same type for all data types in R, <code>append</code> doesn’t apply here.</p>
+<p>To modify the &quot;base&quot; skimmers, refer to them in a similar manner. Since base skimmers are usually a small group, they must return the same type for all data types in R, <code>append</code> doesn't apply here.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_skim &lt;-<span class="st"> </span><span class="kw">skim_with</span>(<span class="dt">base =</span> <span class="kw">sfl</span>(<span class="dt">length =</span> length))
 <span class="kw">my_skim</span>(faithful)</code></pre></div>
 <table>
