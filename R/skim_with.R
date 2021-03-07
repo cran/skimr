@@ -84,18 +84,23 @@ skim_with <- function(...,
 
   function(data, ...) {
     data_name <- rlang::expr_label(substitute(data))
+    if (inherits(data, "data.table")) {
+      dt_key <- data.table::key(data)
+      if (is.null(dt_key))
+        dt_key <- "NULL"
+      dt_key <- paste(dt_key, collapse = ", ")
+    } else {
+      dt_key <- NA # Will never be NA if `data` is a data.table
+    }
     if (!inherits(data, "data.frame")) {
       data <- as.data.frame(data)
     }
     stopifnot(inherits(data, "data.frame"))
-
-    .vars <- rlang::quos(...)
-    cols <- names(data)
-    if (length(.vars) == 0) {
-      selected <- cols
-    } else {
-      selected <- tidyselect::vars_select(cols, !!!.vars)
-    }
+    
+    selected <- names(tidyselect::eval_select(rlang::expr(c(...)), data))
+    if (length(selected) == 0) {
+      selected <- names(data)
+    } 
 
     grps <- dplyr::groups(data)
     if (length(grps) > 0) {
@@ -130,6 +135,7 @@ skim_with <- function(...,
       data_rows = nrow(data),
       data_cols = ncol(data),
       df_name = data_name,
+      dt_key  = dt_key,
       groups = dplyr::groups(data),
       base_skimmers = names(base$funs),
       skimmers_used = get_skimmers_used(unique_skimmers)
@@ -321,13 +327,29 @@ skim_by_type <- function(mangled_skimmers, variable_names, data) {
 skim_by_type.grouped_df <- function(mangled_skimmers, variable_names, data) {
   group_columns <- dplyr::groups(data)
   grouped <- dplyr::group_by(data, !!!group_columns)
-  skimmed <- dplyr::summarize_at(grouped, variable_names, mangled_skimmers$funs)
+  skimmed <- dplyr::summarize(
+    grouped,
+    dplyr::across(variable_names, mangled_skimmers$funs)
+  )
   build_results(skimmed, variable_names, group_columns)
 }
 
 #' @export
 skim_by_type.data.frame <- function(mangled_skimmers, variable_names, data) {
-  skimmed <- dplyr::summarize_at(data, variable_names, mangled_skimmers$funs)
+  skimmed <- dplyr::summarize(
+    data,
+    dplyr::across(variable_names, mangled_skimmers$funs)
+  )
+  build_results(skimmed, variable_names, NULL)
+}
+
+#' @export
+skim_by_type.data.table <- function(mangled_skimmers, variable_names, data) {
+  data <- tibble::as_tibble(data)
+  skimmed <- dplyr::summarize(
+    data,
+    dplyr::across(variable_names, mangled_skimmers$funs)
+  )
   build_results(skimmed, variable_names, NULL)
 }
 
@@ -358,7 +380,7 @@ reshape_skimmed <- function(column, skimmed, groups) {
   out <- dplyr::select(
     as.data.frame(skimmed),
     !!!groups,
-    tidyselect::starts_with(delim_name)
+    tidyselect::starts_with(delim_name, ignore.case = FALSE)
   )
   set_clean_names(out)
 }

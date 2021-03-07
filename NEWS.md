@@ -1,3 +1,10 @@
+# skimr 2.1.3
+
+### MINOR IMPROVEMENTS
+
+*   Add support for data tables when dtplyr is used.
+*   Improve tests.
+
 # skimr 2.1.2
 
 ### MINOR IMPROVEMENTS

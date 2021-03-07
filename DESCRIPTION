@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 2.1.2
+Version: 2.1.3
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
@@ -91,8 +91,17 @@ Authors@R:
       person(given = "Kyle", 
              family = "Butts",
              role ="ctb",
-             email = ""))
-Description: A simple to use summary function that can be used buttskyle96@gmail.comwith pipes
+             email = "buttskyle96@gmail.com"),
+      person(given = "Bastian", 
+             family = "Torges",
+             role ="ctb",
+             email = "bastian.torges@gmail.com"),
+      person(given = "Rick",
+             family = "Saporta",
+             role = "ctb",
+             email = "Rick@TheFarmersDog.com")
+             )
+Description: A simple to use summary function that can be used with pipes
     and displays nicely in the console. The default summary statistics may
     be modified by the user as can the default formatting.  Support for
     data frames and vectors is included, and users can implement their own
@@ -101,15 +110,16 @@ Description: A simple to use summary function that can be used buttskyle96@gmail
     Instructions for managing these on specific operating systems are
     given in the "Using skimr" vignette and the README.
 License: GPL-3
-URL: https://docs.ropensci.org/skimr (website),
-        https://github.com/ropensci/skimr
+URL: https://docs.ropensci.org/skimr/ (website),
+        https://github.com/ropensci/skimr/
 BugReports: https://github.com/ropensci/skimr/issues
 Depends: R (>= 3.1.2)
 Imports: cli, crayon, dplyr (>= 0.8.0), knitr (>= 1.2), magrittr (>=
         1.5), purrr, repr, rlang (>= 0.3.1), stats, stringr (>= 1.1),
-        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 0.2.5), withr
-Suggests: covr, extrafont, lubridate, rmarkdown, sf, testthat (>=
-        2.0.0)
+        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 1.0.0),
+        vctrs, withr
+Suggests: covr, data.table, dtplyr, extrafont, lubridate, rmarkdown,
+        sf, testthat (>= 2.0.0)
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
@@ -117,8 +127,9 @@ RoxygenNote: 7.1.1
 Collate: 'deprecated.R' 'dplyr.R' 'stats.R' 'skim_with.R'
         'get_skimmers.R' 'reshape.R' 'sfl.R' 'skim.R' 'skim_obj.R'
         'skim_print.R' 'skimr-package.R' 'summary.R' 'utils.R'
+        'vctrs.R'
 NeedsCompilation: no
-Packaged: 2020-07-05 21:56:47 UTC; elinwaring
+Packaged: 2021-03-05 00:03:59 UTC; elinwaring
 Author: Elin Waring [cre, aut],
   Michael Quinn [aut],
   Amelia McNamara [aut],
@@ -141,7 +152,9 @@ Author: Elin Waring [cre, aut],
   Patrick Kennedy [ctb],
   Daniel Possenriede [ctb],
   David Zimmermann [ctb],
-  Kyle Butts [ctb]
+  Kyle Butts [ctb],
+  Bastian Torges [ctb],
+  Rick Saporta [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-07-06 05:10:03 UTC
+Date/Publication: 2021-03-07 05:50:02 UTC

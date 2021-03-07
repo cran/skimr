@@ -1,5 +1,3 @@
-context("Skim a data frame")
-
 test_that("skim returns expected response for numeric vectors", {
   input <- skim(mtcars, mpg)
 
@@ -8,10 +6,10 @@ test_that("skim returns expected response for numeric vectors", {
   expect_n_columns(input, 12)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "numeric.mean", "numeric.sd", "numeric.p0", "numeric.p25",
@@ -203,10 +201,10 @@ test_that("skim returns expected response for character vectors", {
   expect_n_columns(input, 9)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "character.min", "character.max", "character.empty",
@@ -244,10 +242,10 @@ test_that("skim returns expected response for logical vectors", {
   expect_n_columns(input, 6)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "logical.mean", "logical.count"
@@ -294,10 +292,10 @@ test_that("skim returns expected response for complex vectors", {
   expect_n_columns(input, 5)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(
     input,
     c(
@@ -333,10 +331,10 @@ test_that("skim returns expected response for Date vectors", {
   expect_n_columns(input, 8)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "Date.min", "Date.max", "Date.median", "Date.n_unique"
@@ -371,10 +369,10 @@ test_that("skim returns expected response for ts vectors", {
   expect_n_columns(input, 14)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "ts.start", "ts.end", "ts.frequency", "ts.deltat", "ts.mean", "ts.sd",
@@ -422,10 +420,10 @@ test_that("skim returns expected response for POSIXct vectors", {
   expect_n_columns(input, 8)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "POSIXct.min", "POSIXct.max", "POSIXct.median",
@@ -479,10 +477,10 @@ test_that("skim returns expected response for list (not AsIs) vectors", {
   expect_n_columns(input, 7)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "list.n_unique", "list.min_length", "list.max_length"
@@ -518,10 +516,10 @@ test_that("skim returns expected response for list with all NA's", {
   expect_n_columns(input, 7)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "list.n_unique", "list.min_length", "list.max_length"
@@ -557,10 +555,10 @@ test_that("skim returns expected response for asis vectors", {
   expect_n_columns(input, 7)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "AsIs.n_unique", "AsIs.min_length", "AsIs.max_length"
@@ -598,10 +596,10 @@ test_that("skim returns expected response for difftime vectors", {
   expect_n_columns(input, 8)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "difftime.min", "difftime.max", "difftime.median",
@@ -638,10 +636,10 @@ test_that("skim returns expected response for lubridate Timespan vectors", {
   expect_n_columns(input, 8)
   
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "Timespan.min", "Timespan.max", "Timespan.median",
@@ -682,10 +680,10 @@ test_that("skim handles objects with multiple classes", {
   expect_n_columns(input, 8)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "Date.min", "Date.max", "Date.median", "Date.n_unique"
@@ -703,10 +701,10 @@ test_that("skim treats unknown classes as character", {
   expect_warning(input <- skim(x))
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "character.min", "character.max", "character.empty",
@@ -735,10 +733,10 @@ test_that("skim handles objects with two unknown classes", {
   expect_warning(input <- skim(x))
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "character.min", "character.max", "character.empty",
@@ -768,10 +766,10 @@ test_that("Skimming a complete data frame works as expected", {
   expect_n_columns(input, 15)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "n_missing", "complete_rate",
     "factor.ordered", "factor.n_unique", "factor.top_counts",
@@ -803,10 +801,10 @@ test_that("successfully skim mixed data types with common skimmers", {
   expect_n_rows(input, 2)
   expect_n_columns(input, 12)
 
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(
     input,
     c(
@@ -848,6 +846,17 @@ test_that("Tidyselect helpers work as expected", {
   )
 })
 
+test_that("Tidyselect predicates work as expected", {
+  input <- skim(iris, where(is.numeric))
+  
+  expect_n_rows(input, 4)
+  expect_n_columns(input, 12)
+  expect_identical(
+    unname(input$skim_variable),
+    c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
+  )
+})
+
 test_that("Skimming a grouped df works as expected", {
   grouped <- dplyr::group_by(mtcars, cyl, gear)
   input <- skim(grouped, mpg, disp)
@@ -857,10 +866,10 @@ test_that("Skimming a grouped df works as expected", {
   expect_n_columns(input, 14)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "cyl", "gear", "n_missing",
     "complete_rate", "numeric.mean", "numeric.sd", "numeric.p0",
@@ -888,10 +897,10 @@ test_that("Skimming a grouped df works when selecting exactly one variable", {
   expect_n_columns(input, 14)
 
   # classes
-  expect_is(input, "skim_df")
-  expect_is(input, "tbl_df")
-  expect_is(input, "tbl")
-  expect_is(input, "data.frame")
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
   expect_named(input, c(
     "skim_type", "skim_variable", "cyl", "gear", "n_missing",
     "complete_rate", "numeric.mean", "numeric.sd", "numeric.p0",
@@ -908,4 +917,13 @@ test_that("Skimming without charts produces no histograms", {
 test_that("Skimming without charts produces no ts line charts", {
   input <- skim_without_charts(freeny, y)
   expect_null(iris$ts.line_graph)
+})
+
+test_that("Skimming succeeds when column names are similar", {
+  input <- data.frame(
+    x = 1:10,
+    X = 11:20
+  )
+  skimmed <- skim(input)
+  expect_s3_class(skimmed, "skim_df")
 })
