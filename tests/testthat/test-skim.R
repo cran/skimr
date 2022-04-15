@@ -630,11 +630,11 @@ test_that("skim returns expected response for difftime vectors", {
 test_that("skim returns expected response for lubridate Timespan vectors", {
   dt <- tibble::tibble(x = lubridate::duration(1))
   input <- skim(dt)
-  
+
   # dimensions
   expect_n_rows(input, 1)
   expect_n_columns(input, 8)
-  
+
   # classes
   expect_s3_class(input, "skim_df")
   expect_s3_class(input, "tbl_df")
@@ -645,7 +645,7 @@ test_that("skim returns expected response for lubridate Timespan vectors", {
     "Timespan.min", "Timespan.max", "Timespan.median",
     "Timespan.n_unique"
   ))
-  
+
   # attributes
   attrs <- attributes(input)
   expect_equal(attrs$data_rows, 1)
@@ -655,7 +655,7 @@ test_that("skim returns expected response for lubridate Timespan vectors", {
     attrs$skimmers_used,
     list(Timespan = c("min", "max", "median", "n_unique"))
   )
-  
+
   # values
   expect_identical(input$skim_variable, "x")
   expect_identical(input$skim_type, "Timespan")
@@ -667,6 +667,94 @@ test_that("skim returns expected response for lubridate Timespan vectors", {
   expect_identical(input$Timespan.n_unique, 1L)
 })
 
+test_that("skim handles objects containing haven_labelled vectors: double", {
+  dt <- tibble::tibble(x = haven::labelled(c(1, 2, 3), c(A = 1, B = 2, C = 3)))
+  input <- skimr::skim(dt)
+
+  # dimensions
+  expect_n_rows(input, 1)
+  expect_n_columns(input, 12)
+
+  # classes
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
+  expect_named(input, c(
+    "skim_type", "skim_variable", "n_missing", "complete_rate",
+    "numeric.mean", "numeric.sd", "numeric.p0", "numeric.p25",
+    "numeric.p50", "numeric.p75", "numeric.p100", "numeric.hist"
+  ))
+
+  # attributes
+  attrs <- attributes(input)
+  expect_equal(attrs$data_rows, 3)
+  expect_equal(attrs$data_cols, 1)
+  expect_equal(attrs$df_name, "`dt`")
+  expect_equal(
+    attrs$skimmers_used,
+    list(
+      numeric = c("mean", "sd", "p0", "p25", "p50", "p75", "p100", "hist")
+    )
+  )
+
+  # values
+  expect_identical(input$skim_type, "numeric")
+  expect_identical(input$skim_variable, "x")
+  expect_identical(input$n_missing, 0L)
+  expect_equal(input$complete_rate, 1)
+  expect_equal(input$numeric.mean, 2, tolerance = 0.1)
+  expect_equal(input$numeric.sd, 1, tolerance = 0.1)
+  expect_equal(input$numeric.p0, 1, tolerance = 0.1)
+  expect_equal(input$numeric.p25, 1.5, tolerance = 0.1)
+  expect_equal(input$numeric.p50, 2, tolerance = 0.1)
+  expect_equal(input$numeric.p75, 2.5, tolerance = 0.1)
+  expect_equal(input$numeric.p100, 3, tolerance = 0.1)
+})
+
+test_that("skim handles objects containing haven_labelled vectors: character", {
+  dt <- tibble::tibble(x = haven::labelled(
+    c("a", "b", "c"),
+    c(A = "a", B = "b", C = "c")
+  ))
+  input <- skimr::skim(dt)
+
+  # dimensions
+  expect_n_rows(input, 1)
+  expect_n_columns(input, 9)
+
+  # classes
+  expect_s3_class(input, "skim_df")
+  expect_s3_class(input, "tbl_df")
+  expect_s3_class(input, "tbl")
+  expect_s3_class(input, "data.frame")
+  expect_named(input, c(
+    "skim_type", "skim_variable", "n_missing", "complete_rate",
+    "character.min", "character.max", "character.empty",
+    "character.n_unique", "character.whitespace"
+  ))
+
+  # attributes
+  attrs <- attributes(input)
+  expect_equal(attrs$data_rows, 3)
+  expect_equal(attrs$data_cols, 1)
+  expect_equal(attrs$df_name, "`dt`")
+  expect_equal(
+    attrs$skimmers_used,
+    list(character = c("min", "max", "empty", "n_unique", "whitespace"))
+  )
+
+  # values
+  expect_identical(input$skim_variable, "x")
+  expect_identical(input$skim_type, "character")
+  expect_identical(input$n_missing, 0L)
+  expect_equal(input$complete_rate, 1., tolerance = .001)
+  expect_identical(input$character.min, 1L)
+  expect_identical(input$character.max, 1L)
+  expect_identical(input$character.empty, 0L)
+  expect_identical(input$character.n_unique, 3L)
+  expect_identical(input$character.whitespace, 0L)
+})
 
 test_that("skim handles objects with multiple classes", {
   dat <- seq(as.Date("2011-07-01"), by = 1, len = 10)
@@ -848,7 +936,7 @@ test_that("Tidyselect helpers work as expected", {
 
 test_that("Tidyselect predicates work as expected", {
   input <- skim(iris, where(is.numeric))
-  
+
   expect_n_rows(input, 4)
   expect_n_columns(input, 12)
   expect_identical(
@@ -857,7 +945,7 @@ test_that("Tidyselect predicates work as expected", {
   )
 })
 
-test_that("Skimming a grouped df works as expected", {
+test_that("Skimming a grouped df with selections works as expected", {
   grouped <- dplyr::group_by(mtcars, cyl, gear)
   input <- skim(grouped, mpg, disp)
 
@@ -926,4 +1014,18 @@ test_that("Skimming succeeds when column names are similar", {
   )
   skimmed <- skim(input)
   expect_s3_class(skimmed, "skim_df")
+})
+
+
+test_that("Skim inside a function returns the data name", {
+  nested_skim <- function(df) {
+    skim(df, .data_name = deparse(substitute(df)))
+  }
+  input <- nested_skim(iris)
+  expect_equal(attr(input, "df_name"), "iris")
+})
+
+test_that("The data_name parameter can change the data_name attribute", {
+  input <- skim(iris, .data_name = "Anderson")
+  expect_equal(attr(input, "df_name"), "Anderson")
 })

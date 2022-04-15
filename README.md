@@ -10,10 +10,10 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![R build
 status](https://github.com/ropensci/skimr/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/skimr/actions?workflow=R-CMD-check)
-[![codecov](https://codecov.io/gh/ropensci/skimr/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/skimr/)
+[![codecov](https://codecov.io/gh/ropensci/skimr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/skimr)
 [![This is an ROpenSci Peer reviewed
 package](https://badges.ropensci.org/175_status.svg)](https://github.com/ropensci/software-review/issues/175)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/skimr)](https://cran.r-project.org/package=skimr)
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/skimr)](https://cran.r-project.org/package=skimr)
 [![cran
 checks](https://cranchecks.info/badges/summary/skimr)](https://cranchecks.info/pkgs/skimr)
 
@@ -81,8 +81,8 @@ change.
     ## 1 feed                  0             1 FALSE          6 soy: 14, cas: 12, lin: 12, sun: 12
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ## 1 weight                0             1  261.  78.1   108  204.   258  324.   423 ▆▆▇▇▃
+    ##   skim_variable n_missing complete_rate mean   sd  p0  p25 p50  p75 p100 hist 
+    ## 1 weight                0             1 261. 78.1 108 204. 258 324.  423 ▆▆▇▇▃
 
 ### Presentation is in a compact horizontal format:
 
@@ -105,11 +105,11 @@ change.
     ## 1 Species               0             1 FALSE          3 set: 50, ver: 50, vir: 50
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ## 1 Sepal.Length          0             1  5.84 0.828   4.3   5.1  5.8    6.4   7.9 ▆▇▇▅▂
-    ## 2 Sepal.Width           0             1  3.06 0.436   2     2.8  3      3.3   4.4 ▁▆▇▂▁
-    ## 3 Petal.Length          0             1  3.76 1.77    1     1.6  4.35   5.1   6.9 ▇▁▆▇▂
-    ## 4 Petal.Width           0             1  1.20 0.762   0.1   0.3  1.3    1.8   2.5 ▇▁▇▅▃
+    ##   skim_variable n_missing complete_rate mean    sd  p0 p25  p50 p75 p100 hist 
+    ## 1 Sepal.Length          0             1 5.84 0.828 4.3 5.1 5.8  6.4  7.9 ▆▇▇▅▂
+    ## 2 Sepal.Width           0             1 3.06 0.436 2   2.8 3    3.3  4.4 ▁▆▇▂▁
+    ## 3 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9 ▇▁▆▇▂
+    ## 4 Petal.Width           0             1 1.20 0.762 0.1 0.3 1.3  1.8  2.5 ▇▁▇▅▃
 
 ### Built in support for strings, lists and other column classes
 
@@ -129,15 +129,15 @@ change.
     ## Group variables            None           
     ## 
     ## ── Variable type: character ────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate   min   max empty n_unique whitespace
-    ## 1 name                  0         1         3    21     0       87          0
-    ## 2 hair_color            5         0.943     4    13     0       12          0
-    ## 3 skin_color            0         1         3    19     0       31          0
-    ## 4 eye_color             0         1         3    13     0       15          0
-    ## 5 sex                   4         0.954     4    14     0        4          0
-    ## 6 gender                4         0.954     8     9     0        2          0
-    ## 7 homeworld            10         0.885     4    14     0       48          0
-    ## 8 species               4         0.954     3    14     0       37          0
+    ##   skim_variable n_missing complete_rate min max empty n_unique whitespace
+    ## 1 name                  0         1       3  21     0       87          0
+    ## 2 hair_color            5         0.943   4  13     0       12          0
+    ## 3 skin_color            0         1       3  19     0       31          0
+    ## 4 eye_color             0         1       3  13     0       15          0
+    ## 5 sex                   4         0.954   4  14     0        4          0
+    ## 6 gender                4         0.954   8   9     0        2          0
+    ## 7 homeworld            10         0.885   4  14     0       48          0
+    ## 8 species               4         0.954   3  14     0       37          0
     ## 
     ## ── Variable type: list ─────────────────────────────────────────────────────────────────────────────
     ##   skim_variable n_missing complete_rate n_unique min_length max_length
@@ -146,10 +146,10 @@ change.
     ## 3 starships             0             1       17          0          5
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ## 1 height                6         0.931 174.   34.8    66 167     180 191     264 ▁▁▇▅▁
-    ## 2 mass                 28         0.678  97.3 169.     15  55.6    79  84.5  1358 ▇▁▁▁▁
-    ## 3 birth_year           44         0.494  87.6 155.      8  35      52  72     896 ▇▁▁▁▁
+    ##   skim_variable n_missing complete_rate  mean    sd p0   p25 p50   p75 p100 hist 
+    ## 1 height                6         0.931 174.   34.8 66 167   180 191    264 ▁▁▇▅▁
+    ## 2 mass                 28         0.678  97.3 169.  15  55.6  79  84.5 1358 ▇▁▁▁▁
+    ## 3 birth_year           44         0.494  87.6 155.   8  35    52  72    896 ▇▁▁▁▁
 
 ### Has a useful summary function
 
@@ -184,9 +184,9 @@ change.
     ## Group variables            None  
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ## 1 Sepal.Length          0             1  5.84 0.828   4.3   5.1  5.8    6.4   7.9 ▆▇▇▅▂
-    ## 2 Petal.Length          0             1  3.76 1.77    1     1.6  4.35   5.1   6.9 ▇▁▆▇▂
+    ##   skim_variable n_missing complete_rate mean    sd  p0 p25  p50 p75 p100 hist 
+    ## 1 Sepal.Length          0             1 5.84 0.828 4.3 5.1 5.8  6.4  7.9 ▆▇▇▅▂
+    ## 2 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9 ▇▁▆▇▂
 
 ### Handles grouped data
 
@@ -209,19 +209,19 @@ change.
     ## Group variables            Species   
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##    skim_variable Species    n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ##  1 Sepal.Length  setosa             0             1 5.01  0.352   4.3  4.8   5     5.2    5.8 ▃▃▇▅▁
-    ##  2 Sepal.Length  versicolor         0             1 5.94  0.516   4.9  5.6   5.9   6.3    7   ▂▇▆▃▃
-    ##  3 Sepal.Length  virginica          0             1 6.59  0.636   4.9  6.22  6.5   6.9    7.9 ▁▃▇▃▂
-    ##  4 Sepal.Width   setosa             0             1 3.43  0.379   2.3  3.2   3.4   3.68   4.4 ▁▃▇▅▂
-    ##  5 Sepal.Width   versicolor         0             1 2.77  0.314   2    2.52  2.8   3      3.4 ▁▅▆▇▂
-    ##  6 Sepal.Width   virginica          0             1 2.97  0.322   2.2  2.8   3     3.18   3.8 ▂▆▇▅▁
-    ##  7 Petal.Length  setosa             0             1 1.46  0.174   1    1.4   1.5   1.58   1.9 ▁▃▇▃▁
-    ##  8 Petal.Length  versicolor         0             1 4.26  0.470   3    4     4.35  4.6    5.1 ▂▂▇▇▆
-    ##  9 Petal.Length  virginica          0             1 5.55  0.552   4.5  5.1   5.55  5.88   6.9 ▃▇▇▃▂
-    ## 10 Petal.Width   setosa             0             1 0.246 0.105   0.1  0.2   0.2   0.3    0.6 ▇▂▂▁▁
-    ## 11 Petal.Width   versicolor         0             1 1.33  0.198   1    1.2   1.3   1.5    1.8 ▅▇▃▆▁
-    ## 12 Petal.Width   virginica          0             1 2.03  0.275   1.4  1.8   2     2.3    2.5 ▂▇▆▅▇
+    ##    skim_variable Species    n_missing complete_rate  mean    sd  p0  p25  p50  p75 p100 hist 
+    ##  1 Sepal.Length  setosa             0             1 5.01  0.352 4.3 4.8  5    5.2   5.8 ▃▃▇▅▁
+    ##  2 Sepal.Length  versicolor         0             1 5.94  0.516 4.9 5.6  5.9  6.3   7   ▂▇▆▃▃
+    ##  3 Sepal.Length  virginica          0             1 6.59  0.636 4.9 6.22 6.5  6.9   7.9 ▁▃▇▃▂
+    ##  4 Sepal.Width   setosa             0             1 3.43  0.379 2.3 3.2  3.4  3.68  4.4 ▁▃▇▅▂
+    ##  5 Sepal.Width   versicolor         0             1 2.77  0.314 2   2.52 2.8  3     3.4 ▁▅▆▇▂
+    ##  6 Sepal.Width   virginica          0             1 2.97  0.322 2.2 2.8  3    3.18  3.8 ▂▆▇▅▁
+    ##  7 Petal.Length  setosa             0             1 1.46  0.174 1   1.4  1.5  1.58  1.9 ▁▃▇▃▁
+    ##  8 Petal.Length  versicolor         0             1 4.26  0.470 3   4    4.35 4.6   5.1 ▂▂▇▇▆
+    ##  9 Petal.Length  virginica          0             1 5.55  0.552 4.5 5.1  5.55 5.88  6.9 ▃▇▇▃▂
+    ## 10 Petal.Width   setosa             0             1 0.246 0.105 0.1 0.2  0.2  0.3   0.6 ▇▂▂▁▁
+    ## 11 Petal.Width   versicolor         0             1 1.33  0.198 1   1.2  1.3  1.5   1.8 ▅▇▃▆▁
+    ## 12 Petal.Width   virginica          0             1 2.03  0.275 1.4 1.8  2    2.3   2.5 ▂▇▆▅▇
 
 ### Behaves nicely in pipelines
 
@@ -241,8 +241,8 @@ change.
     ## Group variables            None      
     ## 
     ## ── Variable type: numeric ──────────────────────────────────────────────────────────────────────────
-    ##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75  p100 hist 
-    ## 1 Petal.Length          0             1  3.76  1.77     1   1.6  4.35   5.1   6.9 ▇▁▆▇▂
+    ##   skim_variable n_missing complete_rate mean   sd p0 p25  p50 p75 p100 hist 
+    ## 1 Petal.Length          0             1 3.76 1.77  1 1.6 4.35 5.1  6.9 ▇▁▆▇▂
 
 ## Knitted results
 
@@ -358,22 +358,26 @@ function that can be called on your data. You can use this factory to
 produce summaries for any type of column within your data.
 
 Assignment within a call to `skim_with()` relies on a helper function,
-`sfl` or `skimr` function list. This is a light wrapper around
-`dplyr::funs()`. It will automatically generate names from the provided
-values.
-
-By default, functions in the `sfl` call are appended to the default
-skimmers.
+`sfl` or `skimr` function list. By default, functions in the `sfl` call
+are appended to the default skimmers, and names are automatically
+generated as well.
 
     my_skim <- skim_with(numeric = sfl(mad))
     my_skim(iris, Sepal.Length)
 
-But you can also use the dummy argument pattern from `dplyr::funs` to
-set particular function arguments. Setting the `append = FALSE` argument
-uses only those functions that you’ve provided.
+But you can also helpers from the `tidyverse` to create new anonymous
+functions that set particular function arguments. The behavior is the
+same as in `purrr` or `dplyr`, with both `.` and `.x` as acceptable
+pronouns. Setting the `append = FALSE` argument uses only those
+functions that you’ve provided.
 
     my_skim <- skim_with(
-      numeric = sfl(iqr = IQR, p99 = list(~ quantile(., probs = .99))), append = FALSE
+      numeric = sfl(
+        iqr = IQR,
+        p01 = ~ quantile(.x, probs = .01)
+        p99 = ~ quantile(., probs = .99)
+      ),
+      append = FALSE
     )
     my_skim(iris, Sepal.Length)
 
@@ -422,9 +426,11 @@ There are known issues with printing the spark-histogram characters when
 printing a data frame. For example, `"▂▅▇"` is printed as
 `"<U+2582><U+2585><U+2587>"`. This longstanding problem [originates in
 the low-level
-code](https://r.789695.n4.nabble.com/Unicode-display-problem-with-data-frames-under-Windows-td4707639.html)
-for printing dataframes. While some cases have been addressed, there
-are, for example, reports of this issue in Emacs ESS.
+code](https://stat.ethz.ch/pipermail/r-devel/2015-May/071250.html) for
+printing dataframes. While some cases have been addressed, there are,
+for example, reports of this issue in Emacs ESS. While this is a deep
+issue, there is [ongoing work to address it in base
+R](https://blog.r-project.org/2020/05/02/utf-8-support-on-windows/).
 
 This means that while `skimr` can render the histograms to the console
 and in RMarkdown documents, it cannot in other circumstances. This
@@ -460,28 +466,21 @@ Displays in documents of different types will vary. For example, one
 user found that the font “Yu Gothic UI Semilight” produced consistent
 results for Microsoft Word and Libre Office Write.
 
-### Stripping metadata and empty results tables
+## Inspirations
 
-In POSIX systems, `skimr` tries to remove the tibble metadata when
-producing the results. A complicating factor is tibble’s color support,
-which depends on environment settings. In particular, not all Windows
-terminals support colors in the way that tibble expects.
+-   [TextPlots](https://github.com/sunetos/TextPlots.jl) for use of
+    Braille characters
 
-So, by default, we disable removing metadata on windows. You can turn
-this feature on with an option. Either set it when calling print or
-globally.
+-   [spark](https://github.com/holman/spark) for use of block
+    characters.
 
-    skimmed <- skim(chickwts)
-    print(skimmed, strip_metadata = TRUE)
-    options(skimr_strip_metadata = TRUE)
+The earliest use of unicode characters to generate sparklines appears to
+be [from
+2009](https://blog.jonudell.net/2009/01/13/fuel-prices-and-pageviews/).
 
-Separately, you might need to check the option `crayon.enabled`.
-Similarly, if your skimr results tables are empty you may need to run
-the following
-
-    options(crayon.enabled = FALSE)
-
-You need to do this one time per session.
+Exercising these ideas to their fullest requires a font with good
+support for block drawing characters.
+[PragamataPro](https://fsd.it/shop/fonts/pragmatapro/) is one such font.
 
 ## Contributing
 
@@ -490,6 +489,6 @@ support for commonly used variable classes. However, in general, we
 encourage users to take advantage of skimr’s flexibility to add their
 own customized classes. Please see the
 [contributing](https://docs.ropensci.org/skimr/CONTRIBUTING.html) and
-[conduct](https://docs.ropensci.org/skimr/CONDUCT.html) documents.
+[conduct](https://ropensci.org/code-of-conduct/) documents.
 
 [![ropenci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)

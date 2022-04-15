@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 2.1.3
+Version: 2.1.4
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
@@ -99,8 +99,12 @@ Authors@R:
       person(given = "Rick",
              family = "Saporta",
              role = "ctb",
-             email = "Rick@TheFarmersDog.com")
-             )
+             email = "Rick@TheFarmersDog.com"),
+      person(given = "Henry",
+             family = "Morgan Stewart",
+             role = "ctb",
+             email = "henry.morganstewart@gmail.com")
+       )
 Description: A simple to use summary function that can be used with pipes
     and displays nicely in the console. The default summary statistics may
     be modified by the user as can the default formatting.  Support for
@@ -114,22 +118,21 @@ URL: https://docs.ropensci.org/skimr/ (website),
         https://github.com/ropensci/skimr/
 BugReports: https://github.com/ropensci/skimr/issues
 Depends: R (>= 3.1.2)
-Imports: cli, crayon, dplyr (>= 0.8.0), knitr (>= 1.2), magrittr (>=
-        1.5), purrr, repr, rlang (>= 0.3.1), stats, stringr (>= 1.1),
-        tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect (>= 1.0.0),
-        vctrs, withr
-Suggests: covr, data.table, dtplyr, extrafont, lubridate, rmarkdown,
-        sf, testthat (>= 2.0.0)
+Imports: cli, dplyr (>= 0.8.0), knitr (>= 1.2), magrittr (>= 1.5),
+        pillar (>= 1.6.4), purrr, repr, rlang (>= 0.3.1), stats,
+        stringr (>= 1.1), tibble (>= 2.0.0), tidyr (>= 1.0), tidyselect
+        (>= 1.0.0), vctrs
+Suggests: covr, crayon, data.table, dtplyr, extrafont, haven,
+        lubridate, rmarkdown, testthat (>= 2.0.0), withr
 VignetteBuilder: knitr
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Collate: 'deprecated.R' 'dplyr.R' 'stats.R' 'skim_with.R'
         'get_skimmers.R' 'reshape.R' 'sfl.R' 'skim.R' 'skim_obj.R'
         'skim_print.R' 'skimr-package.R' 'summary.R' 'utils.R'
         'vctrs.R'
 NeedsCompilation: no
-Packaged: 2021-03-05 00:03:59 UTC; elinwaring
+Packaged: 2022-04-14 23:59:15 UTC; elinwaring
 Author: Elin Waring [cre, aut],
   Michael Quinn [aut],
   Amelia McNamara [aut],
@@ -154,7 +157,8 @@ Author: Elin Waring [cre, aut],
   David Zimmermann [ctb],
   Kyle Butts [ctb],
   Bastian Torges [ctb],
-  Rick Saporta [ctb]
+  Rick Saporta [ctb],
+  Henry Morgan Stewart [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-03-07 05:50:02 UTC
+Date/Publication: 2022-04-15 02:20:02 UTC
