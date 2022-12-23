@@ -10,12 +10,12 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![R build
 status](https://github.com/ropensci/skimr/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/skimr/actions?workflow=R-CMD-check)
-[![codecov](https://codecov.io/gh/ropensci/skimr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/skimr)
+[![codecov](https://codecov.io/gh/ropensci/skimr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ropensci/skimr)
 [![This is an ROpenSci Peer reviewed
 package](https://badges.ropensci.org/175_status.svg)](https://github.com/ropensci/software-review/issues/175)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/skimr)](https://cran.r-project.org/package=skimr)
 [![cran
-checks](https://cranchecks.info/badges/summary/skimr)](https://cranchecks.info/pkgs/skimr)
+checks](https://badges.cranchecks.info/worst/skimr.svg)](https://badges.cranchecks.info/worst/skimr.svg)
 
 `skimr` provides a frictionless approach to summary statistics which
 conforms to the [principle of least
@@ -42,7 +42,7 @@ The APIs for this branch should be considered reasonably stable but
 still subject to change if an issue is discovered.
 
 To install the version with the most recent changes that have not yet
-been incorporated in the master branch (and may not be):
+been incorporated in the main branch (and may not be):
 
     devtools::install_github("ropensci/skimr", ref = "develop")
 
@@ -297,7 +297,20 @@ Data summary
 
 **Variable type: numeric**
 
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+<col style="width: 7%" />
+<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 4%" />
+<col style="width: 7%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">skim_variable</th>

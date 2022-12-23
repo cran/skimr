@@ -1,6 +1,6 @@
 Package: skimr
 Title: Compact and Flexible Summaries of Data
-Version: 2.1.4
+Version: 2.1.5
 Authors@R: 
     c(person(given = "Elin",
              family = "Waring",
@@ -126,13 +126,13 @@ Suggests: covr, crayon, data.table, dtplyr, extrafont, haven,
         lubridate, rmarkdown, testthat (>= 2.0.0), withr
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Collate: 'deprecated.R' 'dplyr.R' 'stats.R' 'skim_with.R'
         'get_skimmers.R' 'reshape.R' 'sfl.R' 'skim.R' 'skim_obj.R'
         'skim_print.R' 'skimr-package.R' 'summary.R' 'utils.R'
         'vctrs.R'
 NeedsCompilation: no
-Packaged: 2022-04-14 23:59:15 UTC; elinwaring
+Packaged: 2022-12-23 10:37:38 UTC; elinwaring
 Author: Elin Waring [cre, aut],
   Michael Quinn [aut],
   Amelia McNamara [aut],
@@ -161,4 +161,4 @@ Author: Elin Waring [cre, aut],
   Henry Morgan Stewart [ctb]
 Maintainer: Elin Waring <elin.waring@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-04-15 02:20:02 UTC
+Date/Publication: 2022-12-23 11:10:02 UTC

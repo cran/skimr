@@ -11,30 +11,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-04-14" />
+<meta name="date" content="2022-12-23" />
 
 <title>Using Skimr</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -52,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -127,7 +138,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -140,14 +331,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <h1 class="title toc-ignore">Using Skimr</h1>
-<h4 class="date">2022-04-14</h4>
+<h4 class="date">2022-12-23</h4>
 
 
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p><code>skimr</code> is designed to provide summary statistics about variables in data frames, tibbles, data tables and vectors. It is opinionated in its defaults, but easy to modify.</p>
-<p>In base R, the most similar functions are <code>summary()</code> for vectors and data frames and <code>fivenum()</code> for numeric vectors:</p>
+<p><code>skimr</code> is designed to provide summary statistics about
+variables in data frames, tibbles, data tables and vectors. It is
+opinionated in its defaults, but easy to modify.</p>
+<p>In base R, the most similar functions are <code>summary()</code> for
+vectors and data frames and <code>fivenum()</code> for numeric
+vectors:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iris)</span></code></pre></div>
 <pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 ##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
@@ -174,11 +369,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="the-skim-function" class="section level2">
 <h2>The <code>skim()</code> function</h2>
-<p>The core function of <code>skimr</code> is <code>skim()</code>, which is designed to work with (grouped) data frames, and will try coerce other objects to data frames if possible. Like <code>summary()</code>, <code>skim()</code>’s method for data frames presents results for every column; the statistics it provides depend on the class of the variable.</p>
+<p>The core function of <code>skimr</code> is <code>skim()</code>, which
+is designed to work with (grouped) data frames, and will try coerce
+other objects to data frames if possible. Like <code>summary()</code>,
+<code>skim()</code>’s method for data frames presents results for every
+column; the statistics it provides depend on the class of the
+variable.</p>
 <div id="skimming-data-frames" class="section level3">
 <h3>Skimming data frames</h3>
-<p>By design, the main focus of <code>skimr</code> is on data frames; it is intended to fit well within a data <a href="https://r4ds.had.co.nz/pipes.html">pipeline</a> and relies extensively on <a href="https://www.tidyverse.org/">tidyverse</a> vocabulary, which focuses on data frames.</p>
-<p>Results of <code>skim()</code> are <em>printed</em> horizontally, with one section per variable type and one row per variable.</p>
+<p>By design, the main focus of <code>skimr</code> is on data frames; it
+is intended to fit well within a data <a href="https://r4ds.had.co.nz/pipes.html">pipeline</a> and relies
+extensively on <a href="https://www.tidyverse.org/">tidyverse</a>
+vocabulary, which focuses on data frames.</p>
+<p>Results of <code>skim()</code> are <em>printed</em> horizontally,
+with one section per variable type and one row per variable.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris)</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
@@ -205,12 +409,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Sepal.Width           0             1 3.06 0.436 2   2.8 3    3.3  4.4 ▁▆▇▂▁
 ## 3 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9 ▇▁▆▇▂
 ## 4 Petal.Width           0             1 1.20 0.762 0.1 0.3 1.3  1.8  2.5 ▇▁▇▅▃</code></pre>
-<p>The format of the results are a single wide data frame combining the results, with some additional attributes and two metadata columns:</p>
+<p>The format of the results are a single wide data frame combining the
+results, with some additional attributes and two metadata columns:</p>
 <ul>
 <li><code>skim_variable</code>: name of the original variable</li>
 <li><code>skim_type</code>: class of the variable</li>
 </ul>
-<p>Unlike many other objects within <code>R</code>, these columns are intrinsic to the <code>skim_df</code> class. Dropping these variables will result in a coercion to a <code>tibble</code>. The <code>is_skim_df()</code> function is used to assert that an object is a skim_df.</p>
+<p>Unlike many other objects within <code>R</code>, these columns are
+intrinsic to the <code>skim_df</code> class. Dropping these variables
+will result in a coercion to a <code>tibble</code>. The
+<code>is_skim_df()</code> function is used to assert that an object is a
+skim_df.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris) <span class="sc">%&gt;%</span> <span class="fu">is_skim_df</span>()</span></code></pre></div>
 <pre><code>## [1] TRUE
 ## attr(,&quot;message&quot;)
@@ -225,7 +434,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] TRUE
 ## attr(,&quot;message&quot;)
 ## character(0)</code></pre>
-<p>In order to avoid type coercion, columns for summary statistics for different types are prefixed with the corresponding <code>skim_type</code>. This means that the columns of the <code>skim_df</code> are somewhat sparse, with quite a few missing values. This is because for some statistics the representations for different types of variables is different. For example, the mean of a Date variable and of a numeric variable are represented differently when printing, but this cannot be supported in a single vector. The exception to this are <code>n_missing</code> and <code>complete_rate</code> (missing/number of observations) which are the same for all types of variables.</p>
+<p>In order to avoid type coercion, columns for summary statistics for
+different types are prefixed with the corresponding
+<code>skim_type</code>. This means that the columns of the
+<code>skim_df</code> are somewhat sparse, with quite a few missing
+values. This is because for some statistics the representations for
+different types of variables is different. For example, the mean of a
+Date variable and of a numeric variable are represented differently when
+printing, but this cannot be supported in a single vector. The exception
+to this are <code>n_missing</code> and <code>complete_rate</code>
+(missing/number of observations) which are the same for all types of
+variables.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris) <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">as_tibble</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 5 × 15
@@ -239,7 +458,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # … with 9 more variables: factor.top_counts &lt;chr&gt;, numeric.mean &lt;dbl&gt;,
 ## #   numeric.sd &lt;dbl&gt;, numeric.p0 &lt;dbl&gt;, numeric.p25 &lt;dbl&gt;, numeric.p50 &lt;dbl&gt;,
 ## #   numeric.p75 &lt;dbl&gt;, numeric.p100 &lt;dbl&gt;, numeric.hist &lt;chr&gt;</code></pre>
-<p>This is in contrast to <code>summary.data.frame()</code>, which stores statistics in a <code>table</code>. The distinction is important, because the <code>skim_df</code> object is pipeable and easy to use for additional manipulation: for example, the user could select all of the variable means, or all summary statistics for a specific variable.</p>
+<p>This is in contrast to <code>summary.data.frame()</code>, which
+stores statistics in a <code>table</code>. The distinction is important,
+because the <code>skim_df</code> object is pipeable and easy to use for
+additional manipulation: for example, the user could select all of the
+variable means, or all summary statistics for a specific variable.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris) <span class="sc">%&gt;%</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(skim_variable <span class="sc">==</span> <span class="st">&quot;Petal.Length&quot;</span>)</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
@@ -281,7 +504,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Sepal.Width           0
 ## 3 Petal.Length          0
 ## 4 Petal.Width           0</code></pre>
-<p>The base skimmers <code>n_missing</code> and <code>complete_rate</code> are computed for all of the columns in the data. But all other type-based skimmers have a namespace. You need to use a <code>skim_type</code> prefix to refer to correct column.</p>
+<p>The base skimmers <code>n_missing</code> and
+<code>complete_rate</code> are computed for all of the columns in the
+data. But all other type-based skimmers have a namespace. You need to
+use a <code>skim_type</code> prefix to refer to correct column.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris) <span class="sc">%&gt;%</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(skim_type, skim_variable, numeric.mean)</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
@@ -302,7 +528,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Sepal.Width   3.06
 ## 3 Petal.Length  3.76
 ## 4 Petal.Width   1.20</code></pre>
-<p><code>skim()</code> also supports grouped data created by <code>dplyr::group_by()</code>. In this case, one additional column for each grouping variable is added to the <code>skim_df</code> object.</p>
+<p><code>skim()</code> also supports grouped data created by
+<code>dplyr::group_by()</code>. In this case, one additional column for
+each grouping variable is added to the <code>skim_df</code> object.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div>
@@ -344,7 +572,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 10 0.3   0.6 ▇▂▂▁▁
 ## 11 1.5   1.8 ▅▇▃▆▁
 ## 12 2.3   2.5 ▂▇▆▅▇</code></pre>
-<p>Individual columns from a data frame may be selected using tidyverse-style selectors.</p>
+<p>Individual columns from a data frame may be selected using
+tidyverse-style selectors.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(iris, Sepal.Length, Species)</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
 ##                            Values
@@ -384,13 +613,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   skim_variable n_missing complete_rate mean    sd  p0 p25 p50 p75 p100 hist 
 ## 1 Sepal.Length          0             1 5.84 0.828 4.3 5.1 5.8 6.4  7.9 ▆▇▇▅▂
 ## 2 Sepal.Width           0             1 3.06 0.436 2   2.8 3   3.3  4.4 ▁▆▇▂▁</code></pre>
-<p>If an individual column is of an unsupported class, it is treated as a character variable with a warning.</p>
+<p>If an individual column is of an unsupported class, it is treated as
+a character variable with a warning.</p>
 </div>
 </div>
 <div id="skimming-vectors" class="section level2">
 <h2>Skimming vectors</h2>
-<p>In <code>skimr</code> v2, <code>skim()</code> will attempt to coerce non-data frames (such as vectors and matrices) to data frames. In most cases with vectors, the object being evaluated should be equivalent to wrapping the object in <code>as.data.frame()</code>.</p>
-<p>For example, the <code>lynx</code> data set is class <code>ts</code>.</p>
+<p>In <code>skimr</code> v2, <code>skim()</code> will attempt to coerce
+non-data frames (such as vectors and matrices) to data frames. In most
+cases with vectors, the object being evaluated should be equivalent to
+wrapping the object in <code>as.data.frame()</code>.</p>
+<p>For example, the <code>lynx</code> data set is class
+<code>ts</code>.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(lynx)</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
 ##                            Values
@@ -414,7 +648,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="skimming-matrices" class="section level2">
 <h2>Skimming matrices</h2>
-<p><code>skimr</code> does not support skimming matrices directly but coerces them to data frames. Columns in the matrix become variables. This behavior is similar to <code>summary.matrix()</code>). Three possible ways to handle matrices with <code>skim()</code> parallel the three variations of the mean function for matrices.</p>
+<p><code>skimr</code> does not support skimming matrices directly but
+coerces them to data frames. Columns in the matrix become variables.
+This behavior is similar to <code>summary.matrix()</code>). Three
+possible ways to handle matrices with <code>skim()</code> parallel the
+three variations of the mean function for matrices.</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>), <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>m</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3]
@@ -422,7 +660,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [2,]    2    6   10
 ## [3,]    3    7   11
 ## [4,]    4    8   12</code></pre>
-<p>Skimming the matrix produces similar results to <code>colMeans()</code>.</p>
+<p>Skimming the matrix produces similar results to
+<code>colMeans()</code>.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colMeans</span>(m)</span></code></pre></div>
 <pre><code>## [1]  2.5  6.5 10.5</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(m) <span class="co"># Similar to summary.matrix and colMeans()</span></span></code></pre></div>
@@ -463,7 +702,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 V2                    0             1    6  4  2   4   6   8   10 ▇▁▇▁▇
 ## 3 V3                    0             1    7  4  3   5   7   9   11 ▇▁▇▁▇
 ## 4 V4                    0             1    8  4  4   6   8  10   12 ▇▁▇▁▇</code></pre>
-<p>And call <code>c()</code> on the matrix to get results across all columns.</p>
+<p>And call <code>c()</code> on the matrix to get results across all
+columns.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(<span class="fu">c</span>(m))</span></code></pre></div>
 <pre><code>## ── Data Summary ────────────────────────
 ##                            Values
@@ -483,7 +723,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## [1] 6.5</code></pre>
 <div id="skimming-without-modification" class="section level3">
 <h3>Skimming without modification</h3>
-<p><code>skim_tee()</code> produces the same printed version as <code>skim()</code> but returns the original, unmodified data frame. This allows for continued piping of the original data.</p>
+<p><code>skim_tee()</code> produces the same printed version as
+<code>skim()</code> but returns the original, unmodified data frame.
+This allows for continued piping of the original data.</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>iris_setosa <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim_tee</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(Species <span class="sc">==</span> <span class="st">&quot;setosa&quot;</span>)</span></code></pre></div>
@@ -519,13 +761,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4          4.6         3.1          1.5         0.2  setosa
 ## 5          5.0         3.6          1.4         0.2  setosa
 ## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
-<p>Note, that <code>skim_tee()</code> is customized differently than <code>skim</code> itself. See below for more details.</p>
+<p>Note, that <code>skim_tee()</code> is customized differently than
+<code>skim</code> itself. See below for more details.</p>
 </div>
 </div>
 <div id="reshaping-the-results-from-skim" class="section level2">
 <h2>Reshaping the results from <code>skim()</code></h2>
-<p>As noted above, <code>skim()</code> returns a wide data frame. This is usually the most sensible format for the majority of operations when investigating data, but the package has some other functions to help with edge cases.</p>
-<p>First, <code>partition()</code> returns a named list of the wide data frames for each data type. Unlike the original data the partitioned data only has columns corresponding to the skimming functions used for this data type. These data frames are, therefore, not <code>skim_df</code> objects.</p>
+<p>As noted above, <code>skim()</code> returns a wide data frame. This
+is usually the most sensible format for the majority of operations when
+investigating data, but the package has some other functions to help
+with edge cases.</p>
+<p>First, <code>partition()</code> returns a named list of the wide data
+frames for each data type. Unlike the original data the partitioned data
+only has columns corresponding to the skimming functions used for this
+data type. These data frames are, therefore, not <code>skim_df</code>
+objects.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">partition</span>()</span></code></pre></div>
@@ -543,7 +793,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Sepal.Width           0             1 3.06 0.436 2   2.8 3    3.3  4.4 ▁▆▇▂▁
 ## 3 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9 ▇▁▆▇▂
 ## 4 Petal.Width           0             1 1.20 0.762 0.1 0.3 1.3  1.8  2.5 ▇▁▇▅▃</code></pre>
-<p>Alternatively, <code>yank()</code> selects only the subtable for a specific type. Think of it like <code>dplyr::select</code> on column types in the original data. Again, unsuitable columns are dropped.</p>
+<p>Alternatively, <code>yank()</code> selects only the subtable for a
+specific type. Think of it like <code>dplyr::select</code> on column
+types in the original data. Again, unsuitable columns are dropped.</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">yank</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
@@ -554,7 +806,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 Sepal.Width           0             1 3.06 0.436 2   2.8 3    3.3  4.4 ▁▆▇▂▁
 ## 3 Petal.Length          0             1 3.76 1.77  1   1.6 4.35 5.1  6.9 ▇▁▆▇▂
 ## 4 Petal.Width           0             1 1.20 0.762 0.1 0.3 1.3  1.8  2.5 ▇▁▇▅▃</code></pre>
-<p><code>to_long()</code> returns a single long data frame with columns <code>variable</code>, <code>type</code>, <code>statistic</code> and <code>formatted</code>. This is similar but not identical to the <code>skim_df</code> object in <code>skimr</code> v1.</p>
+<p><code>to_long()</code> returns a single long data frame with columns
+<code>variable</code>, <code>type</code>, <code>statistic</code> and
+<code>formatted</code>. This is similar but not identical to the
+<code>skim_df</code> object in <code>skimr</code> v1.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">to_long</span>() <span class="sc">%&gt;%</span> </span>
@@ -568,7 +823,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4 numeric   Petal.Length  n_missing     0        
 ## 5 numeric   Petal.Width   n_missing     0        
 ## 6 factor    Species       complete_rate 1</code></pre>
-<p>Since the <code>skim_variable</code> and <code>skim_type</code> columns are a core component of the <code>skim_df</code> class, it’s possible to get unwanted side effects when using <code>dplyr::select()</code>. Instead, use <code>focus()</code> to select columns of the skimmed results and keep them as a <code>skim_df</code>; it always keeps the metadata column.</p>
+<p>Since the <code>skim_variable</code> and <code>skim_type</code>
+columns are a core component of the <code>skim_df</code> class, it’s
+possible to get unwanted side effects when using
+<code>dplyr::select()</code>. Instead, use <code>focus()</code> to
+select columns of the skimmed results and keep them as a
+<code>skim_df</code>; it always keeps the metadata column.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">focus</span>(n_missing, numeric.mean)</span></code></pre></div>
@@ -597,8 +857,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="rendering-the-results-of-skim" class="section level2">
 <h2>Rendering the results of <code>skim()</code></h2>
-<p>The <code>skim_df</code> object is a wide data frame. The display is created by default using <code>print.skim_df()</code>; users can specify additional options by explicitly calling <code>print([skim_df object], ...)</code>.</p>
-<p>For documents rendered by <code>knitr</code>, the package provides a custom <code>knit_print</code> method. To use it, the final line of your code chunk should have a <code>skim_df</code> object.</p>
+<p>The <code>skim_df</code> object is a wide data frame. The display is
+created by default using <code>print.skim_df()</code>; users can specify
+additional options by explicitly calling
+<code>print([skim_df object], ...)</code>.</p>
+<p>For documents rendered by <code>knitr</code>, the package provides a
+custom <code>knit_print</code> method. To use it, the final line of your
+code chunk should have a <code>skim_df</code> object.</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(Orange)</span></code></pre></div>
 <table>
 <caption>Data summary</caption>
@@ -643,6 +908,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p><strong>Variable type: factor</strong></p>
 <table>
+<colgroup>
+<col width="17%" />
+<col width="12%" />
+<col width="17%" />
+<col width="10%" />
+<col width="11%" />
+<col width="29%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -665,7 +938,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p><strong>Variable type: numeric</strong></p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="11%" />
+<col width="16%" />
+<col width="8%" />
+<col width="8%" />
+<col width="4%" />
+<col width="7%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -710,11 +996,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>The same type of rendering is available from reshaped <code>skim_df</code> objects, those generated by <code>partition()</code> and <code>yank()</code> in particular.</p>
+<p>The same type of rendering is available from reshaped
+<code>skim_df</code> objects, those generated by
+<code>partition()</code> and <code>yank()</code> in particular.</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(Orange) <span class="sc">%&gt;%</span></span>
 <span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">yank</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
 <p><strong>Variable type: numeric</strong></p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="16%" />
+<col width="11%" />
+<col width="16%" />
+<col width="8%" />
+<col width="8%" />
+<col width="4%" />
+<col width="7%" />
+<col width="5%" />
+<col width="8%" />
+<col width="5%" />
+<col width="7%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -762,14 +1063,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="customizing-print-options" class="section level2">
 <h2>Customizing print options</h2>
-<p>Although its not a common use case outside of writing vignettes about <code>skimr</code>, you can fall back to default printing methods by adding the chunk option <code>render = knitr::normal_print</code>.</p>
-<p>You can also disable the <code>skimr</code> summary by setting the chunk option <code>skimr_include_summary = FALSE</code>.</p>
-<p>You can change the number of digits shown in the columns of generated statistics by changing the <code>skimr_digits</code> chunk option.</p>
+<p>Although its not a common use case outside of writing vignettes about
+<code>skimr</code>, you can fall back to default printing methods by
+adding the chunk option <code>render = knitr::normal_print</code>.</p>
+<p>You can also disable the <code>skimr</code> summary by setting the
+chunk option <code>skimr_include_summary = FALSE</code>.</p>
+<p>You can change the number of digits shown in the columns of generated
+statistics by changing the <code>skimr_digits</code> chunk option.</p>
 </div>
 <div id="modifying-skim" class="section level2">
 <h2>Modifying <code>skim()</code></h2>
-<p><code>skimr</code> is opinionated in its choice of defaults, but users can easily add, replace, or remove the statistics for a class. For interactive use, you can create your own skimming function with the <code>skim_with()</code> factory. <code>skimr</code> also has an API for extensions in other packages. Working with that is covered later.</p>
-<p>To add a statistic for a data type, create an <code>sfl()</code> (a <code>skimr</code> function list) for each class that you want to change:</p>
+<p><code>skimr</code> is opinionated in its choice of defaults, but
+users can easily add, replace, or remove the statistics for a class. For
+interactive use, you can create your own skimming function with the
+<code>skim_with()</code> factory. <code>skimr</code> also has an API for
+extensions in other packages. Working with that is covered later.</p>
+<p>To add a statistic for a data type, create an <code>sfl()</code> (a
+<code>skimr</code> function list) for each class that you want to
+change:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>my_skim <span class="ot">&lt;-</span> <span class="fu">skim_with</span>(<span class="at">numeric =</span> <span class="fu">sfl</span>(<span class="at">new_mad =</span> mad))</span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">my_skim</span>(faithful)</span></code></pre></div>
 <table>
@@ -811,6 +1122,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p><strong>Variable type: numeric</strong></p>
 <table>
+<colgroup>
+<col width="15%" />
+<col width="11%" />
+<col width="15%" />
+<col width="6%" />
+<col width="6%" />
+<col width="5%" />
+<col width="6%" />
+<col width="4%" />
+<col width="6%" />
+<col width="5%" />
+<col width="6%" />
+<col width="8%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -858,7 +1183,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>As the previous example suggests, the default is to append <em>new</em> summary statistics to the preexisting set. This behavior isn’t always desirable, especially when you want lots of changes. To stop appending, set <code>append = FALSE</code>.</p>
+<p>As the previous example suggests, the default is to append
+<em>new</em> summary statistics to the preexisting set. This behavior
+isn’t always desirable, especially when you want lots of changes. To
+stop appending, set <code>append = FALSE</code>.</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>my_skim <span class="ot">&lt;-</span> <span class="fu">skim_with</span>(<span class="at">numeric =</span> <span class="fu">sfl</span>(<span class="at">new_mad =</span> mad), <span class="at">append =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">my_skim</span>(faithful)</span></code></pre></div>
 <table>
@@ -923,7 +1251,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>You can also use <code>skim_with()</code> to remove specific statistics by setting them to <code>NULL</code>. This is commonly used to disable the inline histograms and spark graphs.</p>
+<p>You can also use <code>skim_with()</code> to remove specific
+statistics by setting them to <code>NULL</code>. This is commonly used
+to disable the inline histograms and spark graphs.</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>no_hist <span class="ot">&lt;-</span> <span class="fu">skim_with</span>(<span class="at">ts =</span> <span class="fu">sfl</span>(<span class="at">line_graph =</span> <span class="cn">NULL</span>))</span>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">no_hist</span>(Nile)</span></code></pre></div>
 <table>
@@ -1012,7 +1342,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>The same pattern applies to changing skimmers for multiple classes simultaneously. If you want to partially-apply function arguments, use the Tidyverse lambda syntax.</p>
+<p>The same pattern applies to changing skimmers for multiple classes
+simultaneously. If you want to partially-apply function arguments, use
+the Tidyverse lambda syntax.</p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>my_skim <span class="ot">&lt;-</span> <span class="fu">skim_with</span>(</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric =</span> <span class="fu">sfl</span>(<span class="at">total =</span> <span class="sc">~</span> <span class="fu">sum</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
 <span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">factor =</span> <span class="fu">sfl</span>(<span class="at">missing =</span> <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.))),</span>
@@ -1117,7 +1449,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>To modify the “base” skimmers, refer to them in a similar manner. Since base skimmers are usually a small group, they must return the same type for all data types in R, <code>append</code> doesn’t apply here.</p>
+<p>To modify the “base” skimmers, refer to them in a similar manner.
+Since base skimmers are usually a small group, they must return the same
+type for all data types in R, <code>append</code> doesn’t apply
+here.</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>my_skim <span class="ot">&lt;-</span> <span class="fu">skim_with</span>(<span class="at">base =</span> <span class="fu">sfl</span>(<span class="at">length =</span> length))</span>
 <span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">my_skim</span>(faithful)</span></code></pre></div>
 <table>
@@ -1158,7 +1493,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p><strong>Variable type: numeric</strong></p>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col width="21%" />
+<col width="10%" />
+<col width="9%" />
+<col width="9%" />
+<col width="7%" />
+<col width="9%" />
+<col width="6%" />
+<col width="9%" />
+<col width="7%" />
+<col width="9%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th align="left">skim_variable</th>
@@ -1203,10 +1550,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="extending-skimr" class="section level2">
 <h2>Extending <code>skimr</code></h2>
-<p>Packages may wish to export their own <code>skim()</code> functions. Use <code>skim_with()</code> for this. In fact, this is how <code>skimr</code> generates its version of <code>skim()</code>.</p>
+<p>Packages may wish to export their own <code>skim()</code> functions.
+Use <code>skim_with()</code> for this. In fact, this is how
+<code>skimr</code> generates its version of <code>skim()</code>.</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
 <span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>my_package_skim <span class="ot">&lt;-</span> <span class="fu">skim_with</span>()</span></code></pre></div>
-<p>Alternatively, defaults for another data types can be added to <code>skimr</code> with the <code>get_skimmers</code> generic. The method for your data type should return an <code>sfl()</code>. Unlike the <code>sfl()</code> used interactively, you also need to set the <code>skim_type</code> argument. It should match the method type in the function signature.</p>
+<p>Alternatively, defaults for another data types can be added to
+<code>skimr</code> with the <code>get_skimmers</code> generic. The
+method for your data type should return an <code>sfl()</code>. Unlike
+the <code>sfl()</code> used interactively, you also need to set the
+<code>skim_type</code> argument. It should match the method type in the
+function signature.</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>get_skimmers.my_type <span class="ot">&lt;-</span> <span class="cf">function</span>(column) {</span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sfl</span>(</span>
 <span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">skim_type =</span> <span class="st">&quot;my_type&quot;</span>,</span>
@@ -1274,13 +1628,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>An extended example is available in the vignette <em>Supporting additional objects</em>.</p>
+<p>An extended example is available in the vignette <em>Supporting
+additional objects</em>.</p>
 </div>
 <div id="solutions-to-common-rendering-problems" class="section level2">
 <h2>Solutions to common rendering problems</h2>
-<p>The details of rendering are dependent on the operating system R is running on, the locale of the installation, and the fonts installed. Rendering may also differ based on whether it occurs in the console or when knitting to specific types of documents such as HTML and PDF.</p>
-<p>The most commonly reported problems involve rendering the spark graphs (inline histogram and line chart) on Windows. One common fix is to switch your locale. The function <code>fix_windows_histograms()</code> does this for you.</p>
-<p>In order to render the sparkgraphs in html or PDF histogram you may need to change fonts to one that supports blocks or Braille (depending on which you need). Please review the separate vignette and associated template for details.</p>
+<p>The details of rendering are dependent on the operating system R is
+running on, the locale of the installation, and the fonts installed.
+Rendering may also differ based on whether it occurs in the console or
+when knitting to specific types of documents such as HTML and PDF.</p>
+<p>The most commonly reported problems involve rendering the spark
+graphs (inline histogram and line chart) on Windows. One common fix is
+to switch your locale. The function
+<code>fix_windows_histograms()</code> does this for you.</p>
+<p>In order to render the sparkgraphs in html or PDF histogram you may
+need to change fonts to one that supports blocks or Braille (depending
+on which you need). Please review the separate vignette and associated
+template for details.</p>
 </div>
 
 
