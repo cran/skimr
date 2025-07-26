@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-12-23" />
+<meta name="date" content="2025-07-26" />
 
 <title>Skimr defaults</title>
 
@@ -50,7 +50,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -120,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -331,7 +338,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Skimr defaults</h1>
-<h4 class="date">2022-12-23</h4>
+<h4 class="date">2025-07-26</h4>
 
 
 
@@ -356,8 +363,8 @@ total values in the column.</li>
 <h2>Default skimmers</h2>
 <p>To learn more about the functions used in this package, use the
 function <code>get_default_skimmer_names()</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_default_skimmer_names</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">get_default_skimmer_names</span>()</span></code></pre></div>
 <pre><code>## $AsIs
 ## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
 ## 
@@ -383,7 +390,7 @@ function <code>get_default_skimmer_names()</code>.</p>
 ## [1] &quot;ordered&quot;    &quot;n_unique&quot;   &quot;top_counts&quot;
 ## 
 ## $haven_labelled
-## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;
+## NULL
 ## 
 ## $list
 ## [1] &quot;n_unique&quot;   &quot;min_length&quot; &quot;max_length&quot;
@@ -401,7 +408,7 @@ function <code>get_default_skimmer_names()</code>.</p>
 <code>get_default_skimmers()</code>, which returns the functions
 themselves. If you are interested in a particular class within
 <code>skimr</code>, pass it as a string to either function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_default_skimmer_names</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">get_default_skimmer_names</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
 <pre><code>## $numeric
 ## [1] &quot;mean&quot; &quot;sd&quot;   &quot;p0&quot;   &quot;p25&quot;  &quot;p50&quot;  &quot;p75&quot;  &quot;p100&quot; &quot;hist&quot;</code></pre>
 <p>The same information is stored in the <code>skimmers_used</code>

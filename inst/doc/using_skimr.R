@@ -10,103 +10,104 @@ fivenum(iris$Sepal.Length)
 ## -----------------------------------------------------------------------------
 summary(iris$Species)
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 library(skimr)
 skim(iris)
 
 ## -----------------------------------------------------------------------------
-skim(iris) %>% is_skim_df()
+skim(iris) |> is_skim_df()
 
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
+  dplyr::select(-skim_type, -skim_variable) |>
+  is_skim_df()
 
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
-  dplyr::select(-skim_type, -skim_variable) %>% is_skim_df()
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
+  dplyr::select(-n_missing) |>
+  is_skim_df()
 
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
-  dplyr::select(-n_missing) %>% is_skim_df()
-
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
   tibble::as_tibble()
 
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
   dplyr::filter(skim_variable == "Petal.Length")
 
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
   dplyr::select(skim_type, skim_variable, n_missing)
 
-## ---- render = knitr::normal_print--------------------------------------------
-skim(iris) %>%
+## ----render = knitr::normal_print---------------------------------------------
+skim(iris) |>
   dplyr::select(skim_type, skim_variable, numeric.mean)
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris %>%
-  dplyr::group_by(Species) %>%
+## ----render = knitr::normal_print---------------------------------------------
+iris |>
+  dplyr::group_by(Species) |>
   skim()
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 skim(iris, Sepal.Length, Species)
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 skim(iris, starts_with("Sepal"))
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 skim(lynx)
 
 ## -----------------------------------------------------------------------------
 all.equal(skim(lynx), skim(as.data.frame(lynx)))
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 m <- matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), nrow = 4, ncol = 3)
 m
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 colMeans(m)
 skim(m) # Similar to summary.matrix and colMeans()
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 rowMeans(m)
 skim(t(m))
 
-## ---- render = knitr::normal_print--------------------------------------------
+## ----render = knitr::normal_print---------------------------------------------
 skim(c(m))
 mean(m)
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris_setosa <- iris %>%
-  skim_tee() %>%
+## ----render = knitr::normal_print---------------------------------------------
+iris_setosa <- iris |>
+  skim_tee() |>
   dplyr::filter(Species == "setosa")
 head(iris_setosa)
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris %>%
-  skim() %>%
+## ----render = knitr::normal_print---------------------------------------------
+iris |>
+  skim() |>
   partition()
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris %>%
-  skim() %>%
+## ----render = knitr::normal_print---------------------------------------------
+iris |>
+  skim() |>
   yank("numeric")
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris %>%
-  skim() %>%
-  to_long() %>% 
+## ----render = knitr::normal_print---------------------------------------------
+iris |>
+  skim() |>
+  to_long() |>
   head()
 
-## ---- render = knitr::normal_print--------------------------------------------
-iris %>%
-  skim() %>%
+## ----render = knitr::normal_print---------------------------------------------
+iris |>
+  skim() |>
   focus(n_missing, numeric.mean)
 
 ## -----------------------------------------------------------------------------
 skim(Orange)
 
 ## -----------------------------------------------------------------------------
-skim(Orange) %>%
+skim(Orange) |>
   yank("numeric")
 
 ## -----------------------------------------------------------------------------

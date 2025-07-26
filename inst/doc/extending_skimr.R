@@ -6,10 +6,10 @@ results <- lm(weight ~ feed, data = chickwts)
 class(results)
 attributes(results)
 
-## ---- eval = FALSE------------------------------------------------------------
-#  as.data.frame(results)
-#  #> Error in as.data.frame.default(results) :
-#  #>  cannot coerce class ‘"lm"’ to a data.frame
+## ----eval = FALSE-------------------------------------------------------------
+# as.data.frame(results)
+# #> Error in as.data.frame.default(results) :
+# #>  cannot coerce class ‘"lm"’ to a data.frame
 
 ## -----------------------------------------------------------------------------
 skim(results$model)
@@ -20,13 +20,13 @@ skim_lm <- function(.data) {
   skimr::skim(.data)
 }
 
-lm(weight ~ feed, data = chickwts) %>% skim_lm()
+lm(weight ~ feed, data = chickwts) |> skim_lm()
 
 ## -----------------------------------------------------------------------------
 skim_lm <- function(.data, fit = FALSE) {
   .data <- .data$model
   if (fit) {
-    .data <- .data %>%
+    .data <- .data |>
       dplyr::bind_cols(
         fitted = data.frame(results$fitted.values),
         residuals = data.frame(results$residuals)
